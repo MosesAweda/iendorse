@@ -1,0 +1,186 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { ThreeCircles, Puff } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
+
+import bg from '../../public/images/bg.svg';
+import bell from './svg/bell.svg';
+import home from './svg/home.svg';
+import search from './svg/search.svg';
+import plus from './svg/plus.svg';
+import feed from './svg/feed.svg';
+import account from './svg/account.svg';
+import share from './svg/share.svg';
+import endorse from './svg/endorse.svg';
+import apple from './svg/apple.svg';
+import playstore from './svg/playstore.svg';
+import SkeletonCampaign from './SkeletonCampaign';
+import Navbar from './NavBar/Navbar';
+import HomeCampaign from './HomeCampaign';
+import usePost from './Hooks/usePost';
+import { baseURL } from './URL';
+import { Skeleton } from '@mui/material';
+
+interface ApiResponse {
+  data: any;
+  loading: boolean;
+  error: Error | null;
+  postData: (body: any) => Promise<void>;
+  totalRecords: number;
+}
+
+const Home = () => {
+  const [page, setPage] = useState(1);
+  const [dataArray, setDataArray] = useState<any[]>([]);
+  const [infiniteLoading, setInfiniteLoading] = useState(false);
+
+  const discoverURL = `${baseURL}/Campaign/DiscoverCampaign?pageNumber=${page}&pageSize=5`;
+  const { data, loading, error, postData } = usePost<ApiResponse>(discoverURL);
+  const totalRecords = data?.totalRecords || 0;
+
+  // Fetch initial data
+  useEffect(() => {
+    postData({});
+  }, []);
+
+  // Fetch data on page change
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      try {
+        const response = await fetch(discoverURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${window.localStorage.getItem('token')}`,
+          },
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const responseData = await response.json();
+        const fetchedData = responseData?.data || [];
+
+        setDataArray((prev) => [...prev, ...fetchedData]);
+      } catch (err) {
+        toast.error((err as Error).message);
+      } finally {
+        setInfiniteLoading(false);
+      }
+    };
+
+    fetchCampaigns();
+  }, [page]);
+
+  // Handle infinite scroll
+  const handleScroll = () => {
+    if (infiniteLoading) return;
+    if(totalRecords == 0) return;
+
+    if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+      if (dataArray.length < totalRecords) {
+        setInfiniteLoading(true);
+        setPage((prev) => prev + 1);
+      } else {
+        console.log("All records loaded:", totalRecords , dataArray.length);
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [dataArray.length, totalRecords]);
+
+
+
+
+
+  
+  return (
+    <>
+      <Navbar />
+
+      <div
+        className="hidden sm:block flex flex-col w-full h-screen"
+        style={{
+          backgroundImage: 'url(images/hero.png)',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          margin: 0,
+          padding: 0,
+        }}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 h-full gap-4 p-4">
+          <div className="flex justify-center items-center p-2">
+            <div className="mx-3 max-w-md">
+              <h1 className="text-4xl font-bold mb-4" style={{ fontFamily: "Georgia" }}>
+                Discover, Endorse, Transform
+              </h1>
+              <p className="text-sm md:text-base leading-relaxed">
+                Dive into our platform to discover a world of impactful campaigns, each one a beacon of hope, a catalyst for transformation.
+                With iEndorse, you have the power to endorse causes close to your heart, amplifying their reach and influence.
+                Every endorsement is a vote for change, a commitment to shaping a better tomorrow for all.
+              </p>
+              <div className='flex mt-8'>
+                <Link to='/'>
+                  <button className='p-1 bg-customBlue text-white rounded-lg px-5 mr-4'>
+                    <div className='flex items-center'>
+                      <img src={apple} alt="Download on the App Store" width={20} height={20} />
+                      <div className='ml-2 text-xs'>
+                        <div>Download on the</div>
+                        <div>App Store</div>
+                      </div>
+                    </div>
+                  </button>
+                </Link>
+                <Link to='/'>
+                  <button className='p-1 bg-customBlue text-white rounded-lg px-5'>
+                    <div className='flex items-center'>
+                      <img src={playstore} alt="Get it on Google Play" width={20} height={20} />
+                      <div className='ml-2 text-xs'>
+                        <div>Get it on</div>
+                        <div>Google Play</div>
+                      </div>
+                    </div>
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap justify-center p-4 text-xs bg-white sm:bg-gray-100">
+        {['All Campaigns', 'Civic Engagements', 'Social Causes', 'Education', 'Art', 'Technology', 'Business', 'Others'].map((category) => (
+          <button key={category} className='bg-customBlue text-white px-5 py-2 m-2 rounded-full'>
+            {category}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex flex-col bg-white sm:bg-gray-100 justify-center items-center overflow-x-hidden">
+      {error && <p>Error: {error.message}</p>}
+
+{loading ? (
+  // Display the loading skeleton while data is being fetched
+ <SkeletonCampaign />
+) : (
+  // Display the actual content once loading is complete
+  dataArray.map((item, index) => (
+    <HomeCampaign key={index} item={item} />
+  ))
+)}
+
+
+        {infiniteLoading && (
+          <div className="flex items-center mt-4 justify-center">
+            <Puff color='#0D236E'  height="40"
+              width="40" />
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
+export default Home;
