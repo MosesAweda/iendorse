@@ -11,6 +11,7 @@ import { LineWave } from 'react-loader-spinner';
 import { ThreeCircles } from 'react-loader-spinner';
 import FeedCampaign from './FeedCampaign';
  
+ 
 
 interface ApiResponse {
   data: any;
@@ -21,7 +22,7 @@ interface ApiResponse {
 
 
 const Feed: React.FC = () => {
-  const { data:ApiData, loading, error, postData } = usePost<ApiResponse>('http://iendorse.runasp.net/api/Campaign/MyFeed?Page=1&PageSize=10');
+  const { data:ApiData, loading, error, postData } = usePost<ApiResponse>(`${baseURL}/Campaign/MyFeed?PageNumber=1&PageSize=10`);
 
   useEffect(() => {
     postData({});

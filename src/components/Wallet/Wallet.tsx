@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../NavBar/Navbar';
 import { baseURL } from '../URL';
 import usePost from '../Hooks/usePost';
@@ -43,6 +43,7 @@ const Wallet = () => {
             const accountId = userData.id;
             setAccountId(accountId);
             console.log("Account ID", accountId);
+
         } else {
             console.log("No userData found in localStorage");
         }
@@ -60,13 +61,13 @@ const Wallet = () => {
         console.log("Preferred method:", method);
         setAllData({ ...allData, units: units, paymentMethod: method, walletBalance: walletBalance, accountId: accountId });
         if (method === "Paystack") {
-            postPayment();
+            InitializePayment();
         }
     }
 
     const URL = `${baseURL}/Wallet/InitializePaystackPayment`;
 
-    const postPayment = async () => {
+    const InitializePayment = async () => {
         setLoading(true);
 
         try {
@@ -84,7 +85,10 @@ const Wallet = () => {
             }
 
             const responseData = await response.json();
-            setApiResponse(responseData);
+           setApiResponse(responseData.data);
+           if(responseData){
+            window.open(`${responseData.data.authorization_url}`, '_blank');
+           }
         } catch (err) {
             toast.error((err as Error).message);
         } finally {
@@ -93,6 +97,72 @@ const Wallet = () => {
 
         }
     };
+
+
+    const VerifyPayStackPayment = async () => {
+        setLoading(true);
+
+        try {
+            const response = await fetch(URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${window.localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({reference: apiResponse.reference}),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const responseData = await response.json();
+        //    setApiResponse(responseData.data);
+           if(responseData.succeeded==true){
+           TopWallet()
+           }
+        } catch (err) {
+            toast.error((err as Error).message);
+        } finally {
+            // setLoading(false);
+            // openFundingSuccess();
+
+        }
+    };
+
+
+    const TopWallet= async () => {
+        setLoading(true);
+
+        try {
+            const response = await fetch(URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${window.localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({reference: apiResponse.reference}),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const responseData = await response.json();
+        //    setApiResponse(responseData.data);
+           if(responseData.succeeded==true){
+          openFundingSuccess();
+          setLoading(false);
+           }
+        } catch (err) {
+            toast.error((err as Error).message);
+        } finally {
+            // setLoading(false);
+        }
+    };
+
+
+
     return (
         <>
             <Navbar />
@@ -101,9 +171,10 @@ const Wallet = () => {
               open={loading}>
               <CircularProgress color="inherit" />
             </Backdrop>
-            <div className={`flex bg-gray-100 justify-center h-screen ${WalletDataLoading && 'animate-pulse'}`}>
+            <div className={`flex bg-gray-100 justify-center h-screen `}>
                 <div className=" mt-10 ">
-                <div className="p-4 w-full md:max-w-md border-gray-700 bg-white rounded-lg my-2 bg-cover  bg-center overflow-hidden" style={{ backgroundImage: 'url(images/frame2.png)' }}>
+                <div className={`p-4 w-full md:max-w-md border-gray-700 bg-white rounded-lg my-2 bg-cover  bg-center overflow-hidden ${WalletDataLoading && 'animate-pulse'}`} 
+                style={{ backgroundImage: 'url(images/frame2.png)' }}>
                           
                             <div className="mt-3  pl-2 pr-10">
                                 <h1 className="text-sm text-customBlue">

@@ -19,7 +19,7 @@ import CreateCampaign from './components/CreateCampaign.tsx/CreateCampaign';
 import Feed from './components/Feeds/Feeds';
 import Analytics from './components/Feeds/Analytics';
 import Sidebar from './components/Sidebar';
-import UserProfile from './components/UserProfie';
+import UserProfile from './components/Profile/UserProfie';
 import HomeCampaign from './components/HomeCampaign';
 import Wallet from './components/Wallet/Wallet';
 import Support from './components/Support';
