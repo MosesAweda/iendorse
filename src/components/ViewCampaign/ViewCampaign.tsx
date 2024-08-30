@@ -167,6 +167,58 @@ const endorseWithWalletData = {
     <>
     <Navbar />
 
+  {
+
+      DataLoading && (
+        <>
+        <div className="sm:bg-gray-100 bg-white h-screen">
+  <div className="flex flex-col sm:bg-gray-100 bg-white justify-center items-center">
+    <div className="p-4 max-w-2xl border-gray-700 bg-white rounded-lg my-5 mx-0 sm:mx-1 mb-20 animate-pulse">
+      <div className="my-4">
+        <div className="h-40 bg-gray-300 rounded-2xl"></div>
+      </div>
+      <div className="flex items-center justify-between">
+        <div className="flex">
+          <div className="mr-4 rounded-full mx-1">
+            <div className="w-11 h-11 bg-gray-300 rounded-full"></div>
+          </div>
+          <div>
+            <div className="w-32 h-5 bg-gray-300 rounded"></div>
+            <div className="w-20 h-3 bg-gray-300 rounded mt-2"></div>
+          </div>
+        </div>
+        <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+      </div>
+      <div className="my-4 campaign-container min-w-[300px] max-w-[768px]">
+        <div className="w-48 h-6 bg-gray-300 rounded mb-4"></div>
+        <div className="flex my-2 items-center">
+          <div className="w-4 h-4 bg-gray-300 rounded-full"></div>
+          <div className="w-32 h-4 bg-gray-300 rounded ml-2"></div>
+        </div>
+        <div className="space-y-2">
+          <div className="w-full h-4 bg-gray-300 rounded"></div>
+          <div className="w-full h-4 bg-gray-300 rounded"></div>
+          <div className="w-1/2 h-4 bg-gray-300 rounded"></div>
+        </div>
+        <div className="w-24 h-3 bg-gray-300 rounded mt-4"></div>
+      </div>
+      <div className="flex mt-4 text-sm justify-between mb-3">
+        <div className="flex mr-5 items-center w-full">
+          <div className="p-3 w-full h-10 bg-gray-300 rounded-md"></div>
+        </div>
+        <div className="flex items-center w-full">
+          <div className="p-3 w-full h-10 bg-gray-300 rounded-md"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+        </>
+      )
+    
+  } 
+
 { campaignData && (
 
     <>

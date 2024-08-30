@@ -31,9 +31,7 @@ const UserProfile = () => {
 
 
     const openEditModal = () => {setEditModal(true); console.log("clicked")}
-
     const closeEditModal = () => setEditModal(false);
-
     const url = `${baseURL}/Campaign/MyCampaigns`
 
     const loadDefaultData = async () => {
@@ -167,85 +165,103 @@ const UserProfile = () => {
             </div>
 
 
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-10 gap-4 sm:mx-32 mx-10">
-                {apiData && apiData.map((item: any, index: number) => (
-                    <Link to={`/ViewCampaign/${item?.campaignId}`} >
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-10 gap-4 sm:mx-32 mx-10">   
 
-                        <div
-                            className="max-w-200 mb-4 h-400 grid rounded-lg border border-gray-200 shadow"
-                            key={index}
-                            style={{
-                                // backgroundColor: 'rgba(0, 0, 5, 0.9)',
-                                backgroundColor: 'rgba(255, 255, 255, 1)',
-                                backgroundImage: `url(${item?.campaignImage})`,
-                                backgroundRepeat: 'no-repeat',
-                                backgroundPosition: 'center',
-                                backgroundSize: 'cover',
-                                height: 200,
-                            }}
-                        >
-                            <div className='grid flex items-end'>
-                                <div
-                                    style={{
-                                        backgroundImage: `linear-gradient(180deg, rgba(255, 255, 242, 0.00) 0%, rgba(242, 242, 242, 0.08) 14.58%, rgba(242, 242, 242, 0.78) 50%, #F2F2F2 70.83%, #F2F2F2 83.33%, #F2F2F2 100%)`
-                                    }}>
-                                    <div className={"flex items-center justify-start pr-4 pl-2 pt-8 mb-2  "}>
-                                        <div className="flex items-center justify-center bg-white border-2 border-customBlue rounded-full w-10 h-10 mx-1">
-                                            <div className="flex items-center justify-center rounded-full w-8 h-8 bg-blue-100">
-                                                {item?.profileImage ? (
-                                                    <img
-                                                        src={item.profileImage}
-                                                        className="rounded-full object-cover w-full h-full"
-                                                        alt="Avatar"
-                                                    />
-                                                ) : (
-                                                <span className="text-customBlue font-bold text-sm" >
-                                                    {getInitials(parsedUserData.fullName)}
-                                                </span>
-                                                )}
-                                            </div>
-                                        </div>
+{loading ? (
+  // Skeleton Loading State
+  <>
+    {[...Array(4)].map((_, index) => (
+      <div key={index} className="max-w-200 mb-4 h-400 grid rounded-lg border border-gray-200 shadow animate-pulse">
+        <div className="h-48 bg-gray-300 rounded-t-lg"></div>
+        <div className="p-4 space-y-4">
+          <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+          <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+          <div className="flex items-center space-x-3 mt-4">
+            <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </>
+) : apiData && apiData.length > 0 ? (
+  // Campaign Data
+  apiData.map((item, index) => (
+    <Link to={`/ViewCampaign/${item?.campaignId}`} key={index}>
+      <div
+        className="max-w-200 mb-4 h-400 grid rounded-lg border border-gray-200 shadow"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 1)',
+          backgroundImage: `url(${item?.campaignImage})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          height: 200,
+        }}
+      >
+        <div className="grid flex items-end">
+          <div
+            style={{
+              backgroundImage: `linear-gradient(180deg, rgba(255, 255, 242, 0.00) 0%, rgba(242, 242, 242, 0.08) 14.58%, rgba(242, 242, 242, 0.78) 50%, #F2F2F2 70.83%, #F2F2F2 83.33%, #F2F2F2 100%)`,
+            }}
+          >
+            <div className="flex items-center justify-start pr-4 pl-2 pt-8 mb-2">
+              <div className="flex items-center justify-center bg-white border-2 border-customBlue rounded-full w-10 h-10 mx-1">
+                <div className="flex items-center justify-center rounded-full w-8 h-8 bg-blue-100">
+                  {item?.profileImage ? (
+                    <img
+                      src={item.profileImage}
+                      className="rounded-full object-cover w-full h-full"
+                      alt="Avatar"
+                    />
+                  ) : (
+                    <span className="text-customBlue font-bold text-sm">
+                      {getInitials(parsedUserData.fullName)}
+                    </span>
+                  )}
+                </div>
+              </div>
 
-
-                                        <div>
-                                            <div className="font-semibold text-xs" style={{ fontSize: '10px' }}>
-                                                {item?.campaignTitle}
-                                            </div>
-                                            <div className='text-xs mt-0' style={{ fontSize: '7px' }}>
-                                                <i>{item?.description}</i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </Link>
-                ))}
-
-
-
-
-                {infiniteLoading && (
-                    <>
-                        <div className='flex justify-center items-center'>
-                            <p>
-                                <Puff
-                                    visible={true}
-                                    height="30"
-                                    width="30"
-                                    color="#0D236E"
-                                    ariaLabel="puff-loading"
-                                    wrapperStyle={{}}
-                                    wrapperClass=""
-                                />
-
-
-                            </p>
-                        </div>
-                    </>
-                )}
+              <div>
+                <div className="font-semibold text-xs" style={{ fontSize: '10px' }}>
+                  {item?.campaignTitle}
+                </div>
+                <div className="text-xs mt-0" style={{ fontSize: '7px' }}>
+                  <i>{item?.description}</i>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  ))
+) : (
+  // No Data Message
+  !loading && (
+    <div className="col-span-4 text-center text-gray-500">
+      <p>No campaigns available at the moment.</p>
+    </div>
+  )
+)}
+
+{infiniteLoading && (
+  <div className="flex justify-center items-center">
+    <p>
+      <Puff
+        visible={true}
+        height="30"
+        width="30"
+        color="#0D236E"
+        ariaLabel="puff-loading"
+        wrapperStyle={{}}
+        wrapperClass=""
+      />
+    </p>
+  </div>
+)}
+</div>
+
 
         </div>
 

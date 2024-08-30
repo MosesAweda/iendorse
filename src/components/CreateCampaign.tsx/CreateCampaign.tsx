@@ -5,10 +5,9 @@ import Step1 from './Step1';
 import Step2 from './Step2'
 
 
-const CreateCamaign = () => {
+const CreateCampaign = () => {
     const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    
   });
  
   const nextStep = () => {
@@ -19,23 +18,53 @@ const CreateCamaign = () => {
     setCurrentStep(prev => prev - 1);
   };
 
-  const handleChange = (input:any) => (e:any) => {
-    setFormData({ ...formData, [input]: e.target.value });
+  const handleFieldChange = (fieldName: string) => (e: any) => {
+    const value = Array.isArray(e) ? e : e?.target?.value; // Check if the value is an array or from an event object
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [fieldName]: value,
+    }));
     console.log(formData)
   };
+
+
+  const handleTagChange = (fieldName: string) => (e: any) => {
+    const value = Array.isArray(e) ? e : e?.target?.value; // Check if the value is an array or from an event object
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [fieldName]: value,
+    }));
+    console.log(formData)
+  };
+  
+
+
+ 
+  
+  const handleFileChange = (fieldName: string) => (files: string[]) => {
+    setFormData({
+      ...formData,
+      [fieldName]: files,
+    });
+  };
+
+
+  // const handleSelectPeople = (selected: any) => {
+  //   setFormData({ ...formData, selectedPeople: selected });
+  // };
 
   useEffect(() => {
     console.log("FORMData>>>>>>>>>>>>>",formData);
   }, [formData]);
 
-  const renderStep = (currentStep:any, formData:any, handleChange:any, nextStep:any, prevStep:any) => {
+  const renderStep = (currentStep:any, formData:any, handleTagChange:any, handleFieldChange:any,  nextStep:any, prevStep:any) => {
     switch (currentStep) {
       case 1:
-        return <Step1 nextStep={nextStep} handleChange={handleChange} formData={formData} />;
+        return <Step1 nextStep={nextStep} handleFieldChange={handleFieldChange} handleTagChange={handleFieldChange} handleFileChange={handleFileChange} formData={formData} />;
  
         
       case 2:
-        return <Step2 prevStep={prevStep}  handleChange={handleChange} formData={formData} />;
+        return <Step2 prevStep={prevStep}  handleFieldChange={handleFieldChange}  handleTagChange={handleFieldChange}  formData={formData} />;
       default:
         return (<div>Form Complete</div>);
     }
@@ -44,13 +73,13 @@ const CreateCamaign = () => {
 
   return(
 
-    <div>
+    <div className='bg-gray-100 h-screen'>
         <Navbar />
-    {renderStep(currentStep, formData, handleChange, nextStep, prevStep)}
+    {renderStep(currentStep, formData, handleFieldChange, handleTagChange,  nextStep, prevStep)}
   </div>
 
   )
 
 };
 
-export default CreateCamaign;
+export default CreateCampaign;

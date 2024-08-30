@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import upload from '../svg/upload.svg'
 
 
-const Step2 = ({ prevStep, handleChange, formData }:any)  => {
+const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange, formData }:any)  => {
  
     const handleSubmit = (e:any) => {
         e.preventDefault();
@@ -31,7 +31,7 @@ const Step2 = ({ prevStep, handleChange, formData }:any)  => {
                 name="Occupation"
             
                 id="email"
-                onChange={handleChange('Occupation')} value={formData.Occupation}
+                onChange={handleFieldChange('Occupation')} value={formData.Occupation}
                 className="border border-gray-300 text-gray-700  rounded-lg focus:ring-blue-500 
                 focus:border-blue-500 block w-full p-2.5"
             >
@@ -47,7 +47,7 @@ const Step2 = ({ prevStep, handleChange, formData }:any)  => {
           <input  
                     placeholder='Age'
                 name="Age"
-                onChange={handleChange('Age')} value={formData.Age}
+                onChange={handleFieldChange('Age')} value={formData.Age}
                 id="email"
                 className="border border-gray-300 text-gray-700   rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           />
