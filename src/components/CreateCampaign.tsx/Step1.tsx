@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import upload from '../svg/upload.svg';
 import useFetch from '../Hooks/useFetch';
@@ -6,7 +6,6 @@ import { baseURL } from '../URL';
 import PeopleModal from './PeopleModal';
 import add from '../svg/add.svg';
 import cancel from '../svg/cancel.svg';
-
 
 interface person {
   id: number;
@@ -16,10 +15,12 @@ interface person {
 
 const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange, formData  }: any) => {
   const [peopleModal, setPeopleModal] = useState(false);
-  const [selectedPeople, setSelectedPeople] = useState<any[]>([]);
-  const [uploadedImages, setUploadedImages] = useState<any[]>([]);
+  const [selectedPeople, setSelectedPeople] = useState<any[]>(formData.tags || []);
+  const [uploadedImages, setUploadedImages] = useState<any[]>(formData.campaignMedias || []);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<{ [key: string]: string }>({});
 
-  console.log("selected Length", selectedPeople.length)
+
   const closePeopleModal = () => {
     setPeopleModal(false);
   }; 
@@ -35,8 +36,12 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
   };
 
   const getInitials = (name: string) => {
-    const nameParts = name.split(' ');
-    return nameParts.map(part => part.charAt(0).toUpperCase()).join('');
+    if(name!==null) {
+      const nameParts = name.split(' ');
+      return nameParts.map(part => part.charAt(0).toUpperCase()).join('');
+    } else {
+      return "";
+    }
   };
 
   const handleSelectPeople = (selected: any) => {
@@ -51,13 +56,14 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
       reader.onerror = error => reject(error);
     });
   };
+
   const handleCampaignMedias = (fieldName: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
   
     if (target && target.files && target.files.length > 0) {
       const newFiles = Array.from(target.files) as File[];
   
-      // Convert new files to base64 strings
+      // Convert files to base64 strings
       const newBase64Files = await Promise.all(
         newFiles.map(file => convertToBase64(file))
       );
@@ -72,18 +78,16 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
   
       // Check if the combined files exceed the maximum limit of 5
       if (combinedFiles.length > 5) {
-        alert("You can upload a maximum of 5 media files.");
+        setError(prev => ({ ...prev, fileUpload: 'You can upload a maximum of 5 media files.' }));
         return;
       }
+
+      setError(prev => ({ ...prev, fileUpload: '' }));
   
       // Update the uploadedImages state with the combined unique files
       setUploadedImages(combinedFiles);
     }
   };
-  
-
-
-
 
   const removePerson = (id: number) => {
     const updatedPeople = selectedPeople.filter((person: any) => person.id !== id);
@@ -98,18 +102,29 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
   const requestURL = `${baseURL}/Category/GetCategories/`;
   const { data: categories, refreshApi: refreshCategories, error: categoriestError, loading: categoriesLoading } = useFetch(requestURL, "GET", onSuccess, onError);
   
+  useEffect(() => {
+    handleTagChange('tags')(selectedPeople); // Pass the entire selectedPeople object array
+  }, [selectedPeople]);
+
+  
+  const handleNextStep = () => {
+    if(!formData.CampaignTitle) {
+      setError(prev => ({ ...prev, CampaignTitle: 'Please enter a title.' }));
+    }
+else{
+ 
+  nextStep();
+}
+  }
+ 
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  }
 
   useEffect(() => {
-    const selectedIds = selectedPeople.map((person: person) => person.id);
-    handleTagChange('tags')(selectedIds); // Pass the array of selected IDs
-  }, [selectedPeople]);
-  
-
-  const handleNextStep = () => {
-    // Push the uploaded images to formData
     handleFileChange('campaignMedias')(uploadedImages);
-    nextStep();
-  };
+  },[uploadedImages])
 
 
   return (
@@ -118,15 +133,15 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
         <div className='bg-white p-5 rounded-lg max-w-md h-auto my-10'>
           <div className="flex items-center justify-center mb-5">
             <div className="flex-1 border-2 border-t border-customBlue"></div>
-            <div className="flex-1 border-t border-gray-300"></div>
+            <div className="flex-1 border-t border-a-300"></div>
           </div>
           <img src="./images/frame1.png" alt="frame1" className='mx-auto' />
-          <form className="space-y-4 mt-4 " action="#">
+          <form className="space-y-4 mt-4 " action="#" onSubmit={(e)=>{e.preventDefault()}}>
             <div>
               <select
                 name="CampaignCategory"
                 onChange={handleFieldChange('CampaignCategory')} value={formData.CampaignCategory}
-                className="border border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className={`border border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
               >
                 <option selected disabled>Campaign Category</option>
                 {categories?.map((item: any) => (
@@ -140,8 +155,9 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
                 placeholder='Campaign Title'
                 name="CampaignTitle"
                 onChange={handleFieldChange('CampaignTitle')} value={formData.CampaignTitle}
-                className="border border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className={`border border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${error.CampaignTitle ? 'border-red-500' : ''}`} 
               />
+             {error.CampaignTitle && <p className="text-red-500 text-xs  ml-1 my-1">{error.CampaignTitle}</p>}
             </div>
 
             <div>
@@ -175,7 +191,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
                
                 readOnly
             
-                className="border border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className="border border-gray-300 text-a-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Tag People"
               />
             </div>
@@ -229,14 +245,16 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
 
 
           <div>
-          <input
-            type="file"
-            placeholder="Upload Campaign Media"
-            name="campaignMedias"
-            onChange={handleCampaignMedias('campaignMedias')}
-            className="border border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            multiple
-          />
+            {/* Hidden Upload Campaign Media Section */}
+            <input
+              type="file"
+              placeholder="Upload Campaign Media"
+              name="campaignMedias"
+              onChange={handleCampaignMedias('campaignMedias')}
+              className="hidden"
+              ref={fileInputRef}
+              multiple
+            />
         </div>
 
 
@@ -245,23 +263,33 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
                 <div className='text-gray-700 pb-1'>Uploaded Images</div>
                 <div className="flex flex-wrap justify-start max-h-40 overflow-y-auto">
                   {uploadedImages.map((image, index) => (
-                    <div key={index} className="relative inline-block mx-4 mt-3 text-center">
-                      <img
-                        src={cancel}
-                        className="absolute cursor-pointer"
-                        onClick={() => removeImage(index)}
-                        alt="Remove"
-                      />
-                      <img
-                        className="rounded-lg border-2 border-white mt-2 mx-4"
-                        style={{ boxShadow: '0 0 0 1px #0D236E' }}
-                        src={image}
-                        width={60}
-                        height={60}
-                        alt={`Uploaded ${index + 1}`}
-                      />
-                    </div>
-                  ))}
+      <div 
+      key={index} 
+      className="relative inline-block mx-2 mt-3 text-center rounded-lg"
+      style={{ width: '80px', height: '80px', backgroundColor: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center',}}
+    >
+      <img
+        src={cancel}
+        className="absolute cursor-pointer"
+        onClick={() => removeImage(index)}
+        alt="Remove"
+        style={{ top: '-5px', right: '-5px', width: '15px', height: '15px' }}
+      />
+      <img
+        className=""
+        style={{ maxWidth: '100%', maxHeight: '100%', }}
+        src={image}
+        alt={`Uploaded ${index + 1}`}
+      />
+    </div>
+    
+
+
+                  )
+                              )}
+              <div  className="relative inline-block mx-4 mt-3 text-center">
+              <img onClick={triggerFileInput} src={add}  width={40} height={40} className='my-4'/>
+              </div>
                 </div>
               </div>
             )}
@@ -270,16 +298,24 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
         
 
 
-            <button
-              className="w-full text-white bg-customBlue hover:bg-blue-600 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center"
+           {
+                
+            uploadedImages.length == 0 &&
+           ( <button
+              onClick={triggerFileInput}
+              className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center"
             >
               <img src={upload} alt="upload" className='inline-block mr-2' />
               Upload Campaign Media
             </button>
-            <p className='text-gray-700 text-xs pb-8'> You can upload a maximum of 5 media files</p>
+           )
+
+            }
+ 
+            {error.fileUpload && <p className="text-red-500 text-xs pb-8">{error.fileUpload}</p>}
             <button
               onClick={handleNextStep}
-              className="w-full text-white bg-gray-400 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
               Next
             </button>

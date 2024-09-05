@@ -27,9 +27,8 @@ const UserProfile = () => {
     const [page, setPage] = useState<number>(1);
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [editModal, setEditModal] = useState(false);
-
-
-
+    const [copySuccess, setCopySuccess] = useState('');
+    const textToCopy =  parsedUserData.referalCode
     const openEditModal = () => {setEditModal(true); console.log("clicked")}
     const closeEditModal = () => setEditModal(false);
     const url = `${baseURL}/Campaign/MyCampaigns`
@@ -76,7 +75,6 @@ const UserProfile = () => {
                 });
 
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
                 const responseData = await response.json();
                 setTotalRecords(responseData.totalRecords);
                 setApiData((prev) => [...prev, ...responseData?.data || []]);
@@ -118,6 +116,15 @@ const UserProfile = () => {
     const submitNewProfile = () =>{
          console.log("submit new profile");   
     }
+
+    const handleCopy = async () => {
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+       toast.success('Copied!');
+      } catch (err) {
+        setCopySuccess('Failed to copy!');
+      }
+    };
     return (
         <>
         <div className='bg-gray-100 min-h-screen'>
@@ -156,8 +163,9 @@ const UserProfile = () => {
                             <h1 className="font-bold text-3xl text-center mb-1">
                                 {parsedUserData.fullName}
                             </h1>
-                            <div className="text-gray-500 flex justify-center text-center">
-                                <img src={docCopy} /> <span className='ml-1 mr-2 font-medium'> Referal code:  </span> {parsedUserData.referalCode}
+                            <div className="text-gray-500 flex justify-center text-center inline"
+                            >
+                            <img src={docCopy} onClick={handleCopy} className='cursor-pointer' /> <span className='ml-1 mr-2 font-medium'> Referal code:  </span> {textToCopy} 
                             </div>
                         </div>
                     </div>
@@ -262,8 +270,7 @@ const UserProfile = () => {
 )}
 </div>
 
-
-        </div>
+</div>
 
         
         <EditProfile 

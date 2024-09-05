@@ -10,14 +10,13 @@ interface EditProfileProps {
 }
 
 const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
-  const [fullName, setFullName] = useState<string>('');
-  const [sex, setSex] = useState<string>('');
+  const userData: any = window.localStorage.getItem("userData");
+  const parsedUserData = JSON.parse(userData);
+  const [fullName, setFullName] = useState<string>(userData?.fullName || '');
+  const [sex, setSex] = useState<string>(userData?.sex || '')
   const [occupation, setOccupation] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
-
-  const userData: any = window.localStorage.getItem("userData");
-  const parsedUserData = JSON.parse(userData);
   const token = parsedUserData?.jwtToken || '';
   const [profilePicture, setProfilePicture] = useState<string>("");
 

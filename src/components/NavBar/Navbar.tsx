@@ -18,13 +18,13 @@ const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const userData = window.localStorage.getItem("userData");
+  const userData:any = window.localStorage.getItem("userData");
   const token = userData ? JSON.parse(userData).jwtToken : null;
   const userName = userData ? JSON.parse(userData).fullName : null;
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const parsedUserData = JSON.parse(userData);
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -67,6 +67,12 @@ const Navbar = () => {
     };
   }, []);
 
+  const getInitials = (fullName: string) => {
+    const names = fullName.split(' ');
+    const initials = names.map(name => name[0]).join('');
+    return initials.toUpperCase();
+};
+
   return (
     <>
       {/* Conditional rendering of Navbar based on loading state */}
@@ -90,7 +96,15 @@ const Navbar = () => {
       <div className={`fixed z-40 top-0 right-0 h-full bg-white text-CustomBlue w-80 transform ${isOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-[2000ms] ease-in-out`}>
         <div className="flex flex-col justify-center items-center">
           <div className="relative inline-block mt-10">
+          {parsedUserData.profileImage ? (
             <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }} src="/images/Avatar.png" width={45} height={45} alt="Avatar" />
+          ):(
+            <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
+            {getInitials(parsedUserData.fullName)}
+            </div>
+          )
+        }
+
             <img
               width={70}
               height={70}
@@ -101,7 +115,7 @@ const Navbar = () => {
           </div>
           <div className="my-2">
             <p className="font-bold text-center"> {userName}</p>
-            <p className="text-center text-xs"> Human Rights Activist</p>
+            <p className="text-center text-xs"> {userData ? JSON.parse(userData).occupation : null}</p>
           </div>
           <div>
             <ul className="py-2 space-y-2 text-sm mx-4 text-gray-800" aria-labelledby="dropdownDefaultButton">
@@ -130,7 +144,7 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="hover:bg-gray-100 rounded-lg">
-                <a href="#" className="block px-16 py-2">
+                <a href="/support" className="block px-16 py-2">
                   <img src={support} className="align-middle mr-2 inline w-4 h-4" />
                   <span className="inline align-middle"> Support </span>
                 </a>
