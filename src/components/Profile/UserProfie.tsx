@@ -142,9 +142,9 @@ const UserProfile = () => {
 
                             <div className="h-36 w-36 flex items-center justify-center bg-white border-2 border-customBlue rounded-full">
                                 <div className="h-32 w-32 flex items-center justify-center  rounded-full">
-                                    {parsedUserData.profileImage ? (
+                                    {parsedUserData.imageUrl ? (
                                         <img
-                                            src={parsedUserData.profileImage}
+                                            src={parsedUserData.imageUrl}
                                             className="rounded-full object-cover h-full w-full shadow-md"
                                             alt="Profile"
                                         />
@@ -216,9 +216,9 @@ const UserProfile = () => {
             <div className="flex items-center justify-start pr-4 pl-2 pt-8 mb-2">
               <div className="flex items-center justify-center bg-white border-2 border-customBlue rounded-full w-10 h-10 mx-1">
                 <div className="flex items-center justify-center rounded-full w-8 h-8 bg-blue-100">
-                  {item?.profileImage ? (
+                  {parsedUserData?.imageUrl ? (
                     <img
-                      src={item.profileImage}
+                      src={parsedUserData?.imageUrl}
                       className="rounded-full object-cover w-full h-full"
                       alt="Avatar"
                     />

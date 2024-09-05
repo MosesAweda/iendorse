@@ -96,8 +96,8 @@ const Navbar = () => {
       <div className={`fixed z-40 top-0 right-0 h-full bg-white text-CustomBlue w-80 transform ${isOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-[2000ms] ease-in-out`}>
         <div className="flex flex-col justify-center items-center">
           <div className="relative inline-block mt-10">
-          {parsedUserData.profileImage ? (
-            <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }} src="/images/Avatar.png" width={45} height={45} alt="Avatar" />
+          {parsedUserData.imageUrl ? (
+            <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }} src={parsedUserData.imageUrl} width={45} height={45} alt="Avatar" />
           ):(
             <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
             {getInitials(parsedUserData.fullName)}

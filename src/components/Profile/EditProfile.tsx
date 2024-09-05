@@ -4,6 +4,8 @@ import editPen from '../svg/editPen.svg';
 import { toast } from "react-toastify";
 import PhoneInput from 'react-phone-input-2';
 import { baseURL } from '../URL';
+import { Audio, LineWave } from 'react-loader-spinner';
+import { Backdrop, CircularProgress } from "@mui/material";
 interface EditProfileProps {
   isOpen: boolean;
   onClose: () => void;
@@ -12,13 +14,15 @@ interface EditProfileProps {
 const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
   const userData: any = window.localStorage.getItem("userData");
   const parsedUserData = JSON.parse(userData);
-  const [fullName, setFullName] = useState<string>(userData?.fullName || '');
-  const [sex, setSex] = useState<string>(userData?.sex || '')
-  const [occupation, setOccupation] = useState<string>('');
+  const [fullName, setFullName] = useState<string>(parsedUserData?.fullName || '');
+  const [loading, setLoading] = useState(false)
+  const [imageLoading, setImageLoading] = useState(false)
+  const [sex, setSex] = useState<string>(parsedUserData?.sex || '')
+  const [occupation, setOccupation] = useState<string>(parsedUserData?.occupation || '')
   const [error, setError] = useState<string>('');
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>(parsedUserData?.phoneNumber || '');
   const token = parsedUserData?.jwtToken || '';
-  const [profilePicture, setProfilePicture] = useState<string>("");
+  const [profilePicture, setProfilePicture] = useState<string>();
 
   const getInitials = (name: string) => {
     const names = name.split(' ');
@@ -48,11 +52,54 @@ const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
     }
   }
 
+  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       const img = new Image();
+  //       img.src = reader.result as string;
+  
+  //       img.onload = () => {
+  //         const canvas = document.createElement('canvas');
+  //         const ctx = canvas.getContext('2d');
+  
+  //         const size = Math.min(img.width, img.height); // The size will be the smallest dimension
+  
+  //         // Set canvas to square dimensions
+  //         canvas.width = size;
+  //         canvas.height = size;
+  
+  //         // Draw the image onto the canvas, centered, and cropped to a square
+  //         ctx?.drawImage(
+  //           img,
+  //           (img.width - size) / 2,  // Start cropping from this x position
+  //           (img.height - size) / 2, // Start cropping from this y position
+  //           size,  // Crop width
+  //           size,  // Crop height
+  //           0,     // Place at x=0 on the canvas
+  //           0,     // Place at y=0 on the canvas
+  //           size,  // Width of the canvas
+  //           size   // Height of the canvas
+  //         );
+  
+  //         // Convert the canvas back to a data URL
+  //         const resizedImage = canvas.toDataURL('image/jpeg');
+  //         setProfilePicture(resizedImage); // Set the resized image as the profile picture
+  //       };
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+  
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImageLoading(true); // Set loading state to true when the image upload starts
     const file = e.target.files?.[0];
+    
     if (file) {
       const reader = new FileReader();
+      
       reader.onloadend = () => {
         const img = new Image();
         img.src = reader.result as string;
@@ -61,43 +108,65 @@ const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
   
-          const size = Math.min(img.width, img.height); // The size will be the smallest dimension
+          if (!ctx) {
+            console.error('Failed to get canvas context');
+            setImageLoading(false); // Stop loading if canvas context fails
+            return;
+          }
+  
+          const size = Math.min(img.width, img.height); // Use the smallest dimension
   
           // Set canvas to square dimensions
           canvas.width = size;
           canvas.height = size;
   
           // Draw the image onto the canvas, centered, and cropped to a square
-          ctx?.drawImage(
+          ctx.drawImage(
             img,
-            (img.width - size) / 2,  // Start cropping from this x position
-            (img.height - size) / 2, // Start cropping from this y position
-            size,  // Crop width
-            size,  // Crop height
-            0,     // Place at x=0 on the canvas
-            0,     // Place at y=0 on the canvas
-            size,  // Width of the canvas
-            size   // Height of the canvas
+            (img.width - size) / 2,  // Crop from the x position
+            (img.height - size) / 2, // Crop from the y position
+            size,                    // Crop width
+            size,                    // Crop height
+            0,                       // Start x on canvas
+            0,                       // Start y on canvas
+            size,                    // Canvas width
+            size                     // Canvas height
           );
   
-          // Convert the canvas back to a data URL
-          const resizedImage = canvas.toDataURL('image/jpeg');
+          // Determine the MIME type based on the file extension
+          const mimeType = file.type || 'image/jpeg'; // Default to 'image/jpeg' if unknown
+          const resizedImage = canvas.toDataURL(mimeType);
+  
           setProfilePicture(resizedImage); // Set the resized image as the profile picture
+          setImageLoading(false); // Stop loading once the image is processed
+        };
+  
+        img.onerror = (error) => {
+          console.error('Error loading image', error);
+          setImageLoading(false); // Stop loading on image load error
         };
       };
+  
+      reader.onerror = (error) => {
+        console.error('Error reading file', error);
+        setImageLoading(false); // Stop loading on file reading error
+      };
+  
       reader.readAsDataURL(file);
+    } else {
+      setImageLoading(false); // Stop loading if no file is selected
     }
   };
   
 
-
-
-  const handleSubmit = async () => {
-    if (!fullName || !sex || !occupation) {
-      setError('Please fill in all fields.');
-      return;
-    }
   
+  
+  const handleSubmit = async () => {
+    // if (!fullName || !sex || !occupation) {
+    //   setError('Please fill in all fields.');
+    //   return;
+    // }
+    setLoading(true)
     const formData = new FormData();
     formData.append('fullName', fullName);
     formData.append('sex', sex);
@@ -125,23 +194,39 @@ const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
       window.localStorage.setItem("userData", JSON.stringify(updatedUserData));
       toast.success('Profile updated successfully');
       onClose();
+
+      setLoading(false)
   
     } catch (err) {
       toast.error((err as Error).message);
+    } finally{
+      setLoading(false)
     }
   };
   
-
+const closeAndClear = () => {
+  onClose();
+  setProfilePicture("");
+  setFullName(parsedUserData.fullName);
+  setSex(parsedUserData.sex);
+  setOccupation(parsedUserData.occupation);
+  setPhoneNumber(parsedUserData.phoneNumber);
+}
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-start sm:items-center justify-center z-50">
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
+      <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={imageLoading}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className='flex justify-center p-4'>
           <span
             className="bg-transparent border-0 text-black text-3xl leading-none font-semibold outline-none focus:outline-none"
-            onClick={onClose}
+            onClick={closeAndClear}
           >
             <img src={close} alt="Close" width={40} height={40} />
           </span>
@@ -156,22 +241,30 @@ const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
               <div className='flex justify-center mb-3 mt-3'>
                 <div className="relative inline-block">
                   <label htmlFor="profile-picture-upload">
-                  {profilePicture ? (
-                      <img
-                        className="rounded-full border-2 border-white cursor-pointer"
-                        style={{ boxShadow: '0 0 0 1px #0D236E' }}
-                        src={profilePicture}
-                        width={45}
-                        height={45}
-                        alt="Avatar"
-                      />
-                    ) : (
+                          {profilePicture ? (
+          <img
+            className="rounded-full border-2 border-white cursor-pointer"
+            style={{ boxShadow: '0 0 0 1px #0D236E' }}
+            src={profilePicture}
+            width={45}
+            height={45}
+            alt="Avatar"
+          />
+        ) : parsedUserData.imageUrl ? (
+          <img
+            className="rounded-full border-2 border-white cursor-pointer"
+            style={{ boxShadow: '0 0 0 1px #0D236E' }}
+            src={parsedUserData.imageUrl}
+            width={45}
+            height={45}
+            alt="Avatar"
+          />
+        ) : (
+          <div className="flex items-center justify-center h-20 w-20 bg-blue-100 rounded-full text-customBlue font-bold text-lg">
+            {getInitials(parsedUserData.fullName)}
+          </div>
+        )}
 
-                      <div className="flex items-center justify-center h-20 w-20 bg-blue-100 rounded-full text-customBlue font-bold text-lg">
-                        {getInitials(parsedUserData.fullName)}
-                      </div>
-
-                    )}
 
                     <img
                       width={70}
@@ -261,10 +354,26 @@ const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
               </div>
 
               <button
+              disabled={loading}
                 onClick={handleSubmit}
-                className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className={`w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center items-center
+                  ${loading ? "cursor-not-allowed bg-gray-600" : "bg-customBlue hover:bg-blue-900 focus:ring-4 focus:ring-blue-300"}`}
               >
-                Save Changes
+             <span className='inline'> {!loading && <>  Save Changess </>}    </span> 
+                {loading && (
+                  <LineWave
+                    visible={true}
+                    height="30"
+                    width="30"
+                    color="#fff"
+                    ariaLabel="line-wave-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    firstLineColor=""
+                    middleLineColor=""
+                    lastLineColor=""
+                  />
+                )}
               </button>
             </div>
           </div>
