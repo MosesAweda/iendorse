@@ -20,6 +20,8 @@ import HomeCampaign from './HomeCampaign';
 import usePost from './Hooks/usePost';
 import { baseURL } from './URL';
 import { Skeleton } from '@mui/material';
+import useFetch from './Hooks/useFetch';
+
 
 interface ApiResponse {
   data: any;
@@ -33,8 +35,19 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [dataArray, setDataArray] = useState<any[]>([]);
   const [infiniteLoading, setInfiniteLoading] = useState(false);
+  const [categoryId, setCategoryId] = useState<any>(0);
 
-  const discoverURL = `${baseURL}/Campaign/DiscoverCampaign?pageNumber=${page}&pageSize=5`;
+  const onSuccess = () => {
+    // setDataArray((prev) => [...prev,...responseData?.data || []]);
+  };
+  const onError = () => {
+    // console.log("error");
+  };
+  const requestURL = `${baseURL}/Category/GetCategories/`;
+  const { data: categories, refreshApi: refreshCategories, error: categoriestError, loading: categoriesLoading } = useFetch(requestURL, "GET", onSuccess, onError);
+  
+
+  const discoverURL = `${baseURL}/Campaign/DiscoverCampaign?CategoryId=${categoryId}&pageNumber=${page}&pageSize=5`;
   const { data, loading, error, postData } = usePost<ApiResponse>(discoverURL);
   const totalRecords = data?.totalRecords || 0;
 
@@ -69,7 +82,7 @@ const Home = () => {
     };
 
     fetchCampaigns();
-  }, [page]);
+  }, [page, categoryId]);
 
   // Handle infinite scroll
   const handleScroll = () => {
@@ -86,15 +99,22 @@ const Home = () => {
     }
   };
 
+    // const handleCategoryChange = (campaignCategory: any) => {
+    //   setPage(1);
+    //   setDataArray([]);
+    //   setInfiniteLoading(false);
+    //   setCampaignCategory(campaignCategory);
+    // }
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [dataArray.length, totalRecords]);
 
 
-
-
-
+//  useEffect(() => {
+//     setPage(1)
+//   }, [categoryId]);
   
   return (
     <>
@@ -150,10 +170,55 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-center p-4 text-xs bg-white sm:bg-gray-100">
-        {['All Campaigns', 'Civic Engagements', 'Social Causes', 'Education', 'Art', 'Technology', 'Business', 'Others'].map((category) => (
-          <button key={category} className='bg-customBlue text-white px-5 py-2 m-2 rounded-full'>
-            {category}
+
+      <div 
+  style={{
+    background: 'radial-gradient(circle, rgba(194,192,227,1) 30%, rgba(194,192,227,1) 36%, rgba(255,255,255,1) 66%)',
+    backgroundRepeat: 'no-repeat', 
+    backgroundSize: 'cover', 
+    margin: 0, 
+    padding: 0, 
+    // height: '100vh', // Ensure the container takes full viewport height
+    display: 'flex',
+    flexDirection: 'column', // Stack children vertically
+    justifyContent: 'flex-end' // Align children to the bottom
+  }} 
+  className="flex-col justify-center items-center text-xs md:hidden">
+  
+  <img 
+    src='images/mobilehero.png' 
+    alt='hero' 
+    className='w-full'
+    style={{ 
+      objectFit: 'cover', // Ensure the image covers its container
+      objectPosition: 'bottom' // Align the image to the bottom of its container
+    }} 
+  />
+  
+  <div className='bg-white'> 
+    <div className='font-bold text-3xl p-2 px-3 mt-4 mx-2'>
+      Discover, Endorse, Transform
+    </div>
+    <div className='p-2 px-2 text-sm text-base text-justify leading-relaxed mx-4'>
+      Dive into our platform to discover a world of impactful campaigns, each 
+      one a beacon of hope, a catalyst for transformation. With iEndorse, you have 
+      the power to endorse causes close to your heart, amplifying their reach and 
+      influence. Every endorsement is a vote for change, a commitment to shaping 
+      a better tomorrow for all.
+    </div>
+  </div>
+</div>
+
+
+
+
+    <div className="flex flex-wrap justify-center p-4 text-xs bg-white sm:bg-gray-100">
+      {  categories?.map((item:any) => (
+          <button 
+         key={item.id} className='bg-customBlue text-white px-5 py-2 m-2 rounded-full hover:bg-blue-700'
+         onClick={() =>setCategoryId(item.id)}
+         >
+            {item.categoryName}
           </button>
         ))}
       </div>

@@ -101,7 +101,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
   
   const requestURL = `${baseURL}/Category/GetCategories/`;
   const { data: categories, refreshApi: refreshCategories, error: categoriestError, loading: categoriesLoading } = useFetch(requestURL, "GET", onSuccess, onError);
-  
+   
   useEffect(() => {
     handleTagChange('tags')(selectedPeople); // Pass the entire selectedPeople object array
   }, [selectedPeople]);
