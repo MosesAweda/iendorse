@@ -87,7 +87,9 @@ const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+           'Authorization': `Bearer ${window.localStorage.getItem('token')}`
         },
+      
         body: JSON.stringify(transformedData), // Send the transformed data
       });
   

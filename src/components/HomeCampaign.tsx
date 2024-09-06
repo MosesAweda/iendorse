@@ -45,8 +45,6 @@ console.log("camampaign File", item?.campaignFiles[0]?.filePath)
 
           <div>
           <div className="my-4">
-
-'#
 {item?.campaignFiles?.length > 0 && (
     <div className="">
     <img className="rounded-2xl"  src={item?.campaignFiles[0]?.filePath  }   

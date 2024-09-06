@@ -181,11 +181,11 @@ const Home = () => {
     margin: 0, 
     padding: 0, 
     // height: '100vh', // Ensure the container takes full viewport height
-    display: 'flex',
+    
     flexDirection: 'column', // Stack children vertically
     justifyContent: 'flex-end' // Align children to the bottom
   }} 
-  className="hidden flex-col justify-center items-center text-xs ">
+  className="flex flex-col justify-center items-center text-xs  sm:hidden ">
   
   <img 
     src='images/mobilehero.png' 
