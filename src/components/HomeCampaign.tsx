@@ -19,7 +19,7 @@ console.log("camampaign File", item?.campaignFiles[0]?.filePath)
           <Link to={`/ViewCampaign/${item?.campaignId}`} className={""}> 
           <div>
             <div className="flex items-center">
-              <div className="mr-4 bg-red-500 rounded-full mx-1">
+              <div className="mr-4  rounded-full mx-1">
                 <img src="/images/Avatar.png" width={45} height={45} alt="Avatar" />
               </div>
               <div>
@@ -46,6 +46,7 @@ console.log("camampaign File", item?.campaignFiles[0]?.filePath)
           <div>
           <div className="my-4">
 
+'#
 {item?.campaignFiles?.length > 0 && (
     <div className="">
     <img className="rounded-2xl"  src={item?.campaignFiles[0]?.filePath  }   

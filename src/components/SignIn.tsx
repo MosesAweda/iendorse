@@ -5,10 +5,7 @@ import instagram from './svg/instagram.svg';
 import { baseURL } from './URL';
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
-import { Audio, LineWave } from 'react-loader-spinner';
-//  12345abcde
-//  devano5256@furnato.com
-
+import { LineWave } from 'react-loader-spinner';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -26,16 +23,14 @@ const SignIn: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ emailAddress: email,  password }),
+        body: JSON.stringify({ emailAddress: email, password }),
       });
 
       const data = await response.json();
 
       if (response.ok && data.succeeded) {
-
         window.localStorage.setItem("userData", JSON.stringify(data.data));
-        window.localStorage.setItem("token", (data?.data.jwtToken));
-         
+        window.localStorage.setItem("token", data?.data.jwtToken);
 
         navigate('/');
         toast('Welcome' + ' ' + data.data.fullName + '!');
@@ -50,15 +45,14 @@ const SignIn: React.FC = () => {
     }
   };
 
-
   return (
     <>
-      <div className="min-h-screen flex items-center justify-start bg-cover bg-center overflow-hidden" style={{ backgroundImage: 'url(images/formbanner.png)' }}>
-        <div className="w-full max-w-md bg-white rounded-lg shadow dark:border p-6 space-y-4 md:space-y-6 mt-1 mx-5 md:mx-10 md:my-5">
+       <div className="min-h-screen flex items-center justify-center md:justify-start md:pl-10 bg-cover bg-center" style={{ backgroundImage: 'url(images/formbanner.png)' }}>
+        <div className="w-full max-w-md bg-white rounded-lg shadow dark:border p-6 space-y-4 md:space-y-6 mx-5">
           <div className="flex justify-center">
             <img src={logo} alt="Logo" />
           </div>
-          <div className=" flex justify-center text-lg font-medium leading-tight tracking-tight text-gray-900 md:text-xl">
+          <div className="flex justify-center text-lg font-medium leading-tight tracking-tight text-gray-900 md:text-xl">
             Sign In
           </div>
           <div className="flex justify-center text-sm leading-tight tracking-tight text-gray-900 ">
@@ -89,14 +83,19 @@ const SignIn: React.FC = () => {
                 required
               />
             </div>
-            
+
             <div className="flex items-center justify-center">
-              <p className="px-4">Forgot your password? <a href="/ForgotPassword" className='text-customBlue hover:text-blue-500  font-medium'>Reset</a></p>
+              <p className="px-4">
+                Forgot your password?{' '}
+                <a href="/ForgotPassword" className="text-customBlue hover:text-blue-500 font-medium">
+                  Reset
+                </a>
+              </p>
             </div>
 
             <div>
-            <button disabled={loading} type="submit" className="bg-customBlue text-white p-2.5 rounded-md w-full flex items-center justify-center space-x-2">
-                <span>{ loading?  "Signing In" : "Sign In"} </span>
+              <button disabled={loading} type="submit" className="bg-customBlue text-white p-2.5 rounded-md w-full flex items-center justify-center space-x-2">
+                <span>{loading ? 'Signing In' : 'Sign In'}</span>
                 {loading && (
                   <LineWave
                     visible={true}
@@ -104,11 +103,6 @@ const SignIn: React.FC = () => {
                     width="40"
                     color="#fff"
                     ariaLabel="line-wave-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                    firstLineColor=""
-                    middleLineColor=""
-                    lastLineColor=""
                   />
                 )}
               </button>
@@ -121,11 +115,16 @@ const SignIn: React.FC = () => {
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
           <div className="flex justify-center space-x-4">
-            <img src={facebook} alt="Facebook"  width={30} height={30}/>
+            <img src={facebook} alt="Facebook" width={30} height={30} />
             <img src={instagram} alt="Instagram" width={30} height={30} />
           </div>
           <div className="flex items-center justify-center">
-            <p className="px-4">Are you new here? <a href="/SignUp" className='text-customBlue    hover:text-blue-500'>Create An Account</a></p>
+            <p className="px-4">
+              Are you new here?{' '}
+              <a href="/SignUp" className="text-customBlue hover:text-blue-500">
+                Create An Account
+              </a>
+            </p>
           </div>
         </div>
       </div>

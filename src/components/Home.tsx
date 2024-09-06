@@ -30,7 +30,6 @@ interface ApiResponse {
   postData: (body: any) => Promise<void>;
   totalRecords: number;
 }
-
 const Home = () => {
   const [page, setPage] = useState(1);
   const [dataArray, setDataArray] = useState<any[]>([]);
@@ -38,25 +37,26 @@ const Home = () => {
   const [categoryId, setCategoryId] = useState<any>(0);
 
   const onSuccess = () => {
-    // setDataArray((prev) => [...prev,...responseData?.data || []]);
+    // setDataArray((prev) => [...prev, ...responseData?.data || []]);
   };
+  
   const onError = () => {
     // console.log("error");
   };
+
   const requestURL = `${baseURL}/Category/GetCategories/`;
-  const { data: categories, refreshApi: refreshCategories, error: categoriestError, loading: categoriesLoading } = useFetch(requestURL, "GET", onSuccess, onError);
-  
+  const { data: categories, refreshApi: refreshCategories, error: categoriesError, loading: categoriesLoading } = useFetch(requestURL, "GET", onSuccess, onError);
 
   const discoverURL = `${baseURL}/Campaign/DiscoverCampaign?CategoryId=${categoryId}&pageNumber=${page}&pageSize=5`;
   const { data, loading, error, postData } = usePost<ApiResponse>(discoverURL);
   const totalRecords = data?.totalRecords || 0;
 
-  // Fetch initial data
+  // Fetch data based on the current category and page
   useEffect(() => {
     postData({});
-  }, []);
+  }, [categoryId, page]);
 
-  // Fetch data on page change
+  // Fetch data and handle infinite scroll
   useEffect(() => {
     const fetchCampaigns = async () => {
       try {
@@ -73,7 +73,12 @@ const Home = () => {
         const responseData = await response.json();
         const fetchedData = responseData?.data || [];
 
-        setDataArray((prev) => [...prev, ...fetchedData]);
+        // If category changes, reset data array, otherwise append new data
+        if (page === 1) {
+          setDataArray(fetchedData);
+        } else {
+          setDataArray((prev) => [...prev, ...fetchedData]);
+        }
       } catch (err) {
         toast.error((err as Error).message);
       } finally {
@@ -87,24 +92,25 @@ const Home = () => {
   // Handle infinite scroll
   const handleScroll = () => {
     if (infiniteLoading) return;
-    if(totalRecords == 0) return;
+    if (totalRecords === 0) return;
 
     if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
       if (dataArray.length < totalRecords) {
         setInfiniteLoading(true);
         setPage((prev) => prev + 1);
       } else {
-        console.log("All records loaded:", totalRecords , dataArray.length);
+        console.log("All records loaded:", totalRecords, dataArray.length);
       }
     }
   };
 
-    // const handleCategoryChange = (campaignCategory: any) => {
-    //   setPage(1);
-    //   setDataArray([]);
-    //   setInfiniteLoading(false);
-    //   setCampaignCategory(campaignCategory);
-    // }
+  // Handle category change
+  const handleCategoryChange = (newCategoryId: any) => {
+    setPage(1); // Reset to the first page
+    setDataArray([]); // Clear the existing data
+    setCategoryId(newCategoryId); // Update the selected category
+    setInfiniteLoading(false); // Reset infinite loading state
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -112,10 +118,6 @@ const Home = () => {
   }, [dataArray.length, totalRecords]);
 
 
-//  useEffect(() => {
-//     setPage(1)
-//   }, [categoryId]);
-  
   return (
     <>
       <Navbar />
@@ -183,7 +185,7 @@ const Home = () => {
     flexDirection: 'column', // Stack children vertically
     justifyContent: 'flex-end' // Align children to the bottom
   }} 
-  className="flex-col justify-center items-center text-xs md:hidden">
+  className="hidden flex-col justify-center items-center text-xs ">
   
   <img 
     src='images/mobilehero.png' 
@@ -207,7 +209,7 @@ const Home = () => {
       a better tomorrow for all.
     </div>
   </div>
-</div>
+    </div>
 
 
 
@@ -216,7 +218,7 @@ const Home = () => {
       {  categories?.map((item:any) => (
           <button 
          key={item.id} className='bg-customBlue text-white px-5 py-2 m-2 rounded-full hover:bg-blue-700'
-         onClick={() =>setCategoryId(item.id)}
+         onClick={() =>handleCategoryChange(item.id)}
          >
             {item.categoryName}
           </button>
@@ -224,17 +226,22 @@ const Home = () => {
       </div>
 
       <div className="flex flex-col bg-white sm:bg-gray-100 justify-center items-center overflow-x-hidden">
-      {error && <p>Error: {error.message}</p>}
+      {/* {error && <p>Error: {error.message}</p>} */}
+      {loading ? (
+          // Display the loading skeleton while data is being fetched
+          <SkeletonCampaign />
+        ) : dataArray.length === 0 ? (
+          // Display a message when there's no data
+          <div className="text-center text-gray-500 mt-4 mb-20">
+            No campaigns found 
+          </div>
+        ) : (
+          // Display the actual content once loading is complete
+          dataArray.map((item, index) => (
+            <HomeCampaign key={index} item={item} />
+          ))
+        )}
 
-{loading ? (
-  // Display the loading skeleton while data is being fetched
- <SkeletonCampaign />
-) : (
-  // Display the actual content once loading is complete
-  dataArray.map((item, index) => (
-    <HomeCampaign key={index} item={item} />
-  ))
-)}
 
 
         {infiniteLoading && (

@@ -182,7 +182,8 @@ const SignUp: React.FC = () => {
   
 
   return (
-    <div className="min-h-screen flex items-center justify-start bg-cover bg-center overflow-hidden" style={{ backgroundImage: 'url(images/formbanner.png)' }}>
+    <div className="min-h-screen flex items-center justify-center md:justify-start md:pl-10 bg-cover bg-center" style={{ backgroundImage: 'url(images/formbanner.png)' }}>
+    
       <div className="w-full max-w-md bg-white rounded-lg shadow dark:border p-6 space-y-4 md:space-y-6 mx-5 mt-5 md:mx-10 md:my-10">
         <div className="flex justify-center">
           <img src={logo} alt="Logo" />
