@@ -202,7 +202,7 @@ const SignUp: React.FC = () => {
               id="fullName"
               value={fullName}
               onChange={handleChange}
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-base  rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               placeholder="Full Name"
               required
             />
@@ -215,7 +215,7 @@ const SignUp: React.FC = () => {
               id="email"
               value={emailAddress}
               onChange={handleChange}
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               placeholder="Email Address"
               required
             />
@@ -226,7 +226,7 @@ const SignUp: React.FC = () => {
               country={'us'}
               value={phoneNumber}
               onChange={handlePhoneChange}
-              inputClass="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              inputClass="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
             />
             {errors.phone && <p className="text-red-600 text-sm">{errors.phone}</p>}
           </div>
@@ -238,7 +238,7 @@ const SignUp: React.FC = () => {
               value={password}
               onChange={handleChange}
               placeholder="Password"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               required
             />
             {errors.password && <p className="text-red-600 text-sm">{errors.password}</p>}
@@ -251,7 +251,7 @@ const SignUp: React.FC = () => {
               value={confirmPassword}
               onChange={handleChange}
               placeholder="Confirm Password"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               required
             />
             {errors.confirmPass && <p className="text-red-600 text-sm">{errors.confirmPass}</p>}

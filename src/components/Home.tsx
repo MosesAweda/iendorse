@@ -89,20 +89,20 @@ const Home = () => {
     fetchCampaigns();
   }, [page, categoryId]);
 
-  // Handle infinite scroll
-  const handleScroll = () => {
-    if (infiniteLoading) return;
-    if (totalRecords === 0) return;
+  // Handle infinite scroll// Handle infinite scroll
+const handleScroll = () => {
+  if (infiniteLoading || dataArray.length >= totalRecords) return;  // Stop if already loading or all records are loaded
 
-    if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
-      if (dataArray.length < totalRecords) {
-        setInfiniteLoading(true);
-        setPage((prev) => prev + 1);
-      } else {
-        console.log("All records loaded:", totalRecords, dataArray.length);
-      }
+  if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+    if (dataArray.length < totalRecords) {
+      setInfiniteLoading(true);
+      setPage((prev) => prev + 1);
+    } else {
+      console.log("All records loaded:", totalRecords, dataArray.length);
     }
-  };
+  }
+};
+
 
   // Handle category change
   const handleCategoryChange = (newCategoryId: any) => {
@@ -188,7 +188,7 @@ const Home = () => {
   className="flex flex-col justify-center items-center text-xs  sm:hidden ">
   
   <img 
-    src='images/mobilehero.png' 
+    src='images/mobileHero.png' 
     alt='hero' 
     className='w-full'
     style={{ 
@@ -213,21 +213,23 @@ const Home = () => {
 
 
 
-
     <div className="flex flex-wrap justify-center p-4 text-xs bg-white sm:bg-gray-100">
-      {  categories?.map((item:any) => (
-          <button 
-         key={item.id} className='bg-customBlue text-white px-5 py-2 m-2 rounded-full hover:bg-blue-700'
-         onClick={() =>handleCategoryChange(item.id)}
-         >
-            {item.categoryName}
-          </button>
-        ))}
-      </div>
+  {categories?.map((item: any) => (
+    <button 
+      key={item.id} 
+      className={`px-5 py-2 m-2 rounded-full text-white 
+        ${item.id === categoryId ? 'bg-blue-800' : 'bg-customBlue hover:bg-blue-900'}`}
+      onClick={() => handleCategoryChange(item.id)}
+    >
+      {item.categoryName}
+    </button>
+  ))}
+    </div>
+
 
       <div className="flex flex-col bg-white sm:bg-gray-100 justify-center items-center overflow-x-hidden">
       {/* {error && <p>Error: {error.message}</p>} */}
-      {loading ? (
+      {loading && !infiniteLoading? (
           // Display the loading skeleton while data is being fetched
           <SkeletonCampaign />
         ) : dataArray.length === 0 ? (
