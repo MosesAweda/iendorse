@@ -29,9 +29,6 @@ import close from '../svg/close.svg';
 import EndorsementSuccessfulModal from "./EndorsementSuccessfulModal";
   
 
- 
-
-
 interface ApiResponse {
   data: any;
   loading: boolean;
@@ -57,7 +54,7 @@ const ViewCampaign = ({ item }: any) => {
   const [paymentMethodModal, setPaymentMethodModal] = useState(false);
   const [insufficientWalletModal, setInsufficientWalletModal] = useState(false);
   const [summaryModal, setSummaryModal] = useState(false);
-  const [promotionSuccessfulModal, setPromotionSuccessfulModal] = useState(false);
+  const [endorsementSuccessfulModal, setEndorsementSuccessfulModal] = useState(false);
   const [shareCampaignModal, setShareCampaignModal] = useState(false);
   const [unitsToPurchase, setUnitsToPurchase] = useState<number>(0);
   const [endorsementNote, setEndorsementNote] = useState("");
@@ -79,12 +76,12 @@ const ViewCampaign = ({ item }: any) => {
   const closeInsufficientWalletModal = () => setInsufficientWalletModal(false);
   const opensummarymodal = () => setSummaryModal(true);
   const closeSummaryModal = () => setSummaryModal(false);
-  const openPromotionSuccessfulModal = () => setPromotionSuccessfulModal(true);
-  const closePromotionSuccessfulModal = () => {setPromotionSuccessfulModal(false); setAllData({})};
+  const openEndorsementSuccessfulModal = () => setEndorsementSuccessfulModal(true);
+  const closeEndorsementSuccessfulModal = () => {setEndorsementSuccessfulModal(false); setAllData({})};
   const openShareCampaignModal = () => setShareCampaignModal(true);
   const closeShareCampaignModal = () =>   setShareCampaignModal(false);
 
-
+const endorseWithWalletURL = `${baseURL}/Campaign/EndorseCampaignWithWallet`
 const walletURL = `${baseURL}/Wallet/WalletProfile`
   const { data: WalletData, refreshApi: refreshWalletData, error: walletError, loading: WalletDataLoading
   } = useFetch(walletURL, "GET", onSuccess, onError);
@@ -98,12 +95,10 @@ const walletURL = `${baseURL}/Wallet/WalletProfile`
  const walletBalance = WalletData?.walletBalance;
 
 
-const endorseWithWalletURL = `${baseURL}/Campaign/EndorseCampaignWithWallet`
-
 const endorseWithWalletData = {
   campaignId: uid,
   numberOfUnits: unitsToPurchase,
-  endorsementNote: "I hereby Endorse "
+  endorsementNote: endorsementNote
 }
 
  const { data:ApiFeedback, loading: ApiFeedbackLoading, error, postData} = usePost(endorseWithWalletURL);
@@ -152,7 +147,7 @@ const endorseWithWalletData = {
     if (ApiFeedback) {
       console.log(ApiFeedback);
          closeSummaryModal()
-    openPromotionSuccessfulModal();
+    openEndorsementSuccessfulModal();
  
     }
   }, [ApiFeedback]);
@@ -160,7 +155,7 @@ const endorseWithWalletData = {
   useEffect(() => {
     if (error) {
       console.error("Error fetching data:", error);
-      toast.error("Failed to promote. Please try again.");
+      toast.error("Failed to endorse. Please try again.");
     }
   }, [error]);
   return (
@@ -416,8 +411,8 @@ const endorseWithWalletData = {
 
 
       <EndorsementSuccessfulModal
-              isOpen={promotionSuccessfulModal}
-        onClose={closePromotionSuccessfulModal}
+              isOpen={endorsementSuccessfulModal}
+        onClose={closeEndorsementSuccessfulModal}
         details ={allData}
       />
 

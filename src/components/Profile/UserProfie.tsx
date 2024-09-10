@@ -17,6 +17,7 @@ import EditProfile from './EditProfile';
 const UserProfile = () => {
     const userData: any = window.localStorage.getItem("userData");
     const parsedUserData = JSON.parse(userData);
+    const [copied, setCopied] = useState(false);
     const token = userData ? JSON.parse(userData).jwtToken : null;
     const [loading, setLoading] = useState(false);
     const [infiniteLoading, setInfiniteLoading] = useState(false);
@@ -120,11 +121,18 @@ const UserProfile = () => {
     const handleCopy = async () => {
       try {
         await navigator.clipboard.writeText(textToCopy);
-       toast.success('Copied!');
+        setCopied(true);
       } catch (err) {
         setCopySuccess('Failed to copy!');
       }
     };
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+ 
+
+
     return (
         <>
         <div className='bg-gray-100 min-h-screen'>
@@ -163,10 +171,17 @@ const UserProfile = () => {
                             <h1 className="font-bold text-3xl text-center mb-1">
                                 {parsedUserData.fullName}
                             </h1>
-                            <div className="text-gray-500 flex justify-center text-center inline"
-                            >
-                            <img src={docCopy} onClick={handleCopy} className='cursor-pointer' /> <span className='ml-1 mr-2 font-medium'> Referal code:  </span> {textToCopy} 
-                            </div>
+                            <div className="text-gray-500 flex justify-center text-center inline">
+      <img src={docCopy} onClick={handleCopy} className="cursor-pointer" alt="Copy icon" />
+      <span className="ml-1 mr-2 font-medium">Referral code:</span> {textToCopy}
+
+      {/* Show the copied message only when the user clicks the copy button */}
+      {copied && (
+        <span className="ml-2 text-green-500 font-medium">
+          Copied!
+        </span>
+      )}
+    </div>
                         </div>
                     </div>
                 </div>
