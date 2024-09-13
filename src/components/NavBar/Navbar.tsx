@@ -129,7 +129,7 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="hover:bg-gray-100 rounded-lg">
-                <a href="#" className="block px-16 py-2">
+                <a href="/Earnings" className="block px-16 py-2">
                   <img src={money} className="align-middle mr-2 inline w-4 h-4" />
                   <span className="inline align-middle"> My Earnings </span>
                 </a>

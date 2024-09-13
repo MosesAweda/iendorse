@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ThreeCircles, Puff } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
-
 import bg from '../../public/images/bg.svg';
 import bell from './svg/bell.svg';
 import home from './svg/home.svg';
@@ -47,7 +46,7 @@ const Home = () => {
   const requestURL = `${baseURL}/Category/GetCategories/`;
   const { data: categories, refreshApi: refreshCategories, error: categoriesError, loading: categoriesLoading } = useFetch(requestURL, "GET", onSuccess, onError);
 
-  const discoverURL = `${baseURL}/Campaign/DiscoverCampaign?CategoryId=${categoryId}&pageNumber=${page}&pageSize=5`;
+  const discoverURL = `${baseURL}/Campaign/DiscoverCampaign?CategoryId=${categoryId}&pageNumber=${page}&pageSize=20`;
   const { data, loading, error, postData } = usePost<ApiResponse>(discoverURL);
   const totalRecords = data?.totalRecords || 0;
 
@@ -196,8 +195,35 @@ const handleScroll = () => {
       objectPosition: 'bottom' // Align the image to the bottom of its container
     }} 
   />
+
+  
   
   <div className='bg-white'> 
+    
+  <div className='flex mt-2 justify-center sm:hidden'>
+                <Link to='/'>
+                  <button className=' bg-customBlue text-white rounded-lg px-3 mr-4'>
+                    <div className='flex items-center px-10'>
+                      <img src={apple} alt="Download on the App Store" width={32} height={32} />
+                      <div className=' text-start ml-3 text-sm py-4'>
+                        <div>Download on the</div>
+                        <div>App Store</div>
+                      </div>
+                    </div>
+                  </button>
+                </Link>
+                <Link to='/'>
+                  <button className='bg-customBlue text-white rounded-lg px-5'>
+                    <div className='flex items-center px-10'>
+                      <img src={playstore} alt="Get it on Google Play" width={35} height={35} />
+                      <div className=' text-start ml-2 text-sm py-4'>
+                        <div>Get it on</div>
+                        <div>Google Play</div>
+                      </div>
+                    </div>
+                  </button>
+                </Link>
+        </div>
     <div className='font-bold text-3xl p-2 px-3 mt-4 mx-2'>
       Discover, Endorse, Transform
     </div>
@@ -208,6 +234,9 @@ const handleScroll = () => {
       influence. Every endorsement is a vote for change, a commitment to shaping 
       a better tomorrow for all.
     </div>
+
+
+
   </div>
     </div>
 
@@ -229,20 +258,27 @@ const handleScroll = () => {
 
       <div className="flex flex-col bg-white sm:bg-gray-100 justify-center items-center overflow-x-hidden">
       {/* {error && <p>Error: {error.message}</p>} */}
-      {loading && !infiniteLoading? (
-          // Display the loading skeleton while data is being fetched
-          <SkeletonCampaign />
-        ) : dataArray.length === 0 ? (
-          // Display a message when there's no data
-          <div className="text-center text-gray-500 mt-4 mb-20">
-            No campaigns found 
-          </div>
-        ) : (
-          // Display the actual content once loading is complete
-          dataArray.map((item, index) => (
-            <HomeCampaign key={index} item={item} />
-          ))
-        )}
+      {loading && !infiniteLoading ? (
+  // Display the loading skeleton while data is being fetched
+  <SkeletonCampaign />
+) : dataArray.length === 0 ? (
+  // Display a message when there's no data
+  <div className="text-center text-gray-500 mt-4 mb-20">
+    {!loading && !infiniteLoading && <p>No campaigns found.</p>}
+  </div>
+) : (
+  // Display the actual content once loading is complete
+  <>
+    {dataArray.map((item, index) => (
+      <HomeCampaign key={index} item={item} />
+    ))}
+    {dataArray.length >= totalRecords && (
+      <div className="text-center text-gray-500 mt-4 mb-20">
+        <p>You have reached the end of the campaigns.</p>
+      </div>
+    )}
+  </>
+)}
 
 
 

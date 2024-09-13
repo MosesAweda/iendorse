@@ -3,13 +3,13 @@ import close from '../svg/close.svg';
 import { toast } from "react-toastify";
  
 
-interface FundWalletProps {
+interface RedeemPointsProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (units: number) => void;
 }
 
-const FundWallet: React.FC<FundWalletProps> = ({ isOpen, onClose, onSubmit }) => {
+const RedeemPoints: React.FC<RedeemPointsProps> = ({ isOpen, onClose, onSubmit }) => {
   const [numberOfUnits, setNumberOfUnits] = useState<number>(0);
   const [error, setError] = useState<string>('');
 
@@ -48,9 +48,9 @@ const FundWallet: React.FC<FundWalletProps> = ({ isOpen, onClose, onSubmit }) =>
       </div> 
         <div className="relative bg-white rounded-lg shadow">
           <div className="p-4 md:p-5">
-            <h1 className="text-center font-bold"> Fund Wallet</h1>
+            <h1 className="text-center font-bold"> Redeem Points</h1>
             <p className="p-1 text-sm text-center font-sans mb-4">
-            Fund your wallet to be able to promote your campaigns and also endorse other campaigns
+           Your points would be redeemed to naira into your desired bank account.
             </p>
 
             <div className="flex-col max-w-sm space-y-2 justify-center mb-40 ">
@@ -59,7 +59,7 @@ const FundWallet: React.FC<FundWalletProps> = ({ isOpen, onClose, onSubmit }) =>
                   onChange={handleChange}
                   id="units"
                   className="w-full py-2 px-3 text-sm  rounded-md  border text-gray-900"
-                  placeholder="Number of units"
+                  placeholder="Number of points"
                 />
                 <div>  
                     <span className='bg-blue-50 text-blue-500 px-2 text-xs rounded-full py-2 mt-6' > 1000 naira equals 1 unit </span>
@@ -73,7 +73,7 @@ const FundWallet: React.FC<FundWalletProps> = ({ isOpen, onClose, onSubmit }) =>
               onClick={handleSubmit}
               className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              Proceed to Pay
+              Proceed  
             </button>
           </div>
         </div>
@@ -82,4 +82,4 @@ const FundWallet: React.FC<FundWalletProps> = ({ isOpen, onClose, onSubmit }) =>
   );
 };
 
-export default FundWallet;
+export default RedeemPoints;

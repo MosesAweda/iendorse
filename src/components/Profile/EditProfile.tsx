@@ -10,11 +10,12 @@ interface EditProfileProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
 const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
   const userData: any = window.localStorage.getItem("userData");
   const parsedUserData = JSON.parse(userData);
   const [fullName, setFullName] = useState<string>(parsedUserData?.fullName || '');
+  const[id, setId] = useState<string>(parsedUserData?.id || '');
+  const[emailAddress, setEmailAddress] = useState<string>(parsedUserData?.emailAddress || '');
   const [loading, setLoading] = useState(false)
   const [imageLoading, setImageLoading] = useState(false)
   const [sex, setSex] = useState<string>(parsedUserData?.sex || '')
@@ -158,51 +159,69 @@ const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
     }
   };
   
-
-  
-  
   const handleSubmit = async () => {
-    // if (!fullName || !sex || !occupation) {
-    //   setError('Please fill in all fields.');
-    //   return;
-    // }
-    setLoading(true)
-    const formData = new FormData();
-    formData.append('fullName', fullName);
-    formData.append('sex', sex);
-    formData.append('emailAddress', parsedUserData.emailAddress);
-    formData.append('occupation', occupation);
-    formData.append('phoneNumber', phoneNumber);
-    if (profilePicture) {
-      formData.append('imageBase64String', profilePicture);
-    }
+    setLoading(true);
+  
+    // Create a transformed data object with only updated fields for the API call
+    const transformedData: any = {
+      id: id,
+      fullName: fullName,
+      sex: sex,
+      emailAddress: parsedUserData.emailAddress,
+      occupation: occupation,
+      phoneNumber: phoneNumber,
+      imageBase64String: profilePicture ? profilePicture : undefined, // Only add image if uploaded
+    };
+  
+    // Remove undefined fields so they are not sent to the API
+    Object.keys(transformedData).forEach((key) => {
+      if (transformedData[key] === undefined) {
+        delete transformedData[key];
+      }
+    });
   
     try {
       const response = await fetch(`${baseURL}/Account/UpdateUserAccountDetails`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${window.localStorage.getItem('token')}`
         },
-        body: formData,
+        body: JSON.stringify(transformedData),
       });
   
-      if (!response.ok) {
-        throw new Error('Failed to update profile');
+      const data = await response.json();
+  
+      if (response.ok && data.succeeded) {
+        // Fetch existing data from localStorage
+        const existingUserData = JSON.parse(window.localStorage.getItem("userData") || "{}");
+  
+        // Merge updated fields with the existing data, using imageUrl for the profile picture
+        const updatedUserData = { 
+          ...existingUserData, 
+          ...transformedData, 
+          imageUrl: transformedData.imageBase64String // Change to imageUrl for localStorage
+        };
+  
+        // Remove imageBase64String from the merged data
+        delete updatedUserData.imageBase64String;
+  
+        // Save the updated user data to localStorage
+        window.localStorage.setItem("userData", JSON.stringify(updatedUserData));
+  
+        toast.success('Profile updated successfully');
+        onClose();
+      } else {
+        toast.error(data.message || 'An error occurred while updating the profile');
       }
-  
-      const updatedUserData = await response.json();
-      window.localStorage.setItem("userData", JSON.stringify(updatedUserData));
-      toast.success('Profile updated successfully');
-      onClose();
-
-      setLoading(false)
-  
-    } catch (err) {
-      toast.error((err as Error).message);
-    } finally{
-      setLoading(false)
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error('An error occurred while updating the profile');
+    } finally {
+      setLoading(false);
     }
   };
+  
   
 const closeAndClear = () => {
   onClose();

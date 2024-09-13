@@ -8,6 +8,7 @@ import PaymentMethodModal from "./ViewCampaign/PaymentMethodModal";
 import InsufficientWalletBalanceModal from "./ViewCampaign/InsufficientWalletBallance";
 import SummaryModal from "./ViewCampaign/SummaryModal";
 import EndorsementSuccessfulModal from "./ViewCampaign/EndorsementSuccessfulModal";
+import ShareCampaignModal from "./ViewCampaign/ShareCampaignModal";
 import { baseURL } from "./URL";
 import useFetch from "./Hooks/useFetch";
 import usePost from "./Hooks/usePost";
@@ -25,6 +26,7 @@ const HomeCampaign = ({item}:any, index:any) => {
  const [insufficientWalletModal, setInsufficientWalletModal] = useState(false);
  const [summaryModal, setSummaryModal] = useState(false);
  const [endorsementSuccessfulModal, setEndorsementSuccessfulModal] = useState(false);
+ const [shareCampaignModal, setShareCampaignModal] = useState(false);
  
 
   const openEndorseMenu = () => {
@@ -42,6 +44,8 @@ const HomeCampaign = ({item}:any, index:any) => {
   const closeInsufficientWalletModal = () => setInsufficientWalletModal(false);
   const opensummarymodal = () => setSummaryModal(true);
   const closeSummaryModal = () => setSummaryModal(false);
+  const openShareCampaignModal = () => setShareCampaignModal(true);
+  const closeShareCampaignModal = () =>   setShareCampaignModal(false);
 
   const openEndorsementSuccessfulModal = () => setEndorsementSuccessfulModal(true);
   const closeEndorsementSuccessfulModal = () => {setEndorsementSuccessfulModal(false); setAllData({})};
@@ -64,7 +68,7 @@ const HomeCampaign = ({item}:any, index:any) => {
     setUnitsToPurchase(units)
     setEndorsementNote(note)
     setAllData({...allData, unitsToPurchase: units, endorsementNote: note});
-    console.log("All ENDORSEMENT DATA>>>>>>>>", allData)
+   // console.log("All ENDORSEMENT DATA>>>>>>>>", allData)
      closeEndorseMenu();
      openPaymentMethodModal();
   }
@@ -80,7 +84,7 @@ const HomeCampaign = ({item}:any, index:any) => {
       if (unitsToPurchase > walletBalance) {
         setInsufficientWalletModal(true);
       } else {
-        console.log("opening summary modal")
+       // console.log("opening summary modal")
         opensummarymodal()
       }
     }
@@ -93,7 +97,7 @@ const HomeCampaign = ({item}:any, index:any) => {
       await postData(endorseWithWalletData);
     } catch (err) {
       console.error("Error posting data:", err);
-      toast.error("Failed to Endorse. Please try again.");
+    //  toast.error("Failed to Endorse. Please try again.");
       return;
     }
   };
@@ -183,7 +187,7 @@ console.log("cammpaign File", item?.campaignFiles[0]?.filePath)
           </Link>
           <div className='flex mt-4 mb-3 text-sm'>
             <div className='flex mr-5 items-center'>
-              <div>
+              <div onClick={openShareCampaignModal}>
                 <img  src={share} width={20} height={20} className='mr-1' alt="Share" />
               </div>
               <div>Share</div>
@@ -233,6 +237,12 @@ console.log("cammpaign File", item?.campaignFiles[0]?.filePath)
         details ={allData}
       />
 
+
+<ShareCampaignModal
+        isOpen={shareCampaignModal}
+        onClose={closeShareCampaignModal}
+        details ={allData}
+      />
 
     </>
   );

@@ -12,9 +12,8 @@ import { Backdrop, CircularProgress } from "@mui/material";
 import FundingSuccessful from './FundingSuccessful';
 
 const Wallet = () => {
-  
     const [accountId, setAccountId] = useState<any>(null);
-    const [apiResponse, setApiResponse] = useState<any>(null);
+    const [apiResponse, setApiResponse] = useState<any>();
     const [loading, setLoading] = useState(false);
     const [fundWalletModal, setFundWalletModal] = useState(false);
     const [fundingSuccessModal, setFundingSuccessModal] = useState(false);
@@ -30,10 +29,13 @@ const Wallet = () => {
     const closeFundWalletModal = () => setFundWalletModal(false);
     const openFundingSuccess = () => setFundingSuccessModal(true);
     const closeFundingSuccess = () => setFundingSuccessModal(false);
+    const navigate = useNavigate();
  
     const walletURL = `${baseURL}/Wallet/WalletProfile`;
     const { data: WalletData, refreshApi: refreshWalletData, error: walletError, loading: WalletDataLoading } = useFetch(walletURL, "GET", onSuccess, onError);
     const walletBalance = WalletData?.walletBalance;
+    const transactions = WalletData?.walletTranactions;
+    console.log("transactions", transactions)
 
     useEffect(() => {
         let userDataString = window.localStorage.getItem("userData");
@@ -69,7 +71,7 @@ const Wallet = () => {
 
     const InitializePayment = async () => {
         setLoading(true);
-
+    
         try {
             const response = await fetch(URL, {
                 method: 'POST',
@@ -77,26 +79,40 @@ const Wallet = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${window.localStorage.getItem('token')}`
                 },
-                body: JSON.stringify({accountId,units}),
+                body: JSON.stringify({ accountId, units }),
             });
-
+    
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+    
             const responseData = await response.json();
-           setApiResponse(responseData.data);
-           if(responseData){
-            window.open(`${responseData.data.authorization_url}`, '_blank');
-           }
+    
+            // Set the API response in state
+            setApiResponse(responseData.data);
+    
+            if (responseData) {
+                // Open the authorization URL in a new tab
+                window.open(`${responseData.data.authorization_url}`, '_blank');
+
+                    
+                // Navigate to the TransactionDetails page with access_code and reference
+                navigate('/TransactionDetails', {
+                    state: {
+                        access_code: responseData.data.access_code,
+                        reference: responseData.data.reference
+                    },
+                });
+            }
         } catch (err) {
             toast.error((err as Error).message);
         } finally {
             setLoading(false);
-            openFundingSuccess();
-
+            console.log("INITIALIZE TRANSAC", apiResponse);
         }
     };
+    
+
 
 
     const VerifyPayStackPayment = async () => {
@@ -161,33 +177,46 @@ const Wallet = () => {
         }
     };
 
+    function formatDate(timestamp: string) {
+        const dateObj = new Date(timestamp);
+        const options: any = {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true // For 12-hour format with AM/PM, set to false for 24-hour format
+        };
+        return dateObj.toLocaleString('en-GB', options);
+      }
 
 
     return (
         <>
+            <div className='bg-gray-100 h-screen '> 
             <Navbar />
             <Backdrop
               sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
               open={loading}>
               <CircularProgress color="inherit" />
             </Backdrop>
-            <div className={`flex bg-gray-100 justify-center h-screen `}>
-                <div className=" mt-10 ">
+           
+            <div className={`flex bg-gray-100 justify-center `}>
+                <div className=" mt-10  ">
                 <div className={`p-4 w-full md:max-w-md border-gray-700 bg-white rounded-lg my-2 bg-cover  bg-center overflow-hidden ${WalletDataLoading && 'animate-pulse'}`} 
                 style={{ backgroundImage: 'url(images/frame2.png)' }}>
                           
-                            <div className="mt-3  pl-2 pr-10">
-                                <h1 className="text-sm text-customBlue">
-                                Wallet Ballance
-                                </h1>
+                 <div className="mt-3  pl-2 pr-36">
+                        <h1 className="text-sm text-customBlue pr-40">
+                        Wallet Ballance
+                        </h1>
+                    </div>
+                        <div className="mt-2 pl-2 ">
+                            <div className="text-3xl font-bold text-customBlue">
+                            {walletBalance? walletBalance : <div className=' pr-40 text-sm'></div>}
                             </div>
-
-                            <div className="mt-2 pl-2 pr-10">
-                                <h1 className="text-3xl font-bold text-customBlue">
-                               {walletBalance}
-                                </h1>
                             </div>  
-
                             <div className="mt-5 pl-2  ">
                             <button 
                                 className="px-10 py-2  bg-customBlue hover:bg-gray-900 text-white rounded-md  "
@@ -198,40 +227,45 @@ const Wallet = () => {
                             </div>  
                         </div>
                       <div className='font-medium text-lg'> Today</div>
-               
-                        <div className=" w-full md:max-w-md p-4 max-w-md border-gray-700 bg-white rounded-lg my-2">
-                            <div className="flex items-center ">
-                                <div className="flex">
-                                    <div className="mr-4   rounded-full  mx-1">
-                                        <img src={incoming}   width={50}   height={50}  alt="notification" className="" />
-                                    </div>
-                                    
-                                </div>
-                               
-                            </div>
-                            <div className="mt-2  pr-16">
-                                <h1 className="font-medium">
-                                Wallet Funded
-                                </h1>
-                                <div className="mt-2 text-sm">
-                                You funded your wallet with 30 units(30,000 Naira).
-                                </div>
-
-                                <div className="mt-2 text-sm">
-                                  Balance : <span className='font-medium'> 30,000 Points</span>
-                                </div>
-
-                                <div>
-                                    <p className="text-xs mt-10">
-                                        18 June, 2024
-                                    </p>
-                                </div>
-
-                            </div>
+               {transactions  && transactions.map((item: any) => (
+                <div className=" w-full md:max-w-md p-4 max-w-md border-gray-700 bg-white rounded-lg my-2">
+                <div className="flex items-center ">
+                    <div className="flex">
+                        <div className="mr-4   rounded-full  mx-1">
+                            <img src={incoming}   width={50}   height={50}  alt="notification" className="" />
                         </div>
+                        
+                    </div>
+                   
+                </div>
+                <div className="mt-2  pr-16">
+                    <h1 className="font-medium">
+                    Wallet Funded
+                    </h1>
+                    <div className="mt-2 text-sm">
+                   {item.description}
+                    </div>
+
+                    <div className="mt-2 text-sm">
+                      Balance : <span className='font-medium'> {item.walletBalance}</span>
+                    </div>
+
+                    <div>
+                        <p className="text-xs mt-10">
+                            {formatDate(item?.paymentDate)}
+                        </p>
+                    </div>
+
                 </div>
             </div>
-
+                   
+               ))}
+                       
+                      
+                </div>
+            </div>
+            </div>
+      
 
 
             <FundWallet 
@@ -249,7 +283,7 @@ const Wallet = () => {
               isOpen={fundingSuccessModal}
                  onClose={closeFundingSuccess}
                      details ={allData}
-                     />
+                />
 
 
         </>

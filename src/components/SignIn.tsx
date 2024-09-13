@@ -50,8 +50,8 @@ const SignIn: React.FC = () => {
 
   return (
     <>
-       <div className="min-h-screen flex items-center justify-center md:justify-start md:pl-10 bg-cover bg-center" style={{ backgroundImage: 'url(images/formbanner.png)' }}>
-        <div className="w-full max-w-md bg-white rounded-lg shadow dark:border p-6 space-y-4 md:space-y-6 mx-5">
+       <div className="min-h-screen flex items-start  sm:items-center justify-center sm:justify-start md:pl-10 bg-cover bg-center" style={{ backgroundImage: 'url(images/formbanner.png)' }}>
+        <div className="w-full max-w-md bg-white rounded-lg shadow dark:border p-6 space-y-4 md:space-y-6 mx-5 mt-10 sm:mt-0">
           <div className="flex justify-center">
             <img src={logo} alt="Logo" />
           </div>

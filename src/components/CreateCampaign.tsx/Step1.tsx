@@ -89,6 +89,8 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
     }
   };
 
+  
+
   const removePerson = (id: number) => {
     const updatedPeople = selectedPeople.filter((person: any) => person.id !== id);
     handleSelectPeople(updatedPeople);

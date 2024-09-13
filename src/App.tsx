@@ -13,7 +13,7 @@ import VerifyEmail from './components/VerifyEmail';
  import ViewCampaign from './components/ViewCampaign/ViewCampaign';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Notifications from './components/Notifications';
+import Notifications from './components/Notifications/Notifications';
 import Search from './components/Search';
 import CreateCampaign from './components/CreateCampaign.tsx/CreateCampaign';
 import Feed from './components/Feeds/Feeds';
@@ -23,6 +23,8 @@ import UserProfile from './components/Profile/UserProfie';
 import HomeCampaign from './components/HomeCampaign';
 import Wallet from './components/Wallet/Wallet';
 import Support from './components/Support';
+import TransactionDetails from './components/Wallet/TranscationDetails';
+import Earnings from './components/Earnings/Earnings';
 
 
 function App() {
@@ -48,6 +50,8 @@ function App() {
         <Route path='/Search' element={<Search />} />
         <Route path='/SignUp' element={<SignUp />} />
         <Route path='/Support' element={<Support />} />
+        <Route path='/TransactionDetails' element={<TransactionDetails />} />
+        <Route path='/Earnings' element={<Earnings />} />
         </Routes>
     </Router>
     </>

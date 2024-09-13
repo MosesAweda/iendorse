@@ -1,11 +1,11 @@
 import React from "react";
-import dot from './svg/dot.svg';
-import send from './svg/send.svg';
-import bell from './svg/bell.svg';
+import dot from '../svg/dot.svg';
+import send from '../svg/send.svg';
+import bell from '../svg/bell.svg';
 import { Link } from "react-router-dom";
 
 const NotificationCard = ({item}: any) => {
-    console.log(item)
+   
    
     function formatDate(timestamp:string) {
         const dateObj = new Date(timestamp);
@@ -41,10 +41,15 @@ const NotificationCard = ({item}: any) => {
             <Link to={`/ViewCampaign/${item.id}`} onClick={() => MarkAsRead(item.id)}>
               <div className="p-4 max-w-md border-gray-700 bg-white rounded-lg my-2">
                             <div className="flex items-center justify-between">
-                                <div className="flex">
+                                <div className="flex mb-3">
                                     <div className="mr-4   rounded-full  mx-1">
-                                        <img src={bell}   alt="notification" className="" />
-                                    </div>
+                                       <div> 
+                                         <img src={item.image}   alt="notification" className="h-8 w-8 mt-1" />
+                                       </div>
+                                       </div>
+                                        <div className="text-sm"> <div className="font-medium">{item.accountName}</div>
+                                        <div className="text-xs">{item.occupation}</div></div>
+                                   
                                     
                                 </div>
                                 <div className="mouse-pointer">
