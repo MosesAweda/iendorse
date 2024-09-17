@@ -188,7 +188,7 @@ console.log("cammpaign File", item?.campaignFiles[0]?.filePath)
           <div className='flex mt-4 mb-3 text-sm'>
             <div className='flex mr-5 items-center'>
               <div onClick={openShareCampaignModal}>
-                <img  src={share} width={20} height={20} className='mr-1' alt="Share" />
+              
               </div>
               <div>Share</div>
             </div>

@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
 import close from '../svg/close.svg';
+import { baseURL } from '../URL';
 import { toast } from "react-toastify";
-
+import { LineWave } from 'react-loader-spinner';
 interface BankDetailsProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (bankDetails: {
-    bankName: string;
-    bankAccountNumber: string;
-    bankAccountName: string;
-  }) => void;
+  onProceed : () => void;
+  // onSubmit: (bankDetails: {
+  //   bankName: string;
+  //   bankAccountNumber: string;
+  //   bankAccountName: string;
+  // }) => void;
+  details : any
 }
 
-const BankDetails: React.FC<BankDetailsProps> = ({ isOpen, onClose, onSubmit }) => {
+const BankDetails: React.FC<BankDetailsProps> = ({ isOpen, onClose, onProceed, details }) => {
   const [bankName, setBankName] = useState<string>('');
   const [bankAccountNumber, setBankAccountNumber] = useState<string>('');
   const [bankAccountName, setBankAccountName] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = () => {
     if (!bankName || !bankAccountNumber || !bankAccountName) {
@@ -24,10 +28,51 @@ const BankDetails: React.FC<BankDetailsProps> = ({ isOpen, onClose, onSubmit }) 
       toast.error('Please fill in all fields.');
     } else {
       setError('');
-      onSubmit({ bankName, bankAccountNumber, bankAccountName });
-      toast.success('Bank details submitted successfully');
+      UpdateBankDetails();
     }
   };
+
+
+  const URL = `${baseURL}/BankAccount/UpdateBankAccount`;
+
+  const UpdateBankDetails = async () => {
+      setLoading(true);
+  
+      try {
+          const response = await fetch(URL, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${window.localStorage.getItem('token')}`
+              },
+              body: JSON.stringify({ 
+               id: 5,
+               bankName: bankName,
+               bankAccountNumber: bankAccountNumber,
+               bankAccountName: bankAccountName
+              }),
+          });
+  
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+  
+          const responseData = await response.json();
+   
+  
+          if (responseData) {
+              toast.success("Bank Details Added");
+              // onProceed();
+          }
+      } catch (err) {
+          toast.error((err as Error).message);
+      } finally {
+          setLoading(false);
+          console.log("Bank Details Added", bankName, bankAccountNumber, bankAccountName);
+          onProceed();
+      }
+  };
+  
 
   if (!isOpen) return null;
 
@@ -92,12 +137,16 @@ const BankDetails: React.FC<BankDetailsProps> = ({ isOpen, onClose, onSubmit }) 
           
             </div>
 
-            <button
+                        <button
+              disabled={loading}
               onClick={handleSubmit}
-              className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              className={`w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ${
+                loading ? 'opacity-50 cursor-not-allowed bg-gray-700' : '  bg-customBlue'
+              }`}
             >
-              Proceed
+             Proceed
             </button>
+
           </div>
         </div>
       </div>

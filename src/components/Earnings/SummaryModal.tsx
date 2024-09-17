@@ -38,7 +38,7 @@ const SummaryModal: React.FC<SummaryModalProps> = ({ isOpen, onClose,onSubmit, d
             <div className="flex-col max-w-sm space-y-2 justify-center mt-8 mb-28">
                <div className='border-b    pb-2 flex justify-between'>
                    <span className=''> Points Balance </span>
-                   <span className='font-medium' > {details?.balance} </span>
+                   <span className='font-medium' > {details?.pointsBalance} </span>
                </div>
 
                <div className='border-b    pb-2 flex justify-between'>

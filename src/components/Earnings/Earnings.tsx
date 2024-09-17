@@ -42,10 +42,10 @@ const Earnings = () => {
  
     const pointsUrl = `${baseURL}/Wallet/PointsProfile`;
     const { data: pointsData, refreshApi: refreshPointsData, error: pointsError, loading: pointsDataLoading } = useFetch(pointsUrl, "GET", onSuccess, onError);
+    
     const pointsBalance = pointsData?.totalPointBalance;
     const transactions = pointsData?.pointsTransactions;
-    console.log("transactions", transactions)
-    console.log("Points Data", pointsData)
+ 
 
     useEffect(() => {
         let userDataString = window.localStorage.getItem("userData");
@@ -54,8 +54,6 @@ const Earnings = () => {
             let userData = JSON.parse(userDataString);
             const accountId = userData.id;
             setAccountId(accountId);
-            console.log("Account ID", accountId);
-
         } else {
             console.log("No userData found in localStorage");
         }
@@ -63,35 +61,71 @@ const Earnings = () => {
 
     const handlePoints = (x: any) => {
         setPoints(x);
-        setAllData({ ...allData, points: points, bankDetails: x, accountId: accountId });
-        console.log(allData);
+        setAllData({ ...allData, points: x, pointsBalance: pointsBalance, accountId: accountId });
+        
         closeRedeemPointsModal();
         openBankDetailsModal();
-
     }
 
-    const handleBankDetails = (x: any) => {
-        setBankDetails(x);
+    const handleBankDetails = () => {
         closeBankDetailsModal();
-        setAllData({ ...allData, balance: pointsBalance,  points: points, bankDetails: x, accountId: accountId });
-        console.log(allData);
+        console.log("allData", allData);
         openSummaryModal()
     }
 
 
-    const handleSummary = () => {
-        console.log(allData);
-        closeSummaryModal()
-        openEnterPasswordModal()
+    const handleSummary = () =>{
+          RedeemEarnedPoints()
+        
     }
 
-    const handlePasswordSubmit = (password: string) => {
-        console.log(password);
-        closeEnterPasswordModal()
-    }
+    const URL = `${baseURL}/Wallet/ReedeemPoint`;
+
+    const RedeemEarnedPoints = async () => {
+        setLoading(true);
+    
+        try {
+            const response = await fetch(URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${window.localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ accountId : accountId,
+                                     redeemedPoints: points ,
+                                     campaignId : 20   }),
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const responseData = await response.json();
+    
+            // Set the API response in state
+            setApiResponse(responseData.data);
+    
+            if (responseData) {
+                // Open the authorization URL in a new tab
+             toast.success("Points Redeemed Successfully")
+             console.log(responseData);
+            } 
+        } catch (err) {
+            console.error((err as Error).message);
+            toast.error("Something went wrong");
+          
+        } finally {
+            setLoading(false);
+            closeSummaryModal();
+            
+            
+        }
+    };
+    
+
 
    
-    const URL = `${baseURL}/Wallet/InitializePaystackPayment`;
+   
 
     function formatDate(timestamp: string) {
         const dateObj = new Date(timestamp);
@@ -156,19 +190,19 @@ const Earnings = () => {
                 </div>
                 <div className="mt-2  pr-16">
                     <h1 className="font-medium">
-                    Wallet Funded
+                   {item.title}
                     </h1>
                     <div className="mt-2 text-sm">
                    {item.description}
                     </div>
 
                     <div className="mt-2 text-sm">
-                      Balance : <span className='font-medium'> {item.walletBalance}</span>
+                      Balance : <span className='font-medium'> {item?.pointBalance}</span>
                     </div>
 
                     <div>
                         <p className="text-xs mt-10">
-                            {formatDate(item?.paymentDate)}
+                            {formatDate(item?.dateRecieved)}
                         </p>
                     </div>
 
@@ -191,7 +225,9 @@ const Earnings = () => {
                 <BankDetails 
                     isOpen={bankDetailsModal}
                     onClose={closeBankDetailsModal}
-                    onSubmit={handleBankDetails}
+                    // onSubmit={handleBankDetails}
+                    onProceed={handleBankDetails}
+                    details ={allData}
                 />
 
                 <SummaryModal 
@@ -201,17 +237,16 @@ const Earnings = () => {
                     details={allData}
                 />
 
-
+{/* 
                 <EnterPassword 
                 isOpen={enterPasswordModal}
                 onClose={closeEnterPasswordModal}
                 onSubmit={handlePasswordSubmit}
-                />  
+                />   */}
 
         </>
 
 
     );
 };
-
 export default Earnings;
