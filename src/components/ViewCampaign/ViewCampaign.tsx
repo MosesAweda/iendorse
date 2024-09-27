@@ -27,6 +27,7 @@ import facebook from '../svg/facebook.svg';
 import instagram from '../svg/instagram.svg';
 import close from '../svg/close.svg';
 import EndorsementSuccessfulModal from "./EndorsementSuccessfulModal";
+import Initials from "../Initials";
   
 
 interface ApiResponse {
@@ -158,6 +159,12 @@ const endorseWithWalletData = {
       toast.error("Failed to endorse. Please try again.");
     }
   }, [error]);
+
+  function formatDate(timestamp:string) {
+    const dateObj = new Date(timestamp);
+    const options:any = { year: 'numeric', month: 'long', day: 'numeric' };
+    return dateObj.toLocaleDateString('en-GB', options);
+  }
   return (
     <>
     <Navbar />
@@ -218,6 +225,8 @@ const endorseWithWalletData = {
 
     <>
 <div className="sm:bg-gray-100  bg-white h-screen">
+
+  
     <div className="flex flex-col sm:bg-gray-100  bg-white justify-center items-center      ">
         
    <div className="p-4 max-w-lg border-gray-700 bg-white rounded-lg my-5  mx-0  sm:mx-1  mb-20">
@@ -235,13 +244,22 @@ const endorseWithWalletData = {
 
         <div className="flex items-center justify-between">
           <div className="flex">
-            <div className="mr-4   rounded-full mx-1">
-              <img src="/images/Avatar.png" width={45} height={45} alt="Avatar" />
+          <div className="  inline-block  z-1 mr-3" >
+          {campaignData?.campaignOwnerImage ? (
+            <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
+             src={campaignData?.campaignOwnerImage} width={45} height={45} alt="Avatar" />
+          ):(
+            <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
+            <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />  
             </div>
+          )
+        }
+ 
+          </div>
             <div>
-              <div className="font-semibold text-lg">{item?.campaignOwner}</div>
+              <div className="font-semibold text-lg">{campaignData?.campaignOwner}</div>
               <div className="text-xs">
-                <i>{item?.campaignOwnerTitle}</i>
+                <i>{campaignData?.campaignOwnerTitle}</i>
               </div>
             </div>
           </div>
@@ -259,7 +277,7 @@ const endorseWithWalletData = {
 
   <div className="text-justify my-2 pb-3  description-container">
     {campaignData?.description}
-    <p className="text-justify text-xs py-2">18 June, 2024</p>
+    <p className="text-justify text-xs py-2">{formatDate(campaignData?.createdDate)}</p>
   </div>
 </  div>
 

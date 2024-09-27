@@ -16,7 +16,8 @@ import { Backdrop, CircularProgress } from "@mui/material";
 
 
 const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange, formData }: any) => {
-  const [loading, setLoading] = useState(false);
+ 
+  const [createLoading, setCreateLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [ageModal, setAgeModal] = useState(false);
   const [occupationModal, setOccupationModal] = useState(false);
@@ -39,7 +40,7 @@ const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange,
   const url = `${baseURL}/CampaignTargetAudience/GetAll`;
   const onSuccess = () => {};
   const onError = () => {};
-  const { data: apiData, refreshApi: refresh, error: Error, loading: Loading } = useFetch(url, "GET", onSuccess, onError);
+  const { data: apiData, refreshApi: refresh, error: Error, loading: AudienceLoading} = useFetch(url, "GET", onSuccess, onError);
   const Genders = apiData && apiData.length > 0 ? apiData[7].values : [];
    
   const GenderId =  apiData ? apiData[7].id : 0;
@@ -47,66 +48,100 @@ const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange,
  const OccupationId =  apiData? apiData[7].id : 0;
   const AgeId =  apiData ? apiData[6].id : 0;
  console.log("ids: " , GenderId, RegionId, OccupationId, AgeId);
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setLoading(true);
+
+const handleSubmit = async (e: any) => {
+  e.preventDefault();
+  setCreateLoading(true);
   
-    // Map formData to the expected backend structure
-    const transformedData = {
-      categoryId: formData.CampaignCategory,
-      campaignTitle: formData.CampaignTitle,
-      campaignLink: formData.CampaignLink,
-      description: formData.Description,
-      tags: formData.tags.map((tag: any) => tag.id), // Convert to an array of tag IDs
-      campaignMedias: formData.campaignMedias, // Already an array of strings (base64)
-      campaignTargetAudienceAnswers: [
-        {
-          id: AgeId, 
-          answer: formData.Age
-        },
-        {
-          id: OccupationId, // Assuming 2 is for Occupation
-          answer: formData.Occupation
-        },
-        {
-          id: RegionId, // Assuming 3 is for Region
-          answer: formData.Region
-        },
-        {
-          id: GenderId, // Assuming 4 is for Gender
-          answer: formData.Gender
-        }
-      ],
-      campaignUnit: 10 // If campaignUnit is a fixed value or needs to be derived from somewhere
-    };
+  // Validate required fields
+  let isValid = true;
+  const validationErrors: { [key: string]: string } = {};
   
-    const apiUrl = `${baseURL}/Campaign/CreateCampaignV2`;
-    setLoading(true);
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-           'Authorization': `Bearer ${window.localStorage.getItem('token')}`
-        },
-      
-        body: JSON.stringify(transformedData), // Send the transformed data
-      });
-  
-      const data = await response.json();
-  
-      if (response.ok && data.succeeded) {
-        toast('Successfully created campaign');
-      } else {
-        toast.error(data.message || 'An error occurred while creating the campaign');
+  if (formData.Age.length===0) {
+    validationErrors.Age = 'Please select an age group.'
+    isValid = false;
+  }
+  if (formData.Gender.length===0) {
+    validationErrors.Gender = 'Please select a gender.';
+    isValid = false;
+  }
+
+  if (formData.Occupation.length===0) {
+    validationErrors.Occupation = 'Please select an Occupation.';
+    isValid = false;
+  }
+  if (formData.Region.length===0) {
+    validationErrors.Region = 'Please select a region.';
+    isValid = false;
+  }
+
+
+
+
+  // If any validation fails, show errors and stop the submission
+  if (!isValid) {
+    setError(validationErrors);
+    setCreateLoading(false);
+    return;
+  }
+
+  // Map formData to the expected backend structure
+  const transformedData = {
+    categoryId: formData.CampaignCategory,
+    campaignTitle: formData.CampaignTitle,
+    campaignLink: formData.CampaignLink,
+    description: formData.Description,
+    tags: formData?.tags.map((tag: any) => tag.id), // Convert to an array of tag IDs
+    campaignMedias: formData.campaignMedias, // Already an array of strings (base64)
+    campaignTargetAudienceAnswers: [
+      {
+        id: AgeId, 
+        answer: formData.Age
+      },
+      {
+        id: OccupationId, // Assuming 2 is for Occupation
+        answer: formData.Occupation
+      },
+      {
+        id: RegionId, // Assuming 3 is for Region
+        answer: formData.Region
+      },
+      {
+        id: GenderId, // Assuming 4 is for Gender
+        answer: formData.Gender
       }
-    } catch (error) {
-      console.error('Error creating campaign:', error);
-      toast.error('An error occurred while creating the campaign');
-    } finally {
-      setLoading(false);
-    }
+    ],
+    campaignUnit: 10 // If campaignUnit is a fixed value or needs to be derived from somewhere
   };
+
+  const apiUrl = `${baseURL}/Campaign/CreateCampaignV2`;
+  setCreateLoading(true);
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+         'Authorization': `Bearer ${window.localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(transformedData), // Send the transformed data
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.succeeded) {
+      toast('Successfully created campaign');
+    } else {
+      toast.error(data.message || 'An error occurred while creating the campaign');
+    }
+  } catch (error) {
+    console.error('Error creating campaign:', error);
+    toast.error('An error occurred while creating the campaign');
+    setCreateLoading(false);
+  } finally {
+    setCreateLoading(false);
+  }
+};
+
   
 
   const handleSelectAge = (age: any) => {
@@ -193,8 +228,13 @@ const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange,
     <>
       <div className="flex bg-gray-100 justify-center text-xs">
       <Backdrop
+              sx={{ color: '#dc0000', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={AudienceLoading}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
+      <Backdrop
               sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={loading}>
+              open={ createLoading}>
               <CircularProgress color="inherit" />
             </Backdrop>
         <div className="bg-white p-5 rounded-lg max-w-md h-auto my-10">
@@ -226,6 +266,7 @@ const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange,
             alt="caret"
           />
         </div>
+        {error.Age && <p className="text-red-500 text-xs  ml-1 ">{error.Age}</p>}
             { selectedAges.length > 0 && (
                 <div className="border p-2 rounded-md">
                   <p className='pt-1 ml-1'> Age</p>
@@ -244,10 +285,11 @@ const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange,
                   </span>
                 ))}
                   <img onClick={openAgeModal} src={add}  width={30} height={30} className='inline-block ml-2 cursor-pointer'/>
+                 
               </div>
   
             )}
-            
+           
                 
               <div className="relative">
             <input
@@ -288,7 +330,7 @@ const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange,
                 </div>
     
               )}
-
+     {error.Occupation && <p className="text-red-500 text-xs  ml-1 ">{error.Occupation}</p>}
 
 
                   
@@ -328,11 +370,12 @@ const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange,
                     </span>
                   ))}
                     <img onClick={openRegionModal} src={add}  width={30} height={30} className='inline-block ml-2 cursor-pointer'/>
+                 
                 </div>
     
               )}
 
-
+{error.Region && <p className="text-red-500 text-xs  ml-1 ">{error.Region}</p>}
 
      <div className="relative">
             <input
@@ -373,7 +416,7 @@ const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange,
                 </div>
     
               )}
-
+   {error.Gender && <p className="text-red-500 text-xs  ml-1 ">{error.Gender}</p>}
           
 
 

@@ -130,7 +130,8 @@ const HomeCampaign = ({item}:any, index:any) => {
       toast.error("Failed to endorse. Please try again.");
     }
   }, [error]);
-console.log("cammpaign File", item?.campaignFiles[0]?.filePath)
+  
+//console.log("cammpaign File", item?.campaignFiles[0]?.filePath)
 
   return (
     <>
@@ -141,7 +142,8 @@ console.log("cammpaign File", item?.campaignFiles[0]?.filePath)
             <div className="flex items-center">
             <div className="  inline-block  z-1 mr-3" >
           {item?.campaignOwnerImage ? (
-            <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }} src={item?.campaignOwnerImage} width={45} height={45} alt="Avatar" />
+            <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
+             src={item?.campaignOwnerImage} width={45} height={45} alt="Avatar" />
           ):(
             <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
             <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />  
@@ -186,9 +188,9 @@ console.log("cammpaign File", item?.campaignFiles[0]?.filePath)
 
           </Link>
           <div className='flex mt-4 mb-3 text-sm'>
-            <div className='flex mr-5 items-center'>
-              <div onClick={openShareCampaignModal}>
-              
+            <div className='flex mr-5 items-center cursor-pointer'  onClick={()=> openShareCampaignModal()}>
+            <div >
+                <img src={share} width={20} height={20} className='mr-1' alt="share" />
               </div>
               <div>Share</div>
             </div>
@@ -241,7 +243,7 @@ console.log("cammpaign File", item?.campaignFiles[0]?.filePath)
 <ShareCampaignModal
         isOpen={shareCampaignModal}
         onClose={closeShareCampaignModal}
-        details ={allData}
+        details ={item}
       />
 
     </>

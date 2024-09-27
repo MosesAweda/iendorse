@@ -34,6 +34,7 @@ const usePost = <T, >(url: string): UsePostResponse<T> => {
       setData(responseData);
     } catch (err) {
       setError(err as Error);
+      setLoading(false);
     } finally {
       setLoading(false);
     }

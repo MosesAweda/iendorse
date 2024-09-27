@@ -13,7 +13,7 @@ import InsufficientWalletBalanceModal from "./InsufficientWalletBallance";
 import SummaryModal from "./SummaryModal";
 import usePost from "../Hooks/usePost";
 import PromotionSuccessfulModal from "./PromotionSuccessfulModal";
-import ShareCampaignModal from "./ShareCampaignModal"
+import ShareCampaignModal from "../ViewCampaign/ShareCampaignModal";
 
 interface ApiResponse {
   data: any;
@@ -150,13 +150,19 @@ const endorseWithWalletData = {
       toast.error("Failed to promote. Please try again.");
     }
   }, [error]);
+
+  function formatDate(timestamp:string) {
+    const dateObj = new Date(timestamp);
+    const options:any = { year: 'numeric', month: 'long', day: 'numeric' };
+    return dateObj.toLocaleDateString('en-GB', options);
+  }
   return (
     <>
       <div className="p-4 max-w-lg mx-1 border-gray-700 bg-white rounded-lg my-5">
       <div className="flex items-center justify-between">
           <div>
             <button className="bg-green-100 text-green-600 rounded-lg px-4 py-2 text-xs font-medium">
-              Points Left
+            {item?.campaignUnit}  Points Left 
             </button>
           </div>
           <div onClick={openCampaignMenu}>
@@ -175,7 +181,7 @@ const endorseWithWalletData = {
             www.powertothepeople.com
           </p>
           <p>{item?.description}</p>
-          <p className="text-xs my-4">11, July, 2023</p>
+          <p className="text-xs my-4"> {formatDate(item?.created)}</p>
           <div>
             <p className="font-medium text-customBlue mb-2 mt-2 text-xs">
               You tagged 3 Persons
@@ -273,7 +279,7 @@ const endorseWithWalletData = {
 <ShareCampaignModal
         isOpen={shareCampaignModal}
         onClose={closeShareCampaignModal}
-        details ={allData}
+        details ={item}
       />
 
 

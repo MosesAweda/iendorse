@@ -24,7 +24,7 @@ const CreateCampaign = () => {
       ...prevFormData,
       [fieldName]: value,
     }));
-    console.log(formData)
+   // console.log(formData)
   };
 
 
@@ -34,7 +34,7 @@ const CreateCampaign = () => {
       ...prevFormData,
       [fieldName]: value,
     }));
-    console.log(formData)
+   // console.log(formData)
   };
   
 
@@ -53,9 +53,9 @@ const CreateCampaign = () => {
   //   setFormData({ ...formData, selectedPeople: selected });
   // };
 
-  useEffect(() => {
-    console.log("FORMData>>>>>>>>>>>>>",formData);
-  }, [formData]);
+  // useEffect(() => {
+  //   console.log("FORMData>>>>>>>>>>>>>",formData);
+  // }, [formData]);
 
   const renderStep = (currentStep:any, formData:any, handleTagChange:any, handleFieldChange:any,  nextStep:any, prevStep:any) => {
     switch (currentStep) {

@@ -26,6 +26,7 @@ const useFetch = (url:string,apiMethod:string, onSuccess:any, onError:any ) => {
         }catch(err){
             console.error(err);
             onError();
+            setLoading(false);
             // setError(err)
         }
 
