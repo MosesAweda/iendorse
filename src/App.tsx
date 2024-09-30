@@ -25,37 +25,92 @@ import Wallet from './components/Wallet/Wallet';
 import Support from './components/Support';
 import TransactionDetails from './components/Wallet/TranscationDetails';
 import Earnings from './components/Earnings/Earnings';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 function App() {
   return (
     <>
-     <Router>
-     <ToastContainer />
-     <Routes>
-     <Route path='/Sidebar' element={<Sidebar />} />
+    <Router>
+      <ToastContainer />
+      <Routes>
+        {/* Protected routes */}
+        <Route
+          path='/CreateCampaign'
+          element={
+            <ProtectedRoute>
+              <CreateCampaign />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/ViewCampaign/:uid'
+          element={
+            <ProtectedRoute>
+              <ViewCampaign />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/UserProfile'
+          element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/Wallet'
+          element={
+            <ProtectedRoute>
+              <Wallet />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/Analytics'
+          element={
+            <ProtectedRoute>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+   
+
+       <Route
+          path='/Notifications'
+          element={
+            <ProtectedRoute>
+              <Notifications />
+            </ProtectedRoute>
+          }
+        />
+
+        
+       <Route
+          path='/Feed'
+          element={
+            <ProtectedRoute>
+              <Feed />
+            </ProtectedRoute>
+          }
+        />
+
+        
+
+
+        {/* Public routes */}
         <Route path='/' element={<Home />} />
-        <Route path='Feed' element={<Feed />} />
-        <Route path='/ViewCampaign/:uid' element={<ViewCampaign />} />
-        <Route path='/UserProfile' element={<UserProfile />} />
-        <Route path='/Wallet' element={<Wallet />} />
-        <Route path='/Analytics' element={<Analytics />} />
-        <Route path='/CreateCampaign' element={<CreateCampaign />} />
-        <Route path='/Notifications' element={<Notifications />} />
-        <Route path='/NewPassword' element={<NewPasword />} />
-        <Route path='/VerifyEmail' element={<VerifyEmail />} />
+        <Route path='/SignIn' element={<SignIn />} />
+        <Route path='/SignUp' element={<SignUp />} />
         <Route path='/ForgotPassword' element={<ForgotPassword />} />
         <Route path='/ResetPassword' element={<ResetPassword />} />
-        <Route path='/SignIn' element={<SignIn />} />
+        <Route path='/VerifyEmail' element={<VerifyEmail />} />
+        <Route path='/NewPassword' element={<NewPasword />} />
         <Route path='/Search' element={<Search />} />
-        <Route path='/SignUp' element={<SignUp />} />
-        <Route path='/Support' element={<Support />} />
-        <Route path='/TransactionDetails' element={<TransactionDetails />} />
-        <Route path='/Earnings' element={<Earnings />} />
-        </Routes>
+      </Routes>
     </Router>
-    </>
- 
+  </>
   );
 }
 
