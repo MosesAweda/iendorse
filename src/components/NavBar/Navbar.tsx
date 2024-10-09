@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { isAuthenticated } from "../auth";
 import DefaultNav from './DefaultNav';
 import GuestNavbar from "./GuestNavBar";
 import AuthBar from "./AuthBar";
@@ -15,7 +16,7 @@ import support from '../svg/support.svg';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+ // const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const userData:any = window.localStorage.getItem("userData");
@@ -35,24 +36,13 @@ const Navbar = () => {
 
   const handleLogout = () => {
     window.localStorage.clear();
-    setIsAuthenticated(false);
+    window.sessionStorage.clear();
     navigate("/SignIn");
-    toast.success("Logged out successfully");
+    toast.success("Logged out successfully"); 
   };
 
-  useEffect(() => {
-    if (token) {
-      setIsAuthenticated(true);
-    }
-    setIsLoading(false);  // Simulating the end of loading
-  }, [token]);
-
-  // useEffect(() => {
-  //   if(!token){
-  //     navigate("/SignIn");
-  //     toast("Sign In first!")
-  //   }
-  // }, [])
+  const isUserAuthenticated = isAuthenticated();
+  
 
   useEffect(() => {
   const handleClickOutside = (event: MouseEvent) => {
@@ -76,14 +66,14 @@ const Navbar = () => {
   
 };
 
+console.log("IS AUTHENTICATED", isUserAuthenticated)
+
   return (
     <>
-      {/* Conditional rendering of Navbar based on loading state */}
-      {isLoading ? (
-        <DefaultNav />
-      ) : (
-        isAuthenticated ? <AuthBar toggleSidebar={toggleSidebar} /> : <GuestNavbar />
-      )}
+   
+       
+       { isUserAuthenticated ? (<AuthBar toggleSidebar={toggleSidebar} />) : (<GuestNavbar />)}
+      
 
       {/* Sidebar */}
       <div className={`fixed z-20 inset-0 bg-black bg-opacity-50 transition-opacity duration-[2000ms]ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>

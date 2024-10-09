@@ -43,14 +43,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path='/ViewCampaign/:uid'
-          element={
-            <ProtectedRoute>
-              <ViewCampaign />
-            </ProtectedRoute>
-          }
-        />
+        
         <Route
           path='/UserProfile'
           element={
@@ -108,6 +101,7 @@ function App() {
         <Route path='/VerifyEmail' element={<VerifyEmail />} />
         <Route path='/NewPassword' element={<NewPasword />} />
         <Route path='/Search' element={<Search />} />
+        <Route path='/ViewCampaign/:uid' element={<ViewCampaign />}   />
       </Routes>
     </Router>
   </>

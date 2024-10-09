@@ -28,6 +28,8 @@ import instagram from '../svg/instagram.svg';
 import close from '../svg/close.svg';
 import EndorsementSuccessfulModal from "./EndorsementSuccessfulModal";
 import Initials from "../Initials";
+import ReportCampaign from "./ReportCampaign";
+import EndorsementFailed from "./EndorsementFailed";
   
 
 interface ApiResponse {
@@ -42,18 +44,14 @@ const ViewCampaign = ({ item }: any) => {
   const { uid } = useParams();
   const [endorseMenu, setEndorseMenu] = useState(false);
   const [reportMenu, setReportMenu] = useState(false)
-  const closeReportMenu = () => {
-    setReportMenu(false);
-  };
-  const openReportMenu = () => {
-    setReportMenu(true);
-  };
+
   const [campaignMenuOpen, setCampaignMenuOpen] = useState(false);
   const [showEndorseMenu, setShowEndorseMenu ]= useState(false);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showPurchaseUnitsModal, setPurchaseUnitsModal] = useState(false);
   const [paymentMethodModal, setPaymentMethodModal] = useState(false);
   const [insufficientWalletModal, setInsufficientWalletModal] = useState(false);
+  const [endorsementFailed, setEndorsementFailed] = useState(false);
   const [summaryModal, setSummaryModal] = useState(false);
   const [endorsementSuccessfulModal, setEndorsementSuccessfulModal] = useState(false);
   const [shareCampaignModal, setShareCampaignModal] = useState(false);
@@ -78,9 +76,14 @@ const ViewCampaign = ({ item }: any) => {
   const opensummarymodal = () => setSummaryModal(true);
   const closeSummaryModal = () => setSummaryModal(false);
   const openEndorsementSuccessfulModal = () => setEndorsementSuccessfulModal(true);
+  const openEndorsementFailed = () => setEndorsementFailed(true);
   const closeEndorsementSuccessfulModal = () => {setEndorsementSuccessfulModal(false); setAllData({})};
+  const closeEndorseFailed = () => {setEndorsementFailed(false); setAllData({})};
   const openShareCampaignModal = () => setShareCampaignModal(true);
   const closeShareCampaignModal = () =>   setShareCampaignModal(false);
+  const closeReportMenu = () => { setReportMenu(false);};
+  const openReportMenu = () => {  setReportMenu(true);};
+ 
 
 const endorseWithWalletURL = `${baseURL}/Campaign/EndorseCampaignWithWallet`
 const walletURL = `${baseURL}/Wallet/WalletProfile`
@@ -91,7 +94,7 @@ const walletURL = `${baseURL}/Wallet/WalletProfile`
   const { data: campaignData, refreshApi: refresCampaignData, error: DataError, loading: DataLoading
   } = useFetch(campaignURL, "GET", onSuccess, onError);
 
-  console.log("camoampaign File", campaignData?.campaignFiles[0]?.filePath)
+  console.log("campaign File", campaignData?.campaignFiles[0]?.filePath)
 
  const walletBalance = WalletData?.walletBalance;
 
@@ -104,7 +107,6 @@ const endorseWithWalletData = {
 
  const { data:ApiFeedback, loading: ApiFeedbackLoading, error, postData} = usePost(endorseWithWalletURL);
 
-
   const submitEndorsement= (units:number, note: any) => {
     setUnitsToPurchase(units)
     setEndorsementNote(note)
@@ -113,6 +115,7 @@ const endorseWithWalletData = {
     closeEndorseMenu();
     openPaymentMethodModal();
   }
+
 
   const submitPaymentMethod = (method: any) => {
     setAllData({ ...allData, paymentMethod: method, walletBalance: walletBalance, campaignId: uid });
@@ -130,16 +133,14 @@ const endorseWithWalletData = {
     }
   }
 
- 
-
-
   const PayWithWallet = async () => {
     console.log("..........Paying with wallet");
     try {
       await postData(endorseWithWalletData);
     } catch (err) {
       console.error("Error posting data:", err);
-      toast.error("Failed to Endorse. Please try again.");
+      // toast.error("Failed to Endorse. Please try again.");
+       openEndorsementFailed();
       return;
     }
   };
@@ -149,14 +150,15 @@ const endorseWithWalletData = {
       console.log(ApiFeedback);
          closeSummaryModal()
     openEndorsementSuccessfulModal();
- 
     }
   }, [ApiFeedback]);
 
   useEffect(() => {
     if (error) {
       console.error("Error fetching data:", error);
-      toast.error("Failed to endorse. Please try again.");
+      openEndorsementFailed()
+       closeSummaryModal()
+        // toast.error("Failed to endorse. Please try again.");
     }
   }, [error]);
 
@@ -308,69 +310,7 @@ const endorseWithWalletData = {
  
 
   { /* Report   */} 
-    <div className={`fixed inset-0 transition-opacity ${reportMenu ? 'flex' : 'hidden'} items-center justify-center `}>
-    <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
-    <span
-            className="absolute top-5   z-50  bg-transparent border-0 text-black text-3xl leading-none font-semibold outline-none focus:outline-none"
-            onClick={closeReportMenu}
-          >
-           <img    src={close} alt="x"  width={40} height={40}/>
-          </span>
-
-    <div className="relative p-4 w-full max-w-lg mx-1  max-h-full">
-{/* Modal content */}
-<div className="relative bg-white rounded-lg shadow">
   
-    {/* Report Campaign */}
-  <div className="p-4 md:p-5">
-    <h1 className="font-medium text-center py-4"> Report Campaign</h1>
-    <form className="space-y-8" action="#">
-      <div>
-
-        <select
-          
-          name="email"
-          id="email"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        >
-
-            <option disabled> Complaint</option>
-            <option> Option 1</option>
-            <option> Option 2</option>
-
-          </select>
-      </div>
-
-
-      <div className="mb-10">  
-    <textarea
-       
-      name="email"
-      id="email"
-      rows={6}
-      className=" resize-none mb-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-      placeholder="Description"
-     
-    />
-  </div>
-     
-      <button
-        type="submit"
-        className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
-        "
-      >
-     Report
-      </button>
- 
-    </form>
-  </div>
-</div>
-</div>
-
-          
-    </div>
-
-
 
 
 
@@ -378,8 +318,14 @@ const endorseWithWalletData = {
         isOpen={campaignMenuOpen} 
         onClose={closeCampaignMenu} 
       />
+      
 
- 
+      <ReportCampaign
+        isOpen={reportMenu} 
+        onClose={closeReportMenu}
+        campaignId={campaignData?.campaignId} 
+  
+      />
 
 <EndorseCampaignModal
         isOpen={endorseMenu}
@@ -433,6 +379,16 @@ const endorseWithWalletData = {
         onClose={closeEndorsementSuccessfulModal}
         details ={allData}
       />
+
+
+      
+<EndorsementFailed
+              isOpen={endorsementFailed}
+        onClose={closeEndorseFailed}
+        details ={allData}
+      />
+
+
 
 <ShareCampaignModal
         isOpen={shareCampaignModal}

@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import close from '../svg/close.svg';
-import greenCheck from '../svg/greenCheck.svg'
+import failed from '../svg/failed.svg'
 import { toast } from 'react-toastify';
 import CampaignMenu from './CampaignMenu';
 import Wallet from '../Wallet/Wallet';
 
-interface EndorsementSuccessfulModalProps  {
+interface EndorsementFailedProps  {
   isOpen: boolean;
   onClose: () => void;
   details :any
   
 }
 
-const EndorsementSuccessfulModal: React.FC<EndorsementSuccessfulModalProps> = ({ isOpen, onClose, details }) => {
+const EndorsementFailed: React.FC<EndorsementFailedProps> = ({ isOpen, onClose, details }) => {
 //console.log(details)
   if (!isOpen) return null;
 
@@ -32,15 +32,14 @@ const EndorsementSuccessfulModal: React.FC<EndorsementSuccessfulModalProps> = ({
     
       <div className="relative bg-white rounded-lg shadow">
         <div className="p-2 md:p-5 mx-2">
-          <h1 className="text-center font-bold my-5">   Endorsement Successful</h1>
+          <h1 className="text-center font-bold my-5">   Endorsement Failed</h1>
           <div className="flex  justify-center my-4 ">
-              <img src={greenCheck} alt="greenCheck"  width={70} height={70} />  
+              <img src={failed} alt="failed"  width={70} height={70} />  
           </div>
 
             <div className='text-center  mb-10'>
               
-            <p> Your endorsement was successful and your current wallet balance is {details.walletBalance} points. Thank you for endorsing
-               campaign #{details.campaignId} with {details.unitsToPurchase} units.
+            <p> Your endorsement failed due to network fluctuations. Please try again to endorse campaign #{details.campaignId}
                </p>
           
             </div>
@@ -60,4 +59,4 @@ const EndorsementSuccessfulModal: React.FC<EndorsementSuccessfulModalProps> = ({
   );
 };
 
-export default EndorsementSuccessfulModal; ;
+export default EndorsementFailed; ;

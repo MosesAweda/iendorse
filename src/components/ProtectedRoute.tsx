@@ -1,29 +1,25 @@
 import React from 'react';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Navigate } from 'react-router-dom';
+import { isAuthenticated } from './auth';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-
-let userDataString:any = window.localStorage.getItem("userData");
-let userData = JSON.parse(userDataString);
-  const token = userData ? userData.jwtToken : null;
-  const tokenExpirationTime = userData.jwtTokenExpirationTime
   
-  // Check if the token exists and if it's still valid
-  const isTokenValid = token && tokenExpirationTime && new Date(tokenExpirationTime) > new Date();
+  // Check if the user is authenticated
+  const isUserAuthenticated = isAuthenticated();
 
-  // If token is not valid, redirect to the login page
-  if (!isTokenValid) {
-   toast.error("Please login to access this page");
+  // If the user is not authenticated, redirect to the login page
+  if (!isUserAuthenticated) {
+    window.localStorage.clear();
+    toast.error("Please login to access this page");
     return <Navigate to="/SignIn" replace />;
-
   }
 
-  // If the token is valid, render the children (protected route content)
+  // If the user is authenticated, render the protected content
   return <>{children}</>;
 };
 

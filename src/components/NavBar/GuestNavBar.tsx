@@ -109,7 +109,7 @@ const GuestNavbar = () => {
             </li>
             <li>
               <a
-                href="Search"
+                href="/Search"
                 className="block py-2 px-3 text-xs rounded md:bg-transparent md:p-0"
                 aria-current="page"
               >
@@ -120,7 +120,7 @@ const GuestNavbar = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="/CreateCampaign"
                 className="block py-2 px-3 text-xs rounded md:bg-transparent md:p-0"
                 aria-current="page"
               >
@@ -131,7 +131,7 @@ const GuestNavbar = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="/Feed"
                 className="block py-2 px-3 text-xs rounded md:bg-transparent md:p-0"
                 aria-current="page"
               >
@@ -140,21 +140,21 @@ const GuestNavbar = () => {
                 </span>
               </a>
             </li>
-            <li> 
-              <a
-              
-                href="#"
-                className="block py-2 px-3 text-xs rounded md:bg-transparent md:p-0"
-                aria-current="page"
-              >
-                <span className="flex items-center">
-                  <img src={account} className="h-5 mr-2" /> My Account
-                </span>
-              </a>
-            </li>
+              {/* <li> 
+                <a
+                
+                  href="#"
+                  className="block py-2 px-3 text-xs rounded md:bg-transparent md:p-0"
+                  aria-current="page"
+                >
+                  <span className="flex items-center">
+                    <img src={account} className="h-5 mr-2" /> My Account
+                  </span>
+                </a>
+              </li> */}
             <li>
               <a
-                href="#"
+                href="/Notifications"
                 className="block py-2 px-3 text-xs rounded md:bg-transparent md:p-0"
                 aria-current="page"
               >
