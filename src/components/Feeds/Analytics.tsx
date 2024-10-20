@@ -5,19 +5,29 @@ import endorse from '../svg/endorse.svg';
 import Navbar from '../NavBar/Navbar';
 import Campaigns2 from './FeedCampaign';
 import { Link } from 'react-router-dom';
+import { baseURL } from '../URL';
+import useFetch from '../Hooks/useFetch';
 import edit from '../svg/edit.svg'
+import verify from '../svg/verify.svg'
+import eye from '../svg/eye.svg'
+import promotion from '../svg/promotion.svg'
+import { useParams } from 'react-router-dom';
+
  
 
 
 
 const Analytics = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const onSuccess = () => {}
+  const onError = () => {}
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
-  return (
+  const URL = `${baseURL}/Campaign/CampaignAnalytics?CampaignId=20`;
+    const { data, refreshApi, error, loading } =  useFetch(URL, "GET", onSuccess, onError);
+    const { uid } = useParams();
+    const campaignURL = `${baseURL}/Campaign/CampaignDetails?CampaignId=${uid}`
+    const { data: campaignData, error: campaignError, loading: campaignLoading } =
+     useFetch(campaignURL, "GET", onSuccess, onError);
+  return (  
     <>  
     <div className='bg-gray-100 h-screen'>
        <Navbar/>
@@ -37,7 +47,7 @@ const Analytics = () => {
                   <svg className="w-2 h-2 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m1 9 4-4-4-4" />
                     </svg>
-                    <a href="/Feed" className="ml-1 text-xs text-gray-600 hover:text-gray-800 md:ml-2 "> Title</a>
+                    <span className="ml-1 text-xs text-gray-600 hover:text-gray-800 md:ml-2 "> {campaignData?.campaignTitle}</span>
 
                   </div>
                 </li>
@@ -50,7 +60,7 @@ const Analytics = () => {
                     <svg className="w-2 h-2 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m1 9 4-4-4-4" />
                     </svg>
-                    <a href="#" className="ml-1 text-sm font-medium text-gray-600 hover:text-gray-800 md:ml-2 ">Analytics</a>
+                    <span className="ml-1 text-sm font-medium text-gray-600 hover:text-gray-800 md:ml-2 ">Analytics</span>
                   </div>
                 </li>
               </ol>
@@ -68,12 +78,12 @@ const Analytics = () => {
 
 
             <div className="grid grid-cols-2 gap-2">         
-            <div className="flex-col justify-center items-center  w-40  flex-initial p-6 border bg-white rounded-md m-2 "> 
+            <div className="flex-col justify-center items-center  w-40  flex-initial py-6 px-2 border bg-white rounded-md m-2 "> 
             <div className="flex justify-center ">
             <img src={share} />
             </div>
             <div className="flex justify-center">
-            <p className="text-customBlue font-bold text-2xl my-1"> 50k</p>
+            <p className="text-customBlue font-bold text-2xl my-1"> {data?.totalShares}</p>
             </div>
 
             <div className="flex justify-center">
@@ -81,16 +91,16 @@ const Analytics = () => {
             </div>
             </div>
                 
-            <div className="flex-col justify-center items-center  w-40  flex-initial p-6 border bg-white rounded-md m-2 "> 
+            <div className="flex-col justify-center items-center  w-40  flex-initial py-6 px-2 border bg-white rounded-md m-2 "> 
             <div className="flex justify-center ">
-            <img src={share} />
+            <img src={verify} />
             </div>
             <div className="flex justify-center">
-            <p className="text-customBlue font-bold text-2xl my-1"> 50k</p>
+            <p className="text-customBlue font-bold text-2xl my-1"> {data?.totalEndorsements}</p>
             </div>
 
             <div className="flex justify-center">
-            <p className=" ">Total Shares</p>
+            <p className=" ">Total Endorsements</p>
             </div>
             </div>
                     </div>
@@ -100,32 +110,32 @@ const Analytics = () => {
 
                     
             <div className="grid grid-cols-2 gap-2">         
-            <div className="flex-col justify-center items-center  w-40  flex-initial p-6 border bg-white rounded-md m-2 "> 
+            <div className="flex-col justify-center items-center  w-40  flex-initial py-6 px-2  border bg-white rounded-md m-2  "> 
             <div className="flex justify-center ">
-            <img src={share} />
+            <img src={eye} />
             </div>
             <div className="flex justify-center">
-            <p className="text-customBlue font-bold text-2xl my-1"> 50k</p>
+            <p className="text-customBlue font-bold text-2xl my-1"> {data?.totalViews}</p>
             </div>
 
             <div className="flex justify-center">
-            <p className=" ">Total Shares</p>
+            <p className=" ">Total Views</p>
             </div>
             </div>
                 
-            <div className="flex-col justify-center items-center  w-40  flex-initial p-6 border bg-white rounded-md m-2 "> 
+            <div className="flex-col justify-center items-center  w-40  flex-initial py-6 px-2 border bg-white rounded-md m-2 "> 
             <div className="flex justify-center ">
-            <img src={share} />
+            <img src={promotion} />
             </div>
             <div className="flex justify-center">
-            <p className="text-customBlue font-bold text-2xl my-1"> 50k</p>
+            <p className="text-customBlue font-bold text-2xl my-1"> {data?.totalPromotions}</p>
             </div>
 
             <div className="flex justify-center">
-            <p className=" ">Total Shares</p>
+            <p className=" ">Total Promotions</p>
             </div>
             </div>
-                    </div>
+               </div>
 
 
  

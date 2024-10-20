@@ -21,7 +21,7 @@ const PromoteModal: React.FC<PromoteModalProps> = ({ isOpen, onClose,onSubmit })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 transition-opacity flex items-center justify-center">
+    <div className="fixed inset-0 transition-opacity flex sm:items-center justify-center">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
 
 

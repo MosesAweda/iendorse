@@ -25,7 +25,7 @@ export const isAuthenticated = (): boolean => {
     const expirationTime = new Date(tokenExpirationTime);
 
     if (expirationTime > currentTime) {
-      console.log("Token is valid");
+    //  console.log("Token is valid");
       return true;
     } else {
       console.log("Token has expired");

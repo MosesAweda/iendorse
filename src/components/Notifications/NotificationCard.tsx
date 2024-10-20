@@ -2,7 +2,9 @@ import React from "react";
 import dot from '../svg/dot.svg';
 import send from '../svg/send.svg';
 import bell from '../svg/bell.svg';
+import { baseURL } from "../URL";
 import { Link } from "react-router-dom";
+import {toast} from 'react-toastify';
 
 const NotificationCard = ({item}: any) => {
    
@@ -11,21 +13,18 @@ const NotificationCard = ({item}: any) => {
         const dateObj = new Date(timestamp);
         const options:any = { year: 'numeric', month: 'long', day: 'numeric' };
         return dateObj.toLocaleDateString('en-GB', options);
-      }
-      const MarkAsRead = async (id: number) => {
+      }     const MarkAsRead = async (id: number) => {
         try {
-          const response = await fetch(`https://yourapi.com/notifications/${id}/markAsRead`, {
-            method: 'POST', // Or 'PATCH' depending on your API
+          const response = await fetch(`${baseURL}/EndorseNotification/ReadNotification?NotificationId=${id}`, {
+            method: 'GET', 
             headers: {
               'Content-Type': 'application/json',
-              // Include authorization headers if required
-            },
-            // You can also include a body if your API requires it
+            },   
           });
       
           if (response.ok) {
             console.log('Notification marked as read');
-            // Optionally, you can update the UI or state here to reflect the change
+            toast.success("Mark as Read")
           } else {
             console.error('Failed to mark notification as read');
           }
@@ -53,7 +52,7 @@ const NotificationCard = ({item}: any) => {
                                     
                                 </div>
                                 <div className="mouse-pointer">
-                                    <img src={dot} alt="dot" />
+                                {!item.isRead &&   <img src={dot} alt="dot" />}  
                                 </div>
                             </div>
                             <div className="my-2 pr-20">

@@ -1,20 +1,33 @@
 import React from 'react';
+import {useState} from 'react';
 import { Link } from 'react-router-dom';
 import close from '../svg/close.svg';
 import chart from '../svg/chart.svg';
 import edit from '../svg/edit.svg';
 import trash from '../svg/trash.svg';
+import DeleteModal from './DeleteModal';
 
 interface CampaignMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  details: any;
 }
 
-const CampaignMenu: React.FC<CampaignMenuProps> = ({ isOpen, onClose }) => {
+const CampaignMenu: React.FC<CampaignMenuProps> = ({ isOpen, onClose, details }) => {
+  const [deleteModal, setDeleteModal] = useState(false);
+
   if (!isOpen) return null;
 
+
+const openDeleteModal = () => {
+  setDeleteModal(true);
+} 
+const closeDeleteModal = () => {
+  setDeleteModal(false);
+}
+
   return (
-    <div className="fixed inset-0 transition-opacity flex items-center justify-center">
+    <div className="fixed inset-0 transition-opacity flex sm:items-center justify-center">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
       <div className="relative p-4 w-full max-w-md max-h-full">
       <div className='  flex justify-center p-4'>      
@@ -27,16 +40,21 @@ const CampaignMenu: React.FC<CampaignMenuProps> = ({ isOpen, onClose }) => {
       </div> 
     
         <div className="bg-white rounded-lg shadow flex items-center justify-center pt-20 pb-44">
-          <div className="flex-col justify-center items-center p-6 border w-28 flex-initial bg-gray-100 rounded-md m-2">
+          <Link to={`Analytics/${details?.campaignId}`}>
+          <div className="flex-col justify-center items-center p-6 border w-28 
+          flex-initial bg-gray-50 rounded-md m-2 cursor-pointer hover:bg-gray-100">
             <div className="flex justify-center">
               <img src={chart} alt="chart" />
             </div>
             <div className="flex justify-center">
-              <Link to="/Analytics">
+             
                 <p className="text-customBlue font-medium">Analytics</p>
-              </Link>
             </div>
           </div>
+          </Link>
+
+
+          
           <div className="flex-col justify-center items-center w-28 flex-initial p-6 border bg-gray-100 rounded-md m-2">
             <div className="flex justify-center">
               <img src={edit} alt="edit" />
@@ -45,7 +63,8 @@ const CampaignMenu: React.FC<CampaignMenuProps> = ({ isOpen, onClose }) => {
               <p className="text-green-500 font-medium">Edit</p>
             </div>
           </div>
-          <div className="flex-col justify-center items-center w-28 flex-initial p-6 border bg-gray-100 rounded-md m-2">
+          <div onClick={openDeleteModal} className="flex-col justify-center items-center w-28 flex-initial
+           p-6 border cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-md m-2">
             <div className="flex justify-center">
               <img src={trash} alt="trash" />
             </div>
@@ -55,6 +74,15 @@ const CampaignMenu: React.FC<CampaignMenuProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
+
+
+      
+<DeleteModal
+        isOpen={deleteModal}
+        onClose={closeDeleteModal}
+        details ={details}
+        onCloseMenu={onClose}
+      />
     </div>
   );
 };
