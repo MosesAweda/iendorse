@@ -10,12 +10,13 @@ import ResetPassword from './components/ResetPasssword';
 import NewPasword from './components/NewPassword';
 // import { Verify } from 'crypto';
 import VerifyEmail from './components/VerifyEmail';
- import ViewCampaign from './components/ViewCampaign/ViewCampaign';
+import ViewCampaign from './components/ViewCampaign/ViewCampaign';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Notifications from './components/Notifications/Notifications';
 import Search from './components/Search';
-import CreateCampaign from './components/CreateCampaign.tsx/CreateCampaign';
+import CreateCampaign from './components/CreateCampaign/CreateCampaign';
+import EditCampaign from './components/EditCampaign/EditCampaign';
 import Feed from './components/Feeds/Feeds';
 import Analytics from './components/Feeds/Analytics';
 import Sidebar from './components/Sidebar';
@@ -31,80 +32,43 @@ import ProtectedRoute from './components/ProtectedRoute';
 function App() {
   return (
     <>
-    <Router>
-      <ToastContainer />
-      <Routes>
-        {/* Protected routes */}
-        <Route
-          path='/CreateCampaign'
-          element={
-            <ProtectedRoute>
-              <CreateCampaign />
-            </ProtectedRoute>
-          }
-        />
-        
-        <Route
-          path='/UserProfile'
-          element={
-            <ProtectedRoute>
-              <UserProfile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/Wallet'
-          element={
-            <ProtectedRoute>
-              <Wallet />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/Analytics'
-          element={
-            <ProtectedRoute>
-              <Analytics />
-            </ProtectedRoute>
-          }
-        />
-   
+      <Router>
+        <ToastContainer />
+        <Routes>
 
-       <Route
-          path='/Notifications'
-          element={
-            <ProtectedRoute>
-              <Notifications />
-            </ProtectedRoute>
-          }
-        />
+          {/* Protected routes
+          <ProtectedRoute>
+            <Route path='/CreateCampaign' element={<CreateCampaign />} />
+            <Route path='/UserProfile' element={<UserProfile />} />
+            <Route path='/Wallet' element={<Wallet />} />
+            <Route path='./Analytics/:uid' element={<Analytics />} />
+            <Route path='/Notifications' element={<Notifications />} />
+            <Route path='/Feed' element={<Feed />} />
+          </ProtectedRoute> */}
 
-        
-       <Route
-          path='/Feed'
-          element={
-            <ProtectedRoute>
-              <Feed />
-            </ProtectedRoute>
-          }
-        />
+          <Route element={<ProtectedRoute />}>
+          <Route path='/EditCampaign' element={<EditCampaign />} />
+            <Route path='/CreateCampaign' element={<CreateCampaign />} />
+            <Route path='/UserProfile' element={<UserProfile />} />
+            <Route path='/Wallet' element={<Wallet />} />
+            <Route path='Feed/Analytics/:uid' element={<Analytics />} />
+            <Route path='/Notifications' element={<Notifications />} />
+            <Route path='/Feed' element={<Feed />} />
+          </Route>
 
-        
-
-
-        {/* Public routes */}
-        <Route path='/' element={<Home />} />
-        <Route path='/SignIn' element={<SignIn />} />
-        <Route path='/SignUp' element={<SignUp />} />
-        <Route path='/ForgotPassword' element={<ForgotPassword />} />
-        <Route path='/ResetPassword' element={<ResetPassword />} />
-        <Route path='/VerifyEmail' element={<VerifyEmail />} />
-        <Route path='/NewPassword' element={<NewPasword />} />
-        <Route path='/Search' element={<Search />} />
-        <Route path='/ViewCampaign/:uid' element={<ViewCampaign />}   />
-      </Routes>
-    </Router>
-  </>
+          {/* Public routes */}
+          <Route path='/' element={<Home />} />
+          <Route path='/SignIn' element={<SignIn />} />
+          <Route path='/SignUp' element={<SignUp />} />
+          <Route path='/ForgotPassword' element={<ForgotPassword />} />
+          <Route path='/ResetPassword' element={<ResetPassword />} />
+          <Route path='/VerifyEmail' element={<VerifyEmail />} />
+          <Route path='/NewPassword' element={<NewPasword />} />
+          <Route path='/Search' element={<Search />} />
+          <Route path='/ViewCampaign/:uid' element={<ViewCampaign />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 

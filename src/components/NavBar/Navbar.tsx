@@ -66,7 +66,7 @@ const Navbar = () => {
   
 };
 
-console.log("IS AUTHENTICATED", isUserAuthenticated)
+
 
   return (
     <>

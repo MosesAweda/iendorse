@@ -165,13 +165,14 @@ const endorseWithWalletData = {
             {item?.campaignUnit}  Points Left 
             </button>
           </div>
-          <div onClick={openCampaignMenu}>
+          <div onClick={openCampaignMenu} className="cursor-pointer">
             <img src={threeDots} />
           </div>
         </div>
 
+
         <div className="my-4">
-          <img src={item?.campaignFiles[0].filePath} alt="Campaign" />
+          <img src={item?.campaignFiles[0]?.filePath} alt="Campaign" />
         </div>
 
         <div className="my-4">
@@ -229,6 +230,7 @@ const endorseWithWalletData = {
       <CampaignMenu 
         isOpen={campaignMenuOpen} 
         onClose={closeCampaignMenu} 
+        details={item}
       />
 
       <PromoteModal
