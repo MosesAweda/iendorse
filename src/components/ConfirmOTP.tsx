@@ -3,7 +3,7 @@ import logo from './svg/logo.svg';
 import facebook from './svg/facebook.svg';
 import instagram from './svg/instagram.svg';
 
-const ResetPassword: React.FC = () => {
+const ConfirmOTP: React.FC = () => {
   const [otp, setOtp] = useState<string[]>(['', '', '', '']);
   const [resendClicked, setResendClicked] = useState<boolean>(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -103,4 +103,4 @@ const ResetPassword: React.FC = () => {
   );
 };
 
-export default ResetPassword;
+export default ConfirmOTP;

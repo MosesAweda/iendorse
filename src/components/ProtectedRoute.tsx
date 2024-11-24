@@ -13,9 +13,11 @@ const ProtectedRoute: React.FC = () => {
     toast.error("Please login to access this page");
     return <Navigate to="/SignIn" replace />;
   }
-
+else
+{
   // If the user is authenticated, render the protected routes via Outlet
   return <Outlet />;
+}
 };
 
 export default ProtectedRoute;

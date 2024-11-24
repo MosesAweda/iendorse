@@ -14,13 +14,12 @@ interface PaymentMethodProps {
 
 const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSubmit }) => {
   const [paymentMethod, setPaymentMethod] = useState("");
-  
   const walletRef = useRef<HTMLInputElement>(null);
   const paystackRef = useRef<HTMLInputElement>(null);
   const paypalRef = useRef<HTMLInputElement>(null);
     const stripeRef = useRef<HTMLInputElement>(null);
         const flutterwaveRef = useRef<HTMLInputElement>(null);
-
+      
   const handleDivClick = (ref: React.RefObject<HTMLInputElement>, type: string) => {
     if (ref.current) {
       ref.current.checked = true;
@@ -37,7 +36,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 transition-opacity flex  items-start sm:items-center justify-center">
+    <div className="fixed inset-0 transition-opacity flex   items-start mt-20 sm:mt-1 sm:items-center justify-center">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
 
       <div className="relative p-4 w-full max-w-md max-h-full">
@@ -54,7 +53,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
           <div className="p-4 md:p-5">
             <h1 className="text-center font-bold"> Select Payment Method</h1>
 
-            <div className="flex-col max-w-sm space-y-2 justify-center mt-2 mb-10">
+            <div className="flex-col max-w-sm space-y-1.5 justify-center mt-2 mb-10">
 
             <div
                 className="flex items-center ps-4 border border-gray-200 rounded-lg cursor-pointer"
@@ -65,11 +64,11 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                   id="wallet-radio"
                   type="radio"
                   name="payment-method"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                  className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                 />
                 <label
                   htmlFor="wallet-radio"
-                  className="w-full py-4 ms-5 text-sm font-medium text-gray-900"
+                  className="w-full py-2 ms-5 text-sm font-medium text-gray-900"
                 >
                   Wallet
                 </label>
@@ -84,13 +83,13 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                   id="paystack-radio"
                   type="radio"
                   name="payment-method"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                  className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                 />
                 <label
                   htmlFor="paystack-radio"
-                  className="w-full py-4 ms-5 text-sm font-medium text-gray-900"
+                  className="w-full py-2 ms-5 text-sm font-medium text-gray-900"
                 >
-                  <img src={paystack} className='inline mr-2' /> Paystack
+                  <img src={paystack}  className='w-4 h-4 inline mr-2' /> Paystack
                 </label>
               </div>
 
@@ -104,13 +103,13 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                   id="paypal-radio"
                   type="radio"
                   name="payment-method"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                  className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                 />
                 <label
                   htmlFor="paypal-radio"
-                  className="w-full py-4 ms-5 text-sm font-medium text-gray-900"
+                  className="w-full py-3 ms-5 text-sm font-medium text-gray-900"
                 >
-                  <img src={paypal} className='inline mr-2' /> Paypal
+                  <img src={paypal} className='inline w-4 h-4  mr-2' /> Paypal
                 </label>
               </div>
             
@@ -126,13 +125,13 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                   id="stripe-radio"
                   type="radio"
                   name="payment-method"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                  className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                 />
                 <label
                   htmlFor="stripe-radio"
-                  className="w-full py-4 ms-5 text-sm font-medium text-gray-900"
+                  className="w-full py-2 ms-5 text-sm font-medium text-gray-900"
                 >
-                  <img src={stripe} className='inline mr-2' /> Stripe
+                  <img src={stripe} className='inline w-4 h-4   mr-2' /> Stripe
                 </label>
               </div>
             
@@ -145,13 +144,13 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                   id="flutterwave-radio"
                   type="radio"
                   name="payment-method"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                  className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                 />
                 <label
                   htmlFor="flutterwave-radio"
-                  className="w-full py-4 ms-5 text-sm font-medium text-gray-900"
+                  className="w-full py-2 ms-5 text-sm font-medium text-gray-900"
                 >
-                  <img src={flutterwave} className='inline mr-2' /> Flutterwave
+                  <img src={flutterwave} className='inline w-4 h-4  mr-2' /> Flutterwave
                 </label>
               </div>
              

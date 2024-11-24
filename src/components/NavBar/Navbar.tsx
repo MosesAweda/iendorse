@@ -13,6 +13,7 @@ import deleteAccount from '../svg/deleteAccount.svg';
 import wallet from '../svg/wallet.svg';
 import battery from '../svg/battery.svg';
 import support from '../svg/support.svg';
+import Logout from "../Logout";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,13 +23,25 @@ const Navbar = () => {
   const userData:any = window.localStorage.getItem("userData");
   const token = userData ? JSON.parse(userData).jwtToken : null;
   const userName = userData ? JSON.parse(userData).fullName : null;
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSidebarOpen, setISidebarOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const parsedUserData = JSON.parse(userData);
+  const [logoutModal, setLogoutModal] = useState(false)
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    setISidebarOpen(!isSidebarOpen);
   };
+
+  const closeLogoutModal = () =>  setLogoutModal(false);
+
+  const openLogoutModal = () => {
+    setISidebarOpen(false)
+    setDropdownOpen(false)
+    setLogoutModal(true)
+
+
+}
+
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -76,35 +89,35 @@ const Navbar = () => {
       
 
       {/* Sidebar */}
-      <div className={`fixed z-20 inset-0 bg-black bg-opacity-50 transition-opacity duration-[2000ms]ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div className={`fixed z-20 inset-0 bg-black bg-opacity-50 transition-opacity duration-[2000ms]ease-in-out ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         {/* Close Button */}
        
-        <span className={`fixed top-1/2 transform -translate-y-1/2 p-2 text-white rounded transition-transform duration-[2000ms] ease-in-out ${isOpen ? 'right-80 translate-x-0' : 'right-0 translate-x-full'}`} onClick={toggleSidebar}>
+        <span className={`fixed top-1/2 transform -translate-y-1/2 p-2 text-white rounded transition-transform duration-[2000ms] ease-in-out ${isSidebarOpen ? 'right-80 translate-x-0' : 'right-0 translate-x-full'}`} onClick={toggleSidebar}>
           <img src={close} alt="x" width={40} height={40} />
         </span>
      
       </div>
 
       {/* Sidebar */}
-      <div className={`fixed z-40 top-0 right-0 h-full bg-white text-CustomBlue w-80 transform ${isOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-[2000ms] ease-in-out`}>
+      <div className={`fixed z-40 top-0 right-0 h-full bg-white text-CustomBlue w-80 transform ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-[100ms] ease-in-out`}>
         <div className="flex flex-col justify-center items-center">
           <div className="relative inline-block mt-10">
           {parsedUserData?.imageUrl ? (
             <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }} src={parsedUserData?.imageUrl} width={45} height={45} alt="Avatar" />
           ):(
-            <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
+            <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full text-customBlue p-2">
             {getInitials(parsedUserData?.fullName)}
             </div>
           )
         }
 
-            <img
+            {/* <img
               width={70}
               height={70}
               src={editPen}
               className="absolute top-[9px] right-0 transform translate-x-1/4 translate-y-1/4"
               alt="Edit"
-            />
+            /> */}
           </div>
           <div className="my-2">
             <p className="font-bold text-center"> {userName}</p>
@@ -143,15 +156,19 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="hover:bg-gray-100 rounded-lg">
-                <a href="#" className="block px-16 py-2">
+                <a onClick={openLogoutModal} href="#" className="block px-16 py-2">
                   <img src={deleteAccount} className="align-middle mr-2 inline w-4 h-4" />
-                  <span className="inline align-middle text-red-700"> Delete Account </span>
+                  <span className="inline align-middle text-red-700"> Logout </span>
                 </a>
               </li>
             </ul>
           </div>
         </div>
       </div>
+      <Logout
+             isOpen={logoutModal}
+             onClose={closeLogoutModal}
+         />
     </>
   );
 }

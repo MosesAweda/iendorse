@@ -9,7 +9,7 @@ export const isAuthenticated = (): boolean => {
   try { 
     const userData = JSON.parse(userDataString);
     const token = userData.jwtToken; // Get token from parsed userData
-    const tokenExpirationTime = userData.tokenExpirationTime;
+    const tokenExpirationTime = userData.tokenExpirationDate;
 
     if (!token) {
       console.log("No token found");
@@ -29,6 +29,7 @@ export const isAuthenticated = (): boolean => {
       return true;
     } else {
       console.log("Token has expired");
+      window.location.href = "/SignIn";
       return false;
     }
   } catch (error) {

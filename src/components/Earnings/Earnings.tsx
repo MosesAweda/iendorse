@@ -13,7 +13,7 @@ import SummaryModal from './SummaryModal';
 import EnterPassword from './EnterPassword';
  
 
-const Earnings = () => {
+const   Earnings = () => {
   
     const [accountId, setAccountId] = useState<any>(null);
     const [apiResponse, setApiResponse] = useState<any>();

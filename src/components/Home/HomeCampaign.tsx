@@ -1,23 +1,27 @@
 import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
-import share from './svg/share.svg';
-import endorse from './svg/endorse.svg';
-import Initials from "./Initials";
-import EndorseCampaignModal from "./ViewCampaign/EndorseCampaignModal";
-import PaymentMethodModal from "./ViewCampaign/PaymentMethodModal";
-import InsufficientWalletBalanceModal from "./ViewCampaign/InsufficientWalletBallance";
-import SummaryModal from "./ViewCampaign/SummaryModal";
-import EndorsementSuccessfulModal from "./ViewCampaign/EndorsementSuccessfulModal";
-import ShareCampaignModal from "./ViewCampaign/ShareCampaignModal";
-import { baseURL } from "./URL";
-import useFetch from "./Hooks/useFetch";
-import usePost from "./Hooks/usePost";
+import share from '../svg/share.svg';
+import endorse from '../svg/endorse.svg';
+import Initials from "../Initials";
+import EndorseCampaignModal from "../ViewCampaign/EndorseCampaignModal";
+import PaymentMethodModal from "../ViewCampaign/PaymentMethodModal";
+import InsufficientWalletBalanceModal from "../ViewCampaign/InsufficientWalletBallance";
+import SummaryModal from "../ViewCampaign/SummaryModal";
+import EndorsementSuccessfulModal from "../ViewCampaign/EndorsementSuccessfulModal";
+import ShareCampaignModal from "../ViewCampaign/ShareCampaignModal";
+import { baseURL } from "../URL";
+import useFetch from "../Hooks/useFetch";
+import usePost from "../Hooks/usePost";
 import {toast} from "react-toastify";
+import { isAuthenticated } from '../auth';
+import SignInFirst from "./SignInFirst";
+import { deflate } from "zlib";
 
 const HomeCampaign = ({item}:any, index:any) => {
   const userData:any = window.localStorage.getItem("userData");
   const parsedUserData = JSON.parse(userData);
   const [endorseMenu, setEndorseMenu] = useState(false);
+  const[signInFirstModal, setSignInFirstModal] = useState(false);
   const [unitsToPurchase, setUnitsToPurchase] = useState<number>(0);
   const [paymentMethodModal, setPaymentMethodModal] = useState(false);
  const [endorsementNote, setEndorsementNote] = useState('');  
@@ -27,17 +31,26 @@ const HomeCampaign = ({item}:any, index:any) => {
  const [summaryModal, setSummaryModal] = useState(false);
  const [endorsementSuccessfulModal, setEndorsementSuccessfulModal] = useState(false);
  const [shareCampaignModal, setShareCampaignModal] = useState(false);
- 
+ const isUserAuthenticated = isAuthenticated();
 
   const openEndorseMenu = () => {
-    setEndorseMenu(true);
-    document.body.style.overflow = 'hidden'; }
+    if(isUserAuthenticated){
+  setEndorseMenu(true);
+  }else{
+    setSignInFirstModal(true);
+  }
+    document.body.style.overflow = 'hidden'; 
+  }
+
+
   const closeEndorseMenu = () => {
     setEndorseMenu(false);
     document.body.style.overflow = 'auto'; 
   }
   const onSuccess = () => {}
   const onError = () => {}
+  const openSignInPrompt = () => setSignInFirstModal(true)
+  const closeSignInPrompt = () => {setSignInFirstModal(false); document.body.style.overflow = 'auto'}
   const openPaymentMethodModal = () => setPaymentMethodModal(true);
   const closePaymentMethodModal = () => setPaymentMethodModal(false);
   const openInsufficientWalletModal = () => setInsufficientWalletModal(true);
@@ -49,20 +62,30 @@ const HomeCampaign = ({item}:any, index:any) => {
 
   const openEndorsementSuccessfulModal = () => setEndorsementSuccessfulModal(true);
   const closeEndorsementSuccessfulModal = () => {setEndorsementSuccessfulModal(false); setAllData({})};
-
-  const walletURL = `${baseURL}/Wallet/WalletProfile`
+ 
   const endorseWithWalletURL = `${baseURL}/Campaign/EndorseCampaignWithWallet`
-  const { data: WalletData, refreshApi: refreshWalletData, error: walletError, loading: WalletDataLoading
-  } = useFetch(walletURL, "GET", onSuccess, onError);
-  const walletBalance = WalletData?.walletBalance;
+  const walletBalance = parsedUserData?.walletUnits;
+
+
+  
 
   const { data:ApiFeedback, loading: ApiFeedbackLoading, error, postData} = usePost(endorseWithWalletURL);
+
   const endorseWithWalletData = {
     campaignId: item.campaignId,
     numberOfUnits: unitsToPurchase,
     endorsementNote: endorsementNote
   }
-  
+  const PayWithWallet = async () => {
+    console.log("..........Paying with wallet");
+    try {
+      await postData(endorseWithWalletData);
+    } catch (err) {
+      console.error("Error posting data:", err);
+    //  toast.error("Failed to Endorse. Please try again.");
+      return;
+    }
+  };
 
   const submitEndorsement= (units:number, note: any) => {
     setUnitsToPurchase(units)
@@ -75,7 +98,7 @@ const HomeCampaign = ({item}:any, index:any) => {
 
 
   const submitPaymentMethod = (method: any) => {
-    setAllData({ ...allData, paymentMethod: method, walletBalance: walletBalance, campaignId: item.id });
+    setAllData({ ...allData, paymentMethod: method, walletBalance: walletBalance, campaignId: item.campaignId });
     setPaymentMethod(method)
     let preferredPaymentMethod = method;
     closePaymentMethodModal();
@@ -91,16 +114,7 @@ const HomeCampaign = ({item}:any, index:any) => {
   }
 
 
-  const PayWithWallet = async () => {
-    console.log("..........Paying with wallet");
-    try {
-      await postData(endorseWithWalletData);
-    } catch (err) {
-      console.error("Error posting data:", err);
-    //  toast.error("Failed to Endorse. Please try again.");
-      return;
-    }
-  };
+
 
 
   const getInitials = (fullName: string) => {
@@ -132,15 +146,16 @@ const HomeCampaign = ({item}:any, index:any) => {
   }, [error]);
   
 //console.log("cammpaign File", item?.campaignFiles[0]?.filePath)
-
+console.log("home campagin", item)
   return (
     <>
       
         <div className="p-4  max-w-lg border-gray-200  border sm:border-0 bg-white rounded-2xl my-5 mx-1 p-3  px-6">
           <Link to={`/ViewCampaign/${item?.campaignId}`} className={""}> 
           <div>
-            <div className="flex items-center">
-            <div className="  inline-block  z-1 mr-3" >
+            <div className="flex items-center justify-between ">
+              <div className="flex items-center">
+            <div className="  inline-block  z-1 mr-3 " >
           {item?.campaignOwnerImage ? (
             <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
              src={item?.campaignOwnerImage} width={45} height={45} alt="Avatar" />
@@ -150,16 +165,26 @@ const HomeCampaign = ({item}:any, index:any) => {
             </div>
           )
         }
- 
           </div>
+
+
+          
               <div>
-                <div className="font-semibold text-lg">
+                <div className="font-semibold text-lg w-[200px] leading-tight">
                  {item?.campaignOwner}
                 </div>
                 <div className='text-xs'>
                   <i> {item?.campaignOwnerTitle}</i>
                 </div>
               </div>
+              </div>
+
+              
+              <div>
+            <button className="bg-green-100 text-green-600 rounded-lg px-4 py-2 text-xs font-medium">
+            {item?.campaignUnit}  Points Left 
+            </button>
+          </div>
             </div>
           </div>
           <div className="my-4 min-w-[300px] max-w-[648px]   rounded-lg">
@@ -196,17 +221,16 @@ const HomeCampaign = ({item}:any, index:any) => {
             </div>
 
             <div className='flex items-center cursor-pointer' onClick={() => openEndorseMenu()}>
-              <div >
+              <div>
                 <img src={endorse} width={20} height={20} className='mr-1' alt="Endorse" />
               </div>
               <div>Endorse</div>
             </div>
           </div>
-        </div>
+          </div>
       
 
-
-        <EndorseCampaignModal
+      <EndorseCampaignModal
         isOpen={endorseMenu}
         onClose={closeEndorseMenu}
         onSubmit={submitEndorsement}
@@ -218,12 +242,11 @@ const HomeCampaign = ({item}:any, index:any) => {
         onSubmit={submitPaymentMethod}
       />
 
-<InsufficientWalletBalanceModal
+    <InsufficientWalletBalanceModal
         isOpen={insufficientWalletModal}
         onClose={closeInsufficientWalletModal}
         details={allData}
       />
-
 
        <SummaryModal
         isOpen={summaryModal}
@@ -233,19 +256,24 @@ const HomeCampaign = ({item}:any, index:any) => {
         ApiLoading={ApiFeedbackLoading}
       />
 
-<EndorsementSuccessfulModal
-              isOpen={endorsementSuccessfulModal}
+        <EndorsementSuccessfulModal
+          isOpen={endorsementSuccessfulModal}
         onClose={closeEndorsementSuccessfulModal}
         details ={allData}
       />
 
 
-<ShareCampaignModal
+      <ShareCampaignModal
         isOpen={shareCampaignModal}
         onClose={closeShareCampaignModal}
         details ={item}
       />
 
+
+      <SignInFirst
+        isOpen={signInFirstModal}
+        onClose={closeSignInPrompt}
+          />
     </>
   );
 }

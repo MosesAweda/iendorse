@@ -15,6 +15,8 @@ import deleteAccount from '../svg/deleteAccount.svg';
 import wallet from '../svg/wallet.svg';
 import battery from '../svg/battery.svg';
 import support from '../svg/support.svg';
+import Initials from "../Initials";
+import Logout from "../Logout";
 
 
 const AuthBar= ({toggleSidebar}:any)=> {
@@ -23,26 +25,26 @@ const AuthBar= ({toggleSidebar}:any)=> {
     const userData:any = window.localStorage.getItem("userData");
     const token = userData ? JSON.parse(userData).jwtToken : null;
     const userName = userData ? JSON.parse(userData).fullName : null;
+    const userImage = userData ? JSON.parse(userData).imageUrl : null;
     const [isOpen, setIsOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-   
+    
       const toggleMenu = () => {
         setMenuOpen(!menuOpen);
+
       };
-    
-      const handleLogout = () => {
-        window.localStorage.clear();
-        navigate("/SignIn");
-        toast.success("Logged out successfully");
-      };
+
+
     
 
     
       useEffect(() => {
+
         const handleClickOutside = (event: MouseEvent) => {
           if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node))  {
             setDropdownOpen(false);
+            setMenuOpen(false)
           }
         };
     
@@ -51,49 +53,95 @@ const AuthBar= ({toggleSidebar}:any)=> {
           document.removeEventListener('mousedown', handleClickOutside);
         };
       }, []);
-
-      
-
+     
+      const [position, setPosition] = useState('initial');
+      const [lastScrollY, setLastScrollY] = useState(0);
+      const [scrollTimer, setScrollTimer] = useState<NodeJS.Timeout | null>(null);
+    
+      useEffect(() => {
+        const handleScroll = () => {
+          const currentScrollY = window.scrollY;
+          
+          // Clear existing timeout
+          if (scrollTimer) {
+            clearTimeout(scrollTimer);
+          }
+    
+          // Always show navbar at the top of the page
+          if (currentScrollY < 100) {
+            setPosition('initial');
+            setLastScrollY(currentScrollY);
+            return;
+          }
+    
+          // Hide navbar when scrolling
+          setPosition('hidden');
+    
+          // Set new timeout to show navbar after scrolling stops
+          const newTimer = setTimeout(() => {
+            setPosition('visible');
+          }, 150);
+    
+          setScrollTimer(newTimer);
+          setLastScrollY(currentScrollY);
+        };
+    
+        window.addEventListener('scroll', handleScroll, { passive: true });
+    
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+          if (scrollTimer) {
+            clearTimeout(scrollTimer);
+       }
+        };
+      }, [lastScrollY, scrollTimer]);
+    
+      const getNavClasses = () => {
+        const baseClasses = 'bg-white w-full z-20 border-b border-gray-200 transition-all duration-300';
+        
+        switch (position) {
+          case 'initial':
+            return `${baseClasses} relative`;
+          case 'hidden':
+            return `${baseClasses} fixed top-0 left-0 -translate-y-full shadow-md`;
+          case 'visible':
+            return `${baseClasses} fixed top-0 left-0 translate-y-0 shadow-md`;
+          default:
+            return baseClasses;
+        }
+      };
     return(
-
-        <nav className="bg-white w-full z-20 top-0 start-0 border-b border-gray-200">
+      <>
+      <nav className={getNavClasses()}>
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="/images/logo.png" className="h-12 md:ml-10" alt="iendorse" />
           </a>
           <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
          
-     <div ref={dropdownRef} className="relative inline-block text-left">
-      <div>
-        <button
-          type="button"
-          className="inline-flex justify-center w-full rounded-md shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
-          id="options-menu"
-          aria-haspopup="true"
-          aria-expanded="true"
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-        >
-          {userName}  
-          <svg className="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-          </svg>
-        </button>
-      </div>
-  
-      {dropdownOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-42 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            <button
-              type="button"
-              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              role="menuitem"
-              onClick={handleLogout}
-            >
-              Sign Out
-            </button>
+     <div  className="relative inline-block text-left">
+      <div className="flex cursor-pointer "
+        aria-current="page"
+        onClick={() => {
+          toggleSidebar();
+          setMenuOpen(false);
+        }}>
+      <div className="  inline-block flex items-center z-1 mr-3 " >
+          {userImage ? (
+            <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
+             src={userImage} width={36} height={36} alt="Avatar" />
+          ):(
+            <div className="flex items-center justify-center h-10 w-10 bg-blue-100 rounded-full text-customBlue p-2">
+            <Initials fullName={userName} className="text-xs " />  
+            </div>
+          )
+        } 
+        <span className="ml-2 align-middle  text-sm text-gray-700">  {userName} </span>
+        
           </div>
-        </div>
-      )}
+          </div>
+  
+      
     </div>
   
             <button
@@ -173,7 +221,10 @@ const AuthBar= ({toggleSidebar}:any)=> {
               </li>
               <li> 
                 <a
-                 onClick={toggleSidebar}
+                 onClick={() => {
+                  toggleSidebar();
+                  setMenuOpen(false);
+                }}
                   href="#"
                   className="block py-2 px-3 text-xs rounded md:bg-transparent md:p-0"
                   aria-current="page"
@@ -198,8 +249,8 @@ const AuthBar= ({toggleSidebar}:any)=> {
           </div>
         </div>
       </nav>
-
-      
+  
+      </>
   
     )
 } 

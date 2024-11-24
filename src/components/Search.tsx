@@ -8,6 +8,7 @@ import closeIcon from './svg/close.svg';
 import arrowLeftIcon from './svg/arrow_left.svg';
 import { baseURL } from './URL';
 
+
 const Search = () => {
     const [isCampaigns, setIsCampaigns] = useState(true);
     const [loading, setLoading] = useState(false);

@@ -19,7 +19,7 @@ const SummaryModal: React.FC<SummaryModalProps> = ({ isOpen, onClose,onSubmit, d
 
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 transition-opacity flex  items-start sm:items-center justify-center">
+    <div className="fixed inset-0 transition-opacity flex  items-start mt-20 sm:mt-1 sm:items-center justify-center">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
       <div className="relative p-4 w-full max-w-md max-h-full">
       <div className='  flex justify-center p-4'>      

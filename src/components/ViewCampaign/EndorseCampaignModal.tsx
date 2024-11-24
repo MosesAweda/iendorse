@@ -61,23 +61,23 @@ const EndorseCampaignModal: React.FC<EndorseCampaignModalProps> = ({ isOpen, onC
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 transition-opacity flex items-start sm:items-center justify-center">
+    <div className="fixed inset-0 transition-opacity flex items-start mt-20 sm:mt-1 sm:items-center justify-center">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
 
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="flex justify-center p-4">
           <span
-            className="bg-transparent border-0 text-black text-3xl leading-none font-semibold outline-none focus:outline-none"
+            className="bg-transparent border-0 text-black  text-3xl leading-none font-semibold outline-none focus:outline-none"
             onClick={onClose}
           >
-            <img src={close} alt="x" width={40} height={40} />
+            <img src={close} alt="x" width={40} height={40} className='mt-2 pt-2' />
           </span>
         </div>
         <div className="relative bg-white rounded-lg shadow">
           <div className="p-4 md:p-5">
             <h1 className="text-center font-bold mb-4">Endorse Campaign</h1>
 
-            <div className="flex-col max-w-sm space-y-2 justify-center mb-20">
+            <div className="flex-col max-w-sm space-y-2 justify-center mb-10">
               <div>
                 <input
                   onChange={handleNumberOfUnits}
@@ -95,7 +95,7 @@ const EndorseCampaignModal: React.FC<EndorseCampaignModalProps> = ({ isOpen, onC
                 </div>
               </div>
 
-              <div className="flex items-center border border-gray-200 rounded mt-20">
+              <div className="flex items-center border border-gray-200 rounded-lg mt-20">
                 <div className="w-full">
                   <textarea
                     onChange={handleNote}

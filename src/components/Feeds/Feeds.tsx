@@ -34,7 +34,8 @@ const Feed: React.FC = () => {
       <div className='bg-gray-100 h-screen'>
         <Navbar/>
         <div className="flex flex-col bg-gray-100 justify-center items-center">
-              {loading && ( <div className='flex items-center justify-center h-screen'>  <ThreeCircles
+              {loading && ( <div className='flex items-center justify-center h-screen'>  
+                <ThreeCircles
               visible={true}
               height="40"
               width="40"

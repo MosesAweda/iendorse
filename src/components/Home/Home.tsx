@@ -3,23 +3,23 @@ import { Link } from 'react-router-dom';
 import { ThreeCircles, Puff } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import bg from '../../public/images/bg.svg';
-import bell from './svg/bell.svg';
-import home from './svg/home.svg';
-import search from './svg/search.svg';
-import plus from './svg/plus.svg';
-import feed from './svg/feed.svg';
-import account from './svg/account.svg';
-import share from './svg/share.svg';
-import endorse from './svg/endorse.svg';
-import apple from './svg/apple.svg';
-import playstore from './svg/playstore.svg';
-import SkeletonCampaign from './SkeletonCampaign';
-import Navbar from './NavBar/Navbar';
+import bell from '../svg/bell.svg';
+import home from '../svg/home.svg';
+import search from '../svg/search.svg';
+import plus from '../svg/plus.svg';
+import feed from '../svg/feed.svg';
+import account from '../svg/account.svg';
+import share from '../svg/share.svg';
+import endorse from '../svg/endorse.svg';
+import apple from '../svg/apple.svg';
+import playstore from '../svg/playstore.svg';
+import SkeletonCampaign from '../SkeletonCampaign';
+import Navbar from '../NavBar/Navbar';
 import HomeCampaign from './HomeCampaign';
-import usePost from './Hooks/usePost';
-import { baseURL } from './URL';
+import usePost from '../Hooks/usePost';
+import { baseURL } from '../URL';
 import { Skeleton } from '@mui/material';
-import useFetch from './Hooks/useFetch';
+import useFetch from '../Hooks/useFetch';
 
 
 interface ApiResponse {
@@ -79,7 +79,8 @@ const Home = () => {
           setDataArray((prev) => [...prev, ...fetchedData]);
         }
       } catch (err) {
-        toast.error((err as Error).message);
+       // toast.error((err as Error).message);#
+       console.log((err as Error).message);
       } finally {
         setInfiniteLoading(false);
       }
@@ -266,7 +267,14 @@ const handleScroll = () => {
   <div className="text-center text-gray-500 mt-4 mb-20">
     {!loading && !infiniteLoading && <p>No campaigns found.</p>}
   </div>
-) : (
+) :
+!dataArray ? (
+  <div className="text-center text-gray-500 mt-4 mb-20">
+    {!loading && !infiniteLoading && <p>Unable to fetch campaigns.</p>}
+  </div>
+) : 
+
+(
   // Display the actual content once loading is complete
   <>
     {dataArray.map((item, index) => (

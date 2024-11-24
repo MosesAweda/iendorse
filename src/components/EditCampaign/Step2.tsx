@@ -114,7 +114,7 @@ const handleSubmit = async (e: any) => {
     campaignUnit: 10 // If campaignUnit is a fixed value or needs to be derived from somewhere
   };
 
-  const apiUrl = `${baseURL}/Campaign/EditCampaignV2`;
+  const apiUrl = `${baseURL}/Campaign/CreateCampaignV2`;
   setCreateLoading(true);
   try {
     const response = await fetch(apiUrl, {

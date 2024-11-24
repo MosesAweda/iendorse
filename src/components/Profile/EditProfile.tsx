@@ -31,10 +31,10 @@ const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
     return initials.toUpperCase();
   };
 
-  const handlePhoneChange = (value: string) => {
-    setPhoneNumber(value);
+  // const handlePhoneChange = (value: string) => {
+  //   setPhoneNumber(value);
 
-  }
+  // }
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -169,7 +169,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
       sex: sex,
       emailAddress: parsedUserData.emailAddress,
       occupation: occupation,
-      phoneNumber: phoneNumber,
+      phoneNumber: parsedUserData.phoneNumber,
       imageBase64String: profilePicture ? profilePicture : undefined, // Only add image if uploaded
     };
   
@@ -236,11 +236,11 @@ const closeAndClear = () => {
   return (
     <div className="fixed inset-0 flex items-start sm:items-center justify-center z-50">
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
-      <Backdrop
+         <Backdrop
               sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
               open={imageLoading}>
               <CircularProgress color="inherit" />
-            </Backdrop>
+         </Backdrop>
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className='flex justify-center p-4'>
           <span
@@ -331,19 +331,34 @@ const closeAndClear = () => {
                   />
                 </div>
 
-                <div className="relative w-full bg-gray-50">
+
+                <div className="relative w-full">
+                  <label className="absolute left-3 top-1 text-xs text-gray-900 px-1">
+                    Phone Number
+                  </label>
+                  <input
+                    name="fullName"
+                    value={"+" + parsedUserData.phoneNumber}
+                    // onChange={handleChange}
+                    className="w-full pt-5 pb-2 px-4 text-xs bg-gray-50 rounded-md border text-gray-900"
+                    placeholder="Phone Number"
+                  />
+                </div>
+
+                {/* <div className="relative w-full bg-gray-50">
                   <label className="pl-2 py-2 mb-2 left-3 w-full text-xs text-gray-900 px-1">
                     Phone Number
                   </label>
                   <PhoneInput
                     country={'ng'}
+                     
                     value={phoneNumber}
-                    onChange={handlePhoneChange}
+                    // onChange={handlePhoneChange}
                     inputStyle={{ border: 'none' }}
                     inputClass="w-full pt-5 pb-2 px-4 text-xs bg-gray-50 rounded-md text-gray-900 focus:ring-primary-600 focus:border-primary-600"
                     buttonStyle={{ border: 'none', backgroundColor: 'transparent' }}
                   />
-                </div>
+                </div> */}
 
                 <div className="relative w-full">
                   <label className="absolute left-3 top-1 text-xs text-gray-900 px-1">

@@ -15,7 +15,7 @@ interface DeleteModalProps {
 
 const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, details, onCloseMenu }) => {
     const [isLoading, setIsLoading] = useState(false);
-const deleteURL = `${baseURL}/Campaign/DeleteCampaign?campaignId=${details.campaignId}`;
+    const deleteURL = `${baseURL}/Campaign/DeleteCampaign?campaignId=${details.campaignId}`;
 
     const deleteCampaign = async () => {
         setIsLoading(true); // Show loading state
@@ -44,6 +44,7 @@ const deleteURL = `${baseURL}/Campaign/DeleteCampaign?campaignId=${details.campa
                 draggable: true,
                 progress: undefined,
             });
+            window.location.reload();
             
           } else {
             console.error("Failed to submit complaint:", response.statusText);
@@ -81,7 +82,7 @@ const deleteURL = `${baseURL}/Campaign/DeleteCampaign?campaignId=${details.campa
     
       <div className="relative bg-white rounded-lg shadow">
         <div className=" md:p-5 mx-2">
-          <h1 className="text-center font-bold my-2 border-b pb-2 ">   Delete Campaign</h1>
+          <h1 className="text-center font-bold my-1 border-b pb-3 pt-1">   Delete Campaign</h1>
           <div className="flex  justify-center my-3 p-3 ">
               <img src={redTrash} alt="greenCheck"  width={80} height={80} />  
           </div>
