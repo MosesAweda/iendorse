@@ -28,6 +28,7 @@ import TransactionDetails from './components/Wallet/TranscationDetails';
 import Earnings from './components/Earnings/Earnings';
 import ProtectedRoute from './components/ProtectedRoute';
 import Sample from './components/sample';
+import AuthCallback from './components/AuthCallback';
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
           
           {/* Public routes */}
           <Route path='/' element={<Home />} />
+          <Route path='/auth-callback' element={<AuthCallback />} />
           <Route path='/SignIn' element={<SignIn />} />
           <Route path='/SignUp' element={<SignUp />} />
           <Route path='/ConfirmOTP' element={<ConfirmOTP />} />

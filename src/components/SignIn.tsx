@@ -14,9 +14,10 @@ const SignIn: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGoogleSignIn = async () => {
+    console.log('google sigin started', account);
     try {
       const redirectUrl = `${window.location.origin}/auth-callback`; // URL to redirect after successful login
-      await account.createOAuth2Session('google' as any, redirectUrl, redirectUrl);
+      await account.createOAuth2Session('google' as any, redirectUrl, `${redirectUrl}/fail`,);
     } catch (error) {
       console.error('Error during Google Sign-In:', error);
       toast.error('Google Sign-In failed');
