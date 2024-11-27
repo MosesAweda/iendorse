@@ -176,7 +176,7 @@ const   Earnings = () => {
                             </button>
                             </div>  
                         </div>
-                      <div className='font-medium text-lg'> Today</div>
+                      {/* <div className='font-medium text-lg'> Today</div> */}
                {transactions  && transactions.map((item: any) => (
                 <div className=" w-full md:max-w-md p-4 max-w-md border-gray-700 bg-white rounded-lg my-2">
                 <div className="flex items-center ">

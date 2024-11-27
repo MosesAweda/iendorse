@@ -11,7 +11,9 @@ const ProtectedRoute: React.FC = () => {
   if (!isUserAuthenticated) {
     window.localStorage.clear();
     toast.error("Please login to access this page");
-    return <Navigate to="/SignIn" replace />;
+    const intendedUrl = window.location.pathname;
+    return <Navigate to={`/SignIn?next=${intendedUrl}`} replace />;
+    // return <Navigate to="/SignIn" replace />;
   }
 else
 {

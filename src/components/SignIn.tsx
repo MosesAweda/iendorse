@@ -1,11 +1,18 @@
 import React, { useState, FormEvent } from 'react';
+import { GoogleLogin } from '@react-oauth/google';
+import {jwtDecode, JwtPayload} from 'jwt-decode'; // Import without brackets for default export
 import logo from './svg/logo.svg';
 import google from './svg/google.svg';
 import { baseURL } from './URL';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import { LineWave } from 'react-loader-spinner';
-import { account } from '../appwrite';
+
+interface MyJwtPayload extends JwtPayload {
+  name: string;
+  // Add other properties that your JWT payload contains
+  email?: string;
+}
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -13,17 +20,23 @@ const SignIn: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleGoogleSignIn = async () => {
-    console.log('google sigin started', account);
-    try {
-      const redirectUrl = `${window.location.origin}/auth-callback`; // URL to redirect after successful login
-      await account.createOAuth2Session('google' as any, redirectUrl, `${redirectUrl}/fail`,);
-    } catch (error) {
-      console.error('Error during Google Sign-In:', error);
-      toast.error('Google Sign-In failed');
+  const handleGoogleSignIn = (credentialResponse: any) => {
+    if (credentialResponse.credential) {
+      const decodedUser = jwtDecode<MyJwtPayload>(credentialResponse.credential);
+ 
+      console.log('Google Sign-In successful:', decodedUser);
+
+      // Save the token and user data to localStorage
+      window.localStorage.setItem('token', credentialResponse.credential);
+      window.localStorage.setItem('userData', JSON.stringify(decodedUser));
+
+      toast.success(`Welcome back, ${decodedUser.name}!`);
+      navigate('/');
+    } else {
+      toast.error('Google Sign-In failed.');
     }
   };
-  
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -40,12 +53,13 @@ const SignIn: React.FC = () => {
       const data = await response.json();
 
       if (response.ok && data.succeeded) {
-        window.localStorage.setItem("userData", JSON.stringify(data.data));
-        window.localStorage.setItem("token", data?.data.jwtToken);
-        window.localStorage.setItem("walletUnits", data?.data.walletUnits);
+        window.localStorage.setItem('userData', JSON.stringify(data.data));
+        window.localStorage.setItem('token', data?.data.jwtToken);
+        window.localStorage.setItem('walletUnits', data?.data.walletUnits);
 
-        navigate('/');
-        toast('Welcome ' + data.data.fullName + '!');
+        const intendedUrl = new URLSearchParams(window.location.search).get('next') || "/";
+        navigate(intendedUrl);
+        toast.success('Welcome ' + data.data.fullName + '!', { autoClose: 3000,'position': 'top-center' });
       } else {
         toast.error(data.message || 'An error occurred while signing in');
       }
@@ -123,10 +137,10 @@ const SignIn: React.FC = () => {
           <div className="flex-1 border-t border-gray-300"></div>
         </div>
         <div className="flex justify-center space-x-4">
-          <button onClick={handleGoogleSignIn} className="flex items-center space-x-2 p-2 border rounded-md hover:bg-gray-100">
-            <img src={google} alt="google" width={24} height={24} />
-            <span>Google</span>
-          </button>
+          <GoogleLogin
+            onSuccess={handleGoogleSignIn}
+            onError={() => toast.error('Google Sign-In failed.')}
+          />
         </div>
         <div className="flex items-center justify-center">
           <p className="px-4">

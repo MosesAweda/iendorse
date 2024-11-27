@@ -27,11 +27,12 @@ import Support from './components/Support';
 import TransactionDetails from './components/Wallet/TranscationDetails';
 import Earnings from './components/Earnings/Earnings';
 import ProtectedRoute from './components/ProtectedRoute';
-import Sample from './components/sample';
+import {Sample} from './components/sample';
 import AuthCallback from './components/AuthCallback';
 
 
 function App() {
+
   return (
     <>
       <Router>

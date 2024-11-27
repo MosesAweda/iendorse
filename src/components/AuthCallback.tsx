@@ -16,7 +16,6 @@ const AuthCallback: React.FC = () => {
           if (!session) {
             toast.error('No session available');
           }
-      
           window.localStorage.setItem('userData', JSON.stringify(session));
           toast.success('Successfully signed in!');
           navigate('/');
@@ -26,8 +25,6 @@ const AuthCallback: React.FC = () => {
           navigate('/signin');
         }
       };
-      
-
     completeOAuthLogin();
   }, [navigate]);
 

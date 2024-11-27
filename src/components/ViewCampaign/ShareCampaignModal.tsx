@@ -16,8 +16,10 @@ interface ShareCampaignModalProps {
   
 }
 
+
  const ShareCampaignModal: React.FC<ShareCampaignModalProps> = ({ isOpen, onClose, details }) => {
-  // console.log("Share Details", details)
+  console.log("Share Details", details)
+
   const [copied, setCopied] = useState(false);
   const [copySuccess, setCopySuccess] = useState('');
   const textToCopy = `https://iendorse.vercel.app/ViewCampaign/${details?.campaignId}`

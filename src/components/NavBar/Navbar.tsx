@@ -143,12 +143,12 @@ const Navbar = () => {
                   <span className="inline align-middle"> My Wallet </span>
                 </a>
               </li>
-              <li className="hover:bg-gray-100 rounded-lg">
+              {/* <li className="hover:bg-gray-100 rounded-lg">
                 <a href="#" className="block px-16 py-2">
                   <img src={battery} className="align-middle mr-2 inline w-4 h-4" />
                   <span className="inline align-middle"> Shared Campaigns </span>
                 </a>
-              </li>
+              </li> */}
               <li className="hover:bg-gray-100 rounded-lg">
                 <a href="/support" className="block px-16 py-2">
                   <img src={support} className="align-middle mr-2 inline w-4 h-4" />

@@ -393,7 +393,7 @@ const endorseWithWalletData = {
 <ShareCampaignModal
         isOpen={shareCampaignModal}
         onClose={closeShareCampaignModal}
-        details ={allData}
+        details ={campaignData}
       />
 
 
