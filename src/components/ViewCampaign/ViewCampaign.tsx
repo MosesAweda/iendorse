@@ -204,6 +204,7 @@ const ViewCampaign = ({ item }: any) => {
     <>
      {campaignData && (
         <Helmet>
+            <title>{ campaignData.campaignTitle || " iendorse"}</title>
           <meta property="og:title" content={campaignData.campaignTitle || "Default Title"} />
           <meta property="og:description" content={campaignData.description || "Default description"} />
           <meta property="og:url" content={campaignData.campaignUrl || window.location.href} />

@@ -30,6 +30,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import {Sample} from './components/sample';
 import AuthCallback from './components/AuthCallback';
 import TandC from './components/Home/TandC';
+import SampleTitle from './components/SampleTitle';
 
 
 function App() {
@@ -77,6 +78,7 @@ function App() {
           <Route path='/Support/' element={<Support />} />
           <Route path='/sample' element={<Sample />} />
           <Route path='/TermsAndConditions' element={<TandC />} />
+          <Route path='/SampleTitle' element={<SampleTitle title="Sample Title" />} />
         </Routes>
       </Router>
     </>
