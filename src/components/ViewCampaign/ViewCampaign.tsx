@@ -205,10 +205,10 @@ const ViewCampaign = ({ item }: any) => {
   return (
     <>
        <Helmet>
-        <title>{campaignData?.campaignTitle || "iEndorse"}</title>
+        <title>{campaignData?.campaignTitle}</title>
         <meta
           name="description"
-          content={campaignData?.description || "Default description"}
+          content={campaignData?.description }
         />
         <meta property="og:title" content={campaignData?.campaignTitle} />
         <meta
