@@ -200,9 +200,34 @@ const ViewCampaign = ({ item }: any) => {
     const options: any = { year: 'numeric', month: 'long', day: 'numeric' };
     return dateObj.toLocaleDateString('en-GB', options);
   }
+
+  useEffect(() => {
+    document.title = campaignData?.campaignTitle || "iEndorse";
+    const metaDescription = document.querySelector("meta[name='description']");
+    const ogImage = document.querySelector("meta[property='og:image']");
+
+    if (metaDescription) {
+      metaDescription.setAttribute("content", campaignData?.description || "Default description");
+    } else {
+      const newMetaDescription = document.createElement("meta");
+      newMetaDescription.name = "description";
+      newMetaDescription.content = campaignData?.description || "Default description";
+      document.head.appendChild(newMetaDescription);
+    }
+
+    if (ogImage) {
+      ogImage.setAttribute("content", campaignData?.campaignFiles?.[0]?.filePath || "");
+    } else if (campaignData?.campaignFiles?.length) {
+      const newOgImage = document.createElement("meta");
+      newOgImage.setAttribute("property", "og:image");
+      newOgImage.content = campaignData.campaignFiles[0]?.filePath || "";
+      document.head.appendChild(newOgImage);
+    }
+  }, [campaignData]);
+
   return (
     <>
-     {campaignData && (
+     {/* {campaignData && (
         <Helmet>
             <title>{ campaignData.campaignTitle || " iendorse"}</title>
           <meta property="og:title" content={campaignData.campaignTitle || "Default Title"} />
@@ -215,7 +240,7 @@ const ViewCampaign = ({ item }: any) => {
             </>
           )}
         </Helmet>
-      )}
+      )} */}
       <Navbar />
 
       {
