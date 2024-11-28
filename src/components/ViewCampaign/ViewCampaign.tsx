@@ -217,7 +217,7 @@ const ViewCampaign = ({ item }: any) => {
         />
         <meta
           property="og:image"
-          content={campaignData?.campaignFiles?.[0]?.filePath || "default-image.png"}
+          content={campaignData?.campaignFiles?.[0]?.filePath || "https://res.cloudinary.com/dgso4wgqt/image/upload/v1732801029/logo_zganue.png"}
         />
         <meta
           property="og:url"
