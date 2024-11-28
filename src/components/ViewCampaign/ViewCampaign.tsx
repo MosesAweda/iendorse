@@ -200,47 +200,30 @@ const ViewCampaign = ({ item }: any) => {
     const options: any = { year: 'numeric', month: 'long', day: 'numeric' };
     return dateObj.toLocaleDateString('en-GB', options);
   }
-
-  useEffect(() => {
-    document.title = campaignData?.campaignTitle || "iEndorse";
-    const metaDescription = document.querySelector("meta[name='description']");
-    const ogImage = document.querySelector("meta[property='og:image']");
-
-    if (metaDescription) {
-      metaDescription.setAttribute("content", campaignData?.description || "Default description");
-    } else {
-      const newMetaDescription = document.createElement("meta");
-      newMetaDescription.name = "description";
-      newMetaDescription.content = campaignData?.description || "Default description";
-      document.head.appendChild(newMetaDescription);
-    }
-
-    if (ogImage) {
-      ogImage.setAttribute("content", campaignData?.campaignFiles?.[0]?.filePath || "");
-    } else if (campaignData?.campaignFiles?.length) {
-      const newOgImage = document.createElement("meta");
-      newOgImage.setAttribute("property", "og:image");
-      newOgImage.content = campaignData.campaignFiles[0]?.filePath || "";
-      document.head.appendChild(newOgImage);
-    }
-  }, [campaignData]);
+ 
 
   return (
     <>
-     {/* {campaignData && (
-        <Helmet>
-            <title>{ campaignData.campaignTitle || " iendorse"}</title>
-          <meta property="og:title" content={campaignData.campaignTitle || "Default Title"} />
-          <meta property="og:description" content={campaignData.description || "Default description"} />
-          <meta property="og:url" content={campaignData.campaignUrl || window.location.href} />
-          {campaignData.campaignFiles?.length > 0 && (
-            <>
-              <meta property="og:image" content={campaignData.campaignFiles[0].filePath} />
-              <meta name="twitter:image" content={campaignData.campaignFiles[0].filePath} />
-            </>
-          )}
-        </Helmet>
-      )} */}
+       <Helmet>
+        <title>{campaignData?.campaignTitle || "iEndorse"}</title>
+        <meta
+          name="description"
+          content={campaignData?.description || "Default description"}
+        />
+        <meta property="og:title" content={campaignData?.campaignTitle || "iEndorse"} />
+        <meta
+          property="og:description"
+          content={campaignData?.description || "Default description"}
+        />
+        <meta
+          property="og:image"
+          content={campaignData?.campaignFiles?.[0]?.filePath || "default-image.png"}
+        />
+        <meta
+          property="og:url"
+          content={campaignData?.campaignUrl || window.location.href}
+        />
+      </Helmet>
       <Navbar />
 
 
@@ -321,8 +304,8 @@ const ViewCampaign = ({ item }: any) => {
                   <div className="flex">
                     <div className="  inline-block  z-1 mr-3" >
                       {campaignData?.campaignOwnerImage ? (
-                        <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
-                          src={campaignData?.campaignOwnerImage} width={45} height={45} alt="Avatar" />
+                        <img className="rounded-full border-2 w-10 h-10    border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
+                          src={campaignData?.campaignOwnerImage}  alt="Avatar" />
                       ) : (
                         <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
                           <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />
