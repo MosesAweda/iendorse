@@ -217,7 +217,7 @@ const ViewCampaign = ({ item }: any) => {
         />
         <meta
           property="og:image"
-          content={campaignData?.campaignFiles?.[0]?.filePath || ""}
+          content={campaignData?.campaignFiles?.[0]?.filePath}
         />
         <meta
           property="og:url"
