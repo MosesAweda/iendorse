@@ -29,6 +29,7 @@ import Earnings from './components/Earnings/Earnings';
 import ProtectedRoute from './components/ProtectedRoute';
 import {Sample} from './components/sample';
 import AuthCallback from './components/AuthCallback';
+import TandC from './components/Home/TandC';
 
 
 function App() {
@@ -58,6 +59,8 @@ function App() {
             <Route path='/Notifications' element={<Notifications />} />
             <Route path='/Feed' element={<Feed />} />
             <Route path='/Earnings' element={<Earnings />} />
+            <Route path='TransactionDetails' element={<TransactionDetails />} />
+         
           </Route>
           
           {/* Public routes */}
@@ -73,6 +76,7 @@ function App() {
           <Route path='/ViewCampaign/:uid' element={<ViewCampaign />} />
           <Route path='/Support/' element={<Support />} />
           <Route path='/sample' element={<Sample />} />
+          <Route path='/TermsAndConditions' element={<TandC />} />
         </Routes>
       </Router>
     </>

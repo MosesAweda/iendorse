@@ -54,7 +54,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
           <div className="p-4 md:p-5">
             <h1 className="text-center font-bold"> Select Payment Method</h1>
 
-            <div className="flex-col max-w-sm space-y-2 justify-center mt-2 mb-10">
+            <div className="flex-col max-w-sm space-y-2 justify-center mt-2 mb-4">
 
       
 
@@ -71,7 +71,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                 />
                 <label
                   htmlFor="paystack-radio"
-                  className="w-full py-4 ms-5 text-sm font-medium text-gray-900"
+                  className="w-full py-3   ms-5 text-sm font-medium text-gray-900"
                 >
                   <img src={paystack} className='inline mr-2' /> Paystack
                 </label>
@@ -91,7 +91,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                 />
                 <label
                   htmlFor="paypal-radio"
-                  className="w-full py-4 ms-5 text-sm font-medium text-gray-900"
+                  className="w-full py-3 ms-5 text-sm font-medium text-gray-900"
                 >
                   <img src={paypal} className='inline mr-2' /> Paypal
                 </label>
@@ -113,7 +113,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                 />
                 <label
                   htmlFor="stripe-radio"
-                  className="w-full py-4 ms-5 text-sm font-medium text-gray-900"
+                  className="w-full py-3 ms-5 text-sm font-medium text-gray-900"
                 >
                   <img src={stripe} className='inline mr-2' /> Stripe
                 </label>
@@ -132,7 +132,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                 />
                 <label
                   htmlFor="flutterwave-radio"
-                  className="w-full py-4 ms-5 text-sm font-medium text-gray-900"
+                  className="w-full py-3 ms-5 text-sm font-medium text-gray-900"
                 >
                   <img src={flutterwave} className='inline mr-2' /> Flutterwave
                 </label>

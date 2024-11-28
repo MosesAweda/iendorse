@@ -22,7 +22,9 @@ const HomeCampaign = ({item}:any, index:any) => {
   const parsedUserData = JSON.parse(userData);
   const [endorseMenu, setEndorseMenu] = useState(false);
   const[signInFirstModal, setSignInFirstModal] = useState(false);
+  const[loading, setLoading] = useState(false);
   const [unitsToPurchase, setUnitsToPurchase] = useState<number>(0);
+  const [walletBalance, setWalletBalance] = useState(0);
   const [paymentMethodModal, setPaymentMethodModal] = useState(false);
  const [endorsementNote, setEndorsementNote] = useState('');  
  const [paymentMethod, setPaymentMethod] = useState("");
@@ -64,12 +66,44 @@ const HomeCampaign = ({item}:any, index:any) => {
   const closeEndorsementSuccessfulModal = () => {setEndorsementSuccessfulModal(false); setAllData({})};
  
   const endorseWithWalletURL = `${baseURL}/Campaign/EndorseCampaignWithWallet`
-  const walletBalance = parsedUserData?.walletUnits;
-
+  // const walletBalance = parsedUserData?.walletUnits;
+  const walletURL = `${baseURL}/Wallet/WalletProfile`;
 
   
 
   const { data:ApiFeedback, loading: ApiFeedbackLoading, error, postData} = usePost(endorseWithWalletURL);
+
+ const fetchWalletBalance = async () => {
+    setLoading(true);
+
+    try {
+      const response = await fetch(walletURL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${window.localStorage.getItem('token')}`
+        },
+
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      if (responseData) {
+        //toast("Wallet fetched")
+        setWalletBalance(responseData.data.walletBalance);
+      }
+    } catch (err) {
+      console.log("Error posting data:", err);
+      //toast.error((err as Error).message);
+    } finally {
+      setLoading(false);
+
+    }
+  };
+
 
   const endorseWithWalletData = {
     campaignId: item.campaignId,
@@ -92,6 +126,7 @@ const HomeCampaign = ({item}:any, index:any) => {
     setEndorsementNote(note)
     setAllData({...allData, unitsToPurchase: units, endorsementNote: note});
    // console.log("All ENDORSEMENT DATA>>>>>>>>", allData)
+   fetchWalletBalance();
      closeEndorseMenu();
      openPaymentMethodModal();
   }
@@ -109,6 +144,7 @@ const HomeCampaign = ({item}:any, index:any) => {
       } else {
        // console.log("opening summary modal")
         opensummarymodal()
+       
       }
     }
   }
@@ -157,10 +193,12 @@ console.log("home campagin", item)
               <div className="flex items-center">
             <div className="  inline-block  z-1 mr-3 " >
           {item?.campaignOwnerImage ? (
-            <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
-             src={item?.campaignOwnerImage} width={45} height={45} alt="Avatar" />
+            // <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
+            //  src={item?.campaignOwnerImage} width={45} height={45} alt="Avatar" />
+            <img className="rounded-full border-2  w-10 h-10 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
+             src={item?.campaignOwnerImage}  alt="Avatar" />
           ):(
-            <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
+            <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full text-customBlue p-2">
             <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />  
             </div>
           )

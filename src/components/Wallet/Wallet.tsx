@@ -35,7 +35,8 @@ const Wallet = () => {
     const { data: WalletData, refreshApi: refreshWalletData, error: walletError, loading: WalletDataLoading } = useFetch(walletURL, "GET", onSuccess, onError);
     const walletBalance = WalletData?.walletBalance;
     const transactions = WalletData?.walletTranactions;
-    console.log("transactions", transactions)
+       const reversedTransactions = transactions?.slice().reverse();
+ 
 
     useEffect(() => {
         let userDataString = window.localStorage.getItem("userData");
@@ -227,7 +228,7 @@ const Wallet = () => {
                             </div>  
                         </div>
                       {/* <div className='font-medium text-lg'> Today</div> */}
-               {transactions  && transactions.map((item: any) => (
+               {reversedTransactions  && reversedTransactions.map((item: any) => (
                 <div className=" w-full md:max-w-md p-4 max-w-md border-gray-700 bg-white rounded-lg my-2">
                 <div className="flex items-center ">
                     <div className="flex">

@@ -34,8 +34,7 @@ const FundWallet: React.FC<FundWalletProps> = ({ isOpen, onClose, onSubmit }) =>
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 transition-opacity flex items-start sm:items-center justify-center">
+  return (  <div className="fixed inset-0 transition-opacity flex items-start mt-20 sm:mt-1 sm:items-center justify-center">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
       <div className="relative p-4 w-full max-w-md max-h-full">
       <div className='  flex justify-center p-4'>      
@@ -53,7 +52,7 @@ const FundWallet: React.FC<FundWalletProps> = ({ isOpen, onClose, onSubmit }) =>
             Fund your wallet to be able to promote your campaigns and also endorse other campaigns
             </p>
 
-            <div className="flex-col max-w-sm space-y-2 justify-center mb-40 ">
+            <div className="flex-col max-w-sm space-y-2 justify-center mb-32">
             {error && <p className="text-red-500 text-xs my-2">{error}</p>}
                 <input
                   onChange={handleChange}

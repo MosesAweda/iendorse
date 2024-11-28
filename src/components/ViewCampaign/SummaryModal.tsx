@@ -51,6 +51,7 @@ const SummaryModal: React.FC<SummaryModalProps> = ({ isOpen, onClose,onSubmit, d
                    <span className='font-medium' > {details?.unitsToPurchase} units</span>
                </div>
                  
+            
                  
             </div>
             
