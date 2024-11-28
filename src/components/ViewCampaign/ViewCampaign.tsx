@@ -30,6 +30,7 @@ import EndorsementSuccessfulModal from "./EndorsementSuccessfulModal";
 import Initials from "../Initials";
 import ReportCampaign from "./ReportCampaign";
 import EndorsementFailed from "./EndorsementFailed";
+import { Helmet } from  'react-helmet-async';
 
 
 interface ApiResponse {
@@ -201,6 +202,30 @@ const ViewCampaign = ({ item }: any) => {
   }
   return (
     <>
+    <Helmet>
+        {campaignData && (
+          <>
+            {/* Open Graph Meta Tags */}
+            <meta property="og:title" content={campaignData.campaignTitle || "Default Title"} />
+            <meta property="og:description" content={campaignData.description || "Default description for the campaign."} />
+            <meta property="og:url" content={campaignData.campaignUrl || window.location.href} />
+            
+            {campaignData.campaignFiles?.length > 0 && (
+              <>
+                <meta property="og:image" content={campaignData.campaignFiles[0].filePath} />
+                <meta property="og:image:secure_url" content={campaignData.campaignFiles[0].filePath} />
+                <meta property="og:image:type" content="image/jpeg" />
+                <meta property="og:image:width" content="1200" />
+                <meta property="og:image:height" content="630" />
+
+                {/* Twitter Card Meta Tags */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:image" content={campaignData.campaignFiles[0].filePath} />
+              </>
+            )}
+          </>
+        )}
+      </Helmet>
       <Navbar />
 
       {
@@ -334,15 +359,7 @@ const ViewCampaign = ({ item }: any) => {
         </>
       )}
 
-
-
-      {/* Endorese Campaign 2*/}
-
-
-
-
-      { /* Report   */}
-
+ 
 
 
 
