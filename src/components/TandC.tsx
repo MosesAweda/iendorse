@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from '../NavBar/Navbar';
+import Navbar from './NavBar/Navbar';
 
 const PolicyComponent = () => {
   const [activeTab, setActiveTab] = useState('terms');

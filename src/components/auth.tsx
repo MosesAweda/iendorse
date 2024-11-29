@@ -23,13 +23,14 @@ export const isAuthenticated = (): boolean => {
 
     const currentTime = new Date();
     const expirationTime = new Date(tokenExpirationTime);
+    console.log(expirationTime, "currentTime");
 
     if (expirationTime > currentTime) {
-    //  console.log("Token is valid");
+    console.log("Token is valid and has not expired");
       return true;
     } else {
       console.log("Token has expired");
-      window.location.href = "/SignIn";
+      window.location.href = "/SignIn"
       return false;
     }
   } catch (error) {

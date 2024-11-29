@@ -52,7 +52,7 @@ const FundWallet: React.FC<FundWalletProps> = ({ isOpen, onClose, onSubmit }) =>
             Fund your wallet to be able to promote your campaigns and also endorse other campaigns
             </p>
 
-            <div className="flex-col max-w-sm space-y-2 justify-center mb-32">
+            <div className="flex-col max-w-sm space-y-2 justify-center mb-20">
             {error && <p className="text-red-500 text-xs my-2">{error}</p>}
                 <input
                   onChange={handleChange}

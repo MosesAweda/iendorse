@@ -29,7 +29,7 @@ import Earnings from './components/Earnings/Earnings';
 import ProtectedRoute from './components/ProtectedRoute';
 import {Sample} from './components/sample';
 import AuthCallback from './components/AuthCallback';
-import TandC from './components/Home/TandC';
+import TandC from './components/TandC';
 import SampleTitle from './components/SampleTitle';
 import CloudinaryApp from './components/CloudinaryApp';
 

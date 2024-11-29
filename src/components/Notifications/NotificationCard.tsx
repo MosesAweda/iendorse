@@ -24,7 +24,7 @@ const NotificationCard = ({item}: any) => {
       
           if (response.ok) {
             console.log('Notification marked as read');
-            toast.success("Mark as Read")
+           // toast.success("Mark as Read")
           } else {
             console.error('Failed to mark notification as read');
           }

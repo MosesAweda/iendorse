@@ -37,7 +37,7 @@ const Notifications = () => {
       setTotalRecords(responseData.totalRecords);
       setOtherNotifications(responseData?.data || []);
     } catch (err) {
-      toast.error((err as Error).message);
+      //toast.error((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ const Notifications = () => {
       setTotalRecords(responseData.totalRecords);
       setEndorsements(responseData?.data || []);
     } catch (err) {
-      toast.error((err as Error).message);
+     // toast.error((err as Error).message);
     } finally {
       setLoading(false);
     }

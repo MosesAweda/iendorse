@@ -106,7 +106,8 @@ const Wallet = () => {
                 });
             }
         } catch (err) {
-            toast.error((err as Error).message);
+           // toast.error((err as Error).message);
+           console.log("An error occured:", err);
         } finally {
             setLoading(false);
             console.log("INITIALIZE TRANSAC", apiResponse);
@@ -139,7 +140,8 @@ const Wallet = () => {
            TopWallet()
            }
         } catch (err) {
-            toast.error((err as Error).message);
+           // toast.error((err as Error).message);
+           console.log("An error occured:", err);
         } finally {
             // setLoading(false);
             // openFundingSuccess();
@@ -172,7 +174,8 @@ const Wallet = () => {
           setLoading(false);
            }
         } catch (err) {
-            toast.error((err as Error).message);
+          //  toast.error((err as Error).message);
+          console.log("An error occured:", err);
         } finally {
             // setLoading(false);
         }
@@ -215,7 +218,7 @@ const Wallet = () => {
                     </div>
                         <div className="mt-2 pl-2 ">
                             <div className="text-3xl font-bold text-customBlue">
-                            {walletBalance? walletBalance : <div className=' pr-40 text-sm'></div>}
+                            {walletBalance? walletBalance : <div className=' pr-40 text-sm'>...</div>}
                             </div>
                             </div>  
                             <div className="mt-5 pl-2  ">
