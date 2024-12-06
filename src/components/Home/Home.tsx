@@ -125,7 +125,7 @@ const handleScroll = () => {
       <div
         className="hidden sm:block flex flex-col w-full h-screen"
         style={{
-          backgroundImage: 'url(images/hero.png)',
+          backgroundImage: 'url(https://res.cloudinary.com/dgso4wgqt/image/upload/v1733496676/hero_awra5e.png)',
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           margin: 0,

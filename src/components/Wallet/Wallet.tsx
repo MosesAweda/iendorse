@@ -209,7 +209,7 @@ const Wallet = () => {
             <div className={`flex bg-gray-100 justify-center `}>
                 <div className=" mt-10  ">
                 <div className={`p-4 w-full md:max-w-md border-gray-700 bg-white rounded-lg my-2 bg-cover  bg-center overflow-hidden ${WalletDataLoading && 'animate-pulse'}`} 
-                style={{ backgroundImage: 'url(images/frame2.png)' }}>
+                style={{ backgroundImage: 'url(https://res.cloudinary.com/dgso4wgqt/image/upload/v1733390900/frame2_zxp52a.png)' }}>
                           
                  <div className="mt-3  pl-2 pr-36">
                         <h1 className="text-sm text-customBlue pr-40">

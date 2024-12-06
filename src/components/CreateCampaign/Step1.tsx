@@ -176,7 +176,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
             <div className="flex-1 border-2 border-t border-customBlue"></div>
             <div className="flex-1 border-t border-a-300"></div>
           </div>
-          <img src="./images/frame1.png" alt="frame1" className='mx-auto' />
+          <img src="https://res.cloudinary.com/dgso4wgqt/image/upload/v1733390897/frame1_pqfed6.png" alt="frame1" className='mx-auto' />
           <form className="space-y-4 mt-4 " action="#" onSubmit={(e) => { e.preventDefault() }}>
             <div>
               <select
