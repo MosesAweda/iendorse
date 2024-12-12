@@ -236,12 +236,8 @@ const handleScroll = () => {
       a better tomorrow for all.
     </div>
 
-
-
   </div>
     </div>
-
-
 
     <div className="flex flex-wrap justify-center p-4 text-xs bg-white sm:bg-gray-100">
   {categories?.map((item: any) => (
@@ -255,7 +251,6 @@ const handleScroll = () => {
     </button>
   ))}
     </div>
-
 
       <div className="flex flex-col bg-white sm:bg-gray-100 justify-center items-center overflow-x-hidden">
       {/* {error && <p>Error: {error.message}</p>} */}

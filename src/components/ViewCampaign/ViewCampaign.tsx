@@ -32,15 +32,6 @@ import ReportCampaign from "./ReportCampaign";
 import EndorsementFailed from "./EndorsementFailed";
 import { Helmet } from  'react-helmet-async';
 
-
-interface ApiResponse {
-  data: any;
-  loading: boolean;
-  error: Error | null;
-  postData: (body: any) => Promise<void>;
-}
-
-
 const ViewCampaign = ({ item }: any) => {
   const { uid } = useParams();
   const [endorseMenu, setEndorseMenu] = useState(false);
@@ -94,7 +85,7 @@ const ViewCampaign = ({ item }: any) => {
 
   const campaignURL = `${baseURL}/Campaign/CampaignDetails?CampaignId=${uid}`
   const { data: campaignData, refreshApi: refresCampaignData, error: DataError, loading: DataLoading
-  } = useFetch(campaignURL, "GET", onSuccess, onError);
+  } = useFetch(campaignURL, "GET", () => {}, () => {});
 
   console.log("campaign File", campaignData?.campaignFiles[0]?.filePath)
 
@@ -204,253 +195,207 @@ const ViewCampaign = ({ item }: any) => {
 
   return (
     <>
-       <Helmet>
-        <title>{campaignData?.campaignTitle}</title>
-        <meta
-          name="description"
-          content={campaignData?.description }
-        />
-        <meta property="og:title" content={campaignData?.campaignTitle} />
-        <meta
-          property="og:description"
-          content={campaignData?.description}
-        />
-        <meta
-          property="og:image"
-          content={campaignData?.campaignFiles?.[0]?.filePath}
-        />
-        <meta
-          property="og:url"
-          content={campaignData?.campaignUrl || window.location.href}
-        />
-      </Helmet>
       <Navbar />
 
-
-      {
-
-        DataLoading && (
-          <>
-            <div className="sm:bg-gray-100 bg-white h-screen">
-              <div className="flex flex-col sm:bg-gray-100 bg-white justify-center items-center">
-                <div className="p-4 max-w-2xl border-gray-700 bg-white rounded-lg my-5 mx-0 sm:mx-1 mb-20 animate-pulse">
-                  <div className="my-4">
-                    <div className="h-40 bg-gray-300 rounded-2xl"></div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex">
-                      <div className="mr-4 rounded-full mx-1">
-                        <div className="w-11 h-11 bg-gray-300 rounded-full"></div>
-                      </div>
-                      <div>
-                        <div className="w-32 h-5 bg-gray-300 rounded"></div>
-                        <div className="w-20 h-3 bg-gray-300 rounded mt-2"></div>
-                      </div>
-                    </div>
-                    <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
-                  </div>
-                  <div className="my-4 campaign-container min-w-[300px] max-w-[768px]">
-                    <div className="w-48 h-6 bg-gray-300 rounded mb-4"></div>
-                    <div className="flex my-2 items-center">
-                      <div className="w-4 h-4 bg-gray-300 rounded-full"></div>
-                      <div className="w-32 h-4 bg-gray-300 rounded ml-2"></div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="w-full h-4 bg-gray-300 rounded"></div>
-                      <div className="w-full h-4 bg-gray-300 rounded"></div>
-                      <div className="w-1/2 h-4 bg-gray-300 rounded"></div>
-                    </div>
-                    <div className="w-24 h-3 bg-gray-300 rounded mt-4"></div>
-                  </div>
-                  <div className="flex mt-4 text-sm justify-between mb-3">
-                    <div className="flex mr-5 items-center w-full">
-                      <div className="p-3 w-full h-10 bg-gray-300 rounded-md"></div>
-                    </div>
-                    <div className="flex items-center w-full">
-                      <div className="p-3 w-full h-10 bg-gray-300 rounded-md"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </>
-        )
-
-      }
-
-      {campaignData && (
-
-        <>
-          <div className="sm:bg-gray-100  bg-white h-screen">
-
-
-            <div className="flex flex-col sm:bg-gray-100  bg-white justify-center items-center      ">
-
-              <div className="p-4 max-w-lg border-gray-700 bg-white rounded-lg my-5  mx-0  sm:mx-1  mb-20">
-                <div className="my-4">
-
-                  {campaignData?.campaignFiles?.length > 0 && (
-                    <div className="">
-                      <img className="rounded-2xl" src={campaignData?.campaignFiles[0]?.filePath}
-                      />
-                    </div>
-                  )}
-
-
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex">
-                    <div className="  inline-block  z-1 mr-3" >
-                      {campaignData?.campaignOwnerImage ? (
-                        <img className="rounded-full border-2 w-10 h-10    border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
-                          src={campaignData?.campaignOwnerImage}  alt="Avatar" />
-                      ) : (
-                        <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
-                          <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />
-                        </div>
-                      )
-                      }
-
-                    </div>
-                    <div>
-                      <div className="font-semibold text-lg">{campaignData?.campaignOwner}</div>
-                      <div className="text-xs">
-                        <i>{campaignData?.campaignOwnerTitle}</i>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-1 cursor-pointer">
-                    <img src={danger} alt="Report" onClick={openReportMenu} />
-                  </div>
-                </div>
-
-                <div className="my-4 campaign-container min-w-[300px] max-w-[648px] ">
-                  <h1 className="font-medium">{campaignData?.campaignTitle}</h1>
-                  <p className="flex my-2 text-customBlue font-medium text-justify">
-                    <img src={link} alt="Link" />
-                    <a href={campaignData?.campaignUrl} ><span className="px-1">{campaignData?.campaignUrl}</span> </a>
-                  </p>
-
-                  <div className="text-justify my-2 pb-3  description-container">
-                    {campaignData?.description}
-                    <p className="text-justify text-xs py-2">{formatDate(campaignData?.createdDate)}</p>
-                  </div>
-                </  div>
-
-
-                <div className="flex mt-4 text-sm justify-between mb-3">
-                  <div className="flex mr-5 items-center w-full">
-                    <button className="p-3 bg-customBlue text-white text-xs rounded-md w-full" onClick={openShareCampaignModal}>
-                      Share Campaign
-                    </button>
-                  </div>
-                  <div className="flex items-center w-full">
-                    <button className="p-3 bg-customBlue   text-xs  text-white rounded-md w-full" onClick={openEndorseMenu} >Endorse Campaign</button>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-        </>
+      {DataLoading && (
+        <div className="sm:bg-gray-100 bg-white h-screen flex justify-center items-center">
+          <ThreeCircles
+            height="80"
+            width="80"
+            color="#0D236E"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel="three-circles-rotating"
+          />
+        </div>
       )}
 
- 
+      {!DataLoading && (!campaignData || DataError) && (
+        <div className="sm:bg-gray-100 bg-white h-screen flex justify-center items-center">
+          <div className="text-center p-6 bg-white rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold text-customBlue mb-4">Campaign Not Found</h2>
+            <p className="text-gray-600 mb-4">
+              The campaign you are looking for might have been removed or is currently unavailable.
+            </p>
+            <div className="flex justify-center">
+              <button 
+                onClick={() => window.history.back()} 
+                className="bg-customBlue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {campaignData && (
+        <>
+        <div className="sm:bg-gray-100  bg-white h-screen">
 
 
+          <div className="flex flex-col sm:bg-gray-100  bg-white justify-center items-center      ">
+
+            <div className="p-4 max-w-lg border-gray-700 bg-white rounded-lg my-5  mx-0  sm:mx-1  mb-20">
+              <div className="my-4">
+
+                {campaignData?.campaignFiles?.length > 0 && (
+                  <div className="">
+                    <img className="rounded-2xl" src={campaignData?.campaignFiles[0]?.filePath}
+                    />
+                  </div>
+                )}
+
+
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex">
+                  <div className="  inline-block  z-1 mr-3" >
+                    {campaignData?.campaignOwnerImage ? (
+                      <img className="rounded-full border-2 w-10 h-10    border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
+                        src={campaignData?.campaignOwnerImage}  alt="Avatar" />
+                    ) : (
+                      <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
+                        <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />
+                      </div>
+                    )
+                    }
+
+                  </div>
+                  <div>
+                    <div className="font-semibold text-lg">{campaignData?.campaignOwner}</div>
+                    <div className="text-xs">
+                      <i>{campaignData?.campaignOwnerTitle}</i>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-1 cursor-pointer">
+                  <img src={danger} alt="Report" onClick={openReportMenu} />
+                </div>
+              </div>
+
+              <div className="my-4 campaign-container min-w-[300px] max-w-[648px] ">
+                <h1 className="font-medium">{campaignData?.campaignTitle}</h1>
+                <p className="flex my-2 text-customBlue font-medium text-justify">
+                  <img src={link} alt="Link" />
+                  <a href={campaignData?.campaignUrl} ><span className="px-1">{campaignData?.campaignUrl}</span> </a>
+                </p>
+
+                <div className="text-justify my-2 pb-3  description-container">
+                  {campaignData?.description}
+                  <p className="text-justify text-xs py-2">{formatDate(campaignData?.createdDate)}</p>
+                </div>
+              </  div>
+
+
+              <div className="flex mt-4 text-sm justify-between mb-3">
+                <div className="flex mr-5 items-center w-full">
+                  <button className="p-3 bg-customBlue text-white text-xs rounded-md w-full" onClick={openShareCampaignModal}>
+                    Share Campaign
+                  </button>
+                </div>
+                <div className="flex items-center w-full">
+                  <button className="p-3 bg-customBlue   text-xs  text-white rounded-md w-full" onClick={openEndorseMenu} >Endorse Campaign</button>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        
 
       <CampaignMenu
-        isOpen={campaignMenuOpen}
-        onClose={closeCampaignMenu}
-      />
+      isOpen={campaignMenuOpen}
+      onClose={closeCampaignMenu}
+    />
 
 
-      <ReportCampaign
-        isOpen={reportMenu}
-        onClose={closeReportMenu}
-        campaignId={campaignData?.campaignId}
+    <ReportCampaign
+      isOpen={reportMenu}
+      onClose={closeReportMenu}
+      campaignId={campaignData?.campaignId}
 
-      />
+    />
 
-      <EndorseCampaignModal
-        isOpen={endorseMenu}
-        onClose={closeEndorseMenu}
-        onSubmit={submitEndorsement}
-      />
-
-
-      {/* <ReportCampaignModal
-        isOpen={ReportCampaignModal}
-        onClose={closeReportCampaignModal}
-        onSubmit={submitReport}
-      /> */}
-
-      {/* 
-    <SubscriptionModal
-        isOpen={showSubscriptionModal}
-        onClose={closeSubscriptionModal}
-        onSubmit={handleSubPlanSelect}
-      /> */}
-
-      {/* <PurchaseUnitsModal
-        isOpen={showPurchaseUnitsModal}
-        onClose={closePurchaseUnitsModal}
-        onSubmit={submitUnitsToPurchase}
-      /> */}
-
-      <PaymentMethodModal
-        isOpen={paymentMethodModal}
-        onClose={closePaymentMethodModal}
-        onSubmit={submitPaymentMethod}
-      />
-
-      <InsufficientWalletBalanceModal
-        isOpen={insufficientWalletModal}
-        onClose={closeInsufficientWalletModal}
-        details={allData}
-      />
-
-      <SummaryModal
-        isOpen={summaryModal}
-        onClose={closeSummaryModal}
-        onSubmit={PayWithWallet}
-        details={allData}
-        ApiLoading={ApiFeedbackLoading}
-      />
+    <EndorseCampaignModal
+      isOpen={endorseMenu}
+      onClose={closeEndorseMenu}
+      onSubmit={submitEndorsement}
+    />
 
 
-      <EndorsementSuccessfulModal
-        isOpen={endorsementSuccessfulModal}
-        onClose={closeEndorsementSuccessfulModal}
-        details={allData}
-      />
+    {/* <ReportCampaignModal
+      isOpen={ReportCampaignModal}
+      onClose={closeReportCampaignModal}
+      onSubmit={submitReport}
+    /> */}
+
+    {/* 
+  <SubscriptionModal
+      isOpen={showSubscriptionModal}
+      onClose={closeSubscriptionModal}
+      onSubmit={handleSubPlanSelect}
+    /> */}
+
+    {/* <PurchaseUnitsModal
+      isOpen={showPurchaseUnitsModal}
+      onClose={closePurchaseUnitsModal}
+      onSubmit={submitUnitsToPurchase}
+    /> */}
+
+    <PaymentMethodModal
+      isOpen={paymentMethodModal}
+      onClose={closePaymentMethodModal}
+      onSubmit={submitPaymentMethod}
+    />
+
+    <InsufficientWalletBalanceModal
+      isOpen={insufficientWalletModal}
+      onClose={closeInsufficientWalletModal}
+      details={allData}
+    />
+
+    <SummaryModal
+      isOpen={summaryModal}
+      onClose={closeSummaryModal}
+      onSubmit={PayWithWallet}
+      details={allData}
+      ApiLoading={ApiFeedbackLoading}
+    />
 
 
-
-      <EndorsementFailed
-        isOpen={endorsementFailed}
-        onClose={closeEndorseFailed}
-        details={allData}
-      />
+    <EndorsementSuccessfulModal
+      isOpen={endorsementSuccessfulModal}
+      onClose={closeEndorsementSuccessfulModal}
+      details={allData}
+    />
 
 
 
-      <ShareCampaignModal
-        isOpen={shareCampaignModal}
-        onClose={closeShareCampaignModal}
-        details={campaignData}
-      />
+    <EndorsementFailed
+      isOpen={endorsementFailed}
+      onClose={closeEndorseFailed}
+      details={allData}
+    />
 
 
 
+    <ShareCampaignModal
+      isOpen={shareCampaignModal}
+      onClose={closeShareCampaignModal}
+      details={campaignData}
+    />
 
 
 
+      </>
+      )}
 
-
+      {/* All existing modals remain the same */}
     </>
   );
 };

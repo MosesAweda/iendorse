@@ -7,7 +7,7 @@ import searchIcon from './svg/search.svg';
 import closeIcon from './svg/close.svg';
 import arrowLeftIcon from './svg/arrow_left.svg';
 import { baseURL } from './URL';
-
+import Initials from './Initials';
 
 const Search = () => {
     const [isCampaigns, setIsCampaigns] = useState(true);
@@ -60,6 +60,7 @@ const Search = () => {
         }
         setSearchMode(true);
         setLoading(true);
+        setPage(1); // Reset page to first page on new search
 
         try {
             const response = await fetch(searchURL, {
@@ -74,6 +75,7 @@ const Search = () => {
 
             const responseData = await response.json();
             setApiData(responseData?.data || []);
+            setTotalRecords(responseData.totalRecords || 0);
         } catch (err) {
             toast.error((err as Error).message);
         } finally {
@@ -132,6 +134,35 @@ const Search = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [apiData]);
 
+    const renderEmptyState = () => (
+        <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-16 w-16 mb-4 text-gray-300" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+            >
+                <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+                />
+            </svg>
+            {searchMode ? (
+                <p className="text-lg text-center">
+                    No results found for "{searchQuery}". 
+                    <br />Try a different search term or explore existing campaigns.
+                </p>
+            ) : (
+                <p className="text-lg text-center">
+                    No campaigns available at the moment.
+                </p>
+            )}
+        </div>
+    );
+
     return (
         <div className='bg-gray-100 min-h-screen'>
             <Navbar />
@@ -189,75 +220,83 @@ const Search = () => {
                 </div>
             ) : (
                 isCampaigns ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-10 gap-4 sm:mx-32 mx-10">
-                        {apiData && apiData.map((item: any, index: number) => (
-                            <Link to={`/ViewCampaign/${item?.campaignId}`} > 
-                            <div
-                                className="max-w-200 mb-4 h-400 grid rounded-lg border border-gray-200 shadow"
-                                key={index}
-                                style={{
-                                    // backgroundColor: 'rgba(0, 0, 5, 0.9)',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                                    backgroundImage: searchMode ? `url(${item?.filePath})` : `url(${item?.campaignFiles[0]?.filePath})`,
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundPosition: 'center',
-                                    backgroundSize: 'cover',
-                                    height: 200,
-                                }}
-                            >
-                                <div className='grid flex items-end'>
-                                    <div 
+                    apiData.length === 0 ? (
+                        renderEmptyState()
+                    ) : (
+                        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-10 gap-4 sm:mx-32 mx-10">
+                            {apiData.map((item: any, index: number) => {
+                                // Safety check for campaignFiles
+                                const campaignImageUrl = item?.campaignFiles && item.campaignFiles.length > 0 
+                                    ? item.campaignFiles[0].filePath 
+                                    : null;
+
+                                return (
+                                    <Link to={`/ViewCampaign/${item?.campaignId}`} key={index}> 
+                                    <div
+                                        className="max-w-200 mb-4 h-400 grid rounded-lg border border-gray-200 shadow"
                                         style={{
-                                            backgroundImage: `linear-gradient(180deg, rgba(242, 242, 242, 0.00) 0%, rgba(242, 242, 242, 0.08) 14.58%, rgba(242, 242, 242, 0.78) 50%, #F2F2F2 70.83%, #F2F2F2 83.33%, #F2F2F2 100%)`
-                                        }}>   
-                                        <div className="flex items-center justify-start pr-4 pl-2 pt-8 mb-4">
-                                            <div className="mr-1 rounded-full mx-1">
-                                                <img src="/images/Avatar.png" width={30} height={30} alt="Avatar" />
+                                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                            backgroundImage: campaignImageUrl ? `url(${campaignImageUrl})` : 'none',
+                                            backgroundRepeat: 'no-repeat',
+                                            backgroundPosition: 'center',
+                                            backgroundSize: 'cover',
+                                            height: 200,
+                                        }}
+                                    >
+                                        {!campaignImageUrl && 
+                                            <div className='grid p-4 flex justify-center items-center'>
+                                                {item?.campaignTitle}
                                             </div>
-                                            <div>
-                                                <div className="font-semibold text-xs" style={{ fontSize: '10px' }}>
-                                                    {item?.campaignOwner}
-                                                </div>
-                                                <div className='text-xs mt-0' style={{ fontSize: '7px' }}>
-                                                    <i>{item?.campaignOwnerTitle}</i>
+                                        }
+
+                                        <div className='grid flex items-end'>
+                                            <div 
+                                                style={{
+                                                    backgroundImage: `linear-gradient(180deg, rgba(242, 242, 242, 0.00) 0%, rgba(242, 242, 242, 0.08) 14.58%, rgba(242, 242, 242, 0.78) 50%, #F2F2F2 70.83%, #F2F2F2 83.33%, #F2F2F2 100%)`
+                                                }}>   
+                                                <div className="flex items-center justify-start pr-4 pl-2 pt-8 mb-4">
+                                                    <div className="mr-1 rounded-full mx-1">
+                                                        {item?.campaignOwnerImage ? (
+                                                            <img src={item?.campaignOwnerImage} className="w-8 h-8 rounded-full" alt="" /> 
+                                                        ) : (
+                                                            <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full text-customBlue p-2">
+                                                                <Initials fullName={item?.campaignOwner} className="text-xs " /> 
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-semibold text-xs" style={{ fontSize: '10px' }}>
+                                                            {item?.campaignOwner}
+                                                        </div>
+                                                        <div className='text-xs mt-0' style={{ fontSize: '7px' }}>
+                                                            <i>{item?.campaignOwnerTitle}</i>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    </Link>
+                                );
+                            })}
+
+                            {infiniteLoading && (
+                                <div className='flex justify-center items-center'>
+                                    <Puff
+                                        visible={true}
+                                        height="30"
+                                        width="30"
+                                        color="#0D236E"
+                                        ariaLabel="puff-loading"
+                                    />
                                 </div>
-                            </div>
-                            </Link>
-                        ))}
-                 
-
-
-
-                 { infiniteLoading && (
-                    <>          
-                    <div className='flex justify-center items-center'>
-                    <p>   
-                        <Puff
-                            visible={true}
-                            height="30"
-                            width="30"
-                            color="#0D236E"
-                            ariaLabel="puff-loading"
-                            wrapperStyle={{}}
-                            wrapperClass=""
-                            />
-
-                             
-                            </p>
-                    </div>
-                    </>
-                 )}
-                    </div>
-                    
-
-               
+                            )}
+                        </div>
+                    )
                 ) : (
                     <div className='flex justify-center'>
                         <div className='bg-white p-10 w-full mx-1 sm:w-3/4 rounded-md mb-10'>
+                            {/* Accounts section remains the same */}
                             <div className="flex items-center justify-between my-8 mx-1">
                                 <div className="flex">
                                     <div className="mr-4 rounded-full mx-1">
@@ -271,24 +310,7 @@ const Search = () => {
                                     </div>
                                 </div>
                                 <div className="p-1 cursor-pointer">
-                                    <img   alt="Report" />
-                                </div>
-                            </div>
-
-                            <div className="flex items-center justify-between my-8 mx-1">
-                                <div className="flex">
-                                    <div className="mr-4 rounded-full mx-1">
-                                        <img src="/images/Avatar.png" width={45} height={45} alt="Avatar" />
-                                    </div>
-                                    <div>
-                                        <div className="font-semibold text-lg">Poster</div>
-                                        <div className="text-xs">
-                                            <p>Human Right Activist</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="p-1 cursor-pointer">
-                                    <img   alt="Report" />
+                                    <img alt="Report" />
                                 </div>
                             </div>
                         </div>

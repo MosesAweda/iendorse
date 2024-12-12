@@ -43,7 +43,7 @@ const NotificationCard = ({item}: any) => {
                                 <div className="flex mb-3">
                                     <div className="mr-4   rounded-full  mx-1">
                                        <div> 
-                                         <img src={item.image}   alt="notification" className="h-8 w-8 mt-1" />
+                                         <img src={item.image}   alt="notification" className="rounded-full h-8 w-8 mt-1" />
                                        </div>
                                        </div>
                                         <div className="text-sm"> <div className="font-medium">{item.accountName}</div>
