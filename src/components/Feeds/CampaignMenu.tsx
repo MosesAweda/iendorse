@@ -27,7 +27,7 @@ const closeDeleteModal = () => {
 }
 
   return (
-    <div className="fixed inset-0 transition-opacity flex sm:items-center justify-center">
+    <div className="fixed inset-0 transition-opacity flex items-center mt-20 sm:mt-1 sm:items-center justify-center">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
       <div className="relative p-4 w-full max-w-md max-h-full">
       <div className='  flex justify-center p-4'>      
@@ -39,7 +39,7 @@ const closeDeleteModal = () => {
       </span> 
       </div> 
     
-        <div className="bg-white rounded-lg shadow flex items-center justify-center pt-20 pb-44">
+        <div className="bg-white rounded-lg shadow flex items-center justify-center pt-20 pb-20">
           <Link to={`Analytics/${details?.campaignId}`}>
           <div className="flex-col justify-center items-center p-6 border w-28 
           flex-initial bg-gray-50 rounded-md m-2 cursor-pointer hover:bg-gray-100">

@@ -4,6 +4,7 @@ import redTrash from '../svg/redTrash.svg'
 import { toast } from 'react-toastify';
 import { baseURL } from '../URL';
 import { LineWave } from 'react-loader-spinner';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 interface DeleteModalProps { 
   isOpen: boolean;
@@ -35,6 +36,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, details, onC
             const data = await response.json();
             console.log("API response:", data);
             // Optionally show success message
+            window.location.reload();
             toast.success('Campaign deleted successfully', {
                 position: "top-center",
                 autoClose: 5000,
@@ -44,7 +46,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, details, onC
                 draggable: true,
                 progress: undefined,
             });
-            window.location.reload();
+           
             
           } else {
             console.error("Failed to submit complaint:", response.statusText);
@@ -67,9 +69,13 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, details, onC
 
 
   return (
-    <div className="fixed inset-0 transition-opacity flex sm:items-center justify-center">
+    <div className="fixed inset-0 transition-opacity  flex items-center mt-20 sm:mt-1 sm:items-center  justify-center">
     <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
- 
+    <Backdrop
+              sx={{ color: '#dc0000', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={isLoading}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
     <div className="relative p-4 w-full max-w-md max-h-full">
     <div className='  flex justify-center p-4'>      
              <span

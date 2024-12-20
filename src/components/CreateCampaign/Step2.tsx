@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import upload from '../svg/upload.svg';
 import AgeModal from './AgeModal';
 import { toast } from 'react-toastify';
@@ -16,7 +16,7 @@ import { Backdrop, CircularProgress } from "@mui/material";
 
 
 const Step2 = ({ prevStep, handleFileChange, handleFieldChange, handleTagChange, formData }: any) => {
- 
+  const navigate = useNavigate();
   const [createLoading, setCreateLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [ageModal, setAgeModal] = useState(false);
@@ -129,7 +129,11 @@ const handleSubmit = async (e: any) => {
     const data = await response.json();
 
     if (response.ok && data.succeeded) {
+      
+
+      navigate('/Feed');
       toast('Successfully created campaign');
+    
     } else {
       toast.error(data.message || 'An error occurred while creating the campaign');
     }

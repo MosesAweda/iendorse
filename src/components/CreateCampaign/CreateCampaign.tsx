@@ -73,7 +73,7 @@ const CreateCampaign = () => {
 
   return(
 
-    <div className='bg-gray-100 h-screen'>
+    <div className='bg-gray-100   '>
         <Navbar />
     {renderStep(currentStep, formData, handleFieldChange, handleTagChange,  nextStep, prevStep)}
   </div>
