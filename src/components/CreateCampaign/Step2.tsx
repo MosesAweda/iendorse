@@ -148,34 +148,56 @@ const handleSubmit = async (e: any) => {
 
   
 
-  const handleSelectAge = (age: any) => {
-    if (!selectedAges.includes(age)) {
-      setSelectedAges([...selectedAges, age]);
-     // handleFieldChange('Age')(selectedAges);
-    } else {
-      toast.error(`You have already selected the age range ${age}.`);
-    }
-  };
+const handleSelectAge = (ages: string | string[]) => {
+  const newAges = Array.isArray(ages) ? ages : [ages];
+
+  const filteredAges = newAges.filter((age) => !selectedAges.includes(age));
+  if (filteredAges.length > 0) {
+      setSelectedAges([...selectedAges, ...filteredAges]);
+  } else if (!Array.isArray(ages)) {
+      toast.error(`You have already selected the age range ${ages}.`);
+  }
+};
 
 
-  const handleOccupation = (occupation: any) => {
-    if (!selectedOccupation.includes(occupation)) {
-      setSelectedOccupation([...selectedOccupation, occupation]);
-     // handleFieldChange('Age')(selectedAges);
-    } else {
-      toast.error(`You have already selected the occupation ${occupation}.`);
-    }
-  };
+const handleOccupation = (occupations: string[]) => {
+  // Filter out any duplicates
+  const newOccupations = occupations.filter(
+      (occupation) => !selectedOccupation.includes(occupation)
+  );
+
+  if (newOccupations.length > 0) {
+      // Add unique occupations to the state
+      setSelectedOccupation([...selectedOccupation, ...newOccupations]);
+      handleFieldChange("Occupation")([...selectedOccupation, ...newOccupations]);
+  } else {
+      toast.error("All selected occupations are already included.");
+  }
+};
+
 
   
-  const handleRegion = (region: any) => {
+const handleRegion = (region: any) => {
+  if (Array.isArray(region)) {
+    // Handle "Select All" case
+    const newRegions = region.filter((r) => !selectedRegion.includes(r));
+    if (newRegions.length > 0) {
+      setSelectedRegion([...selectedRegion, ...newRegions]);
+      toast.success(`All regions have been selected.`);
+    } else {
+      toast.error(`All regions are already selected.`);
+    }
+  } else {
+    // Handle single region
     if (!selectedRegion.includes(region)) {
       setSelectedRegion([...selectedRegion, region]);
-     // handleFieldChange('Age')(selectedAges);
+      toast.success(`Region ${region} has been added.`);
     } else {
       toast.error(`You have already selected the region ${region}.`);
     }
-  };
+  }
+};
+
 
 
   
@@ -188,11 +210,9 @@ const handleSubmit = async (e: any) => {
     }
   };
  
-
-  const removeAge = (age: any) => {
-    setSelectedAges(selectedAges.filter((selectedAge) => selectedAge !== age));
-  };
-
+  const removeAge = (age: string) => {
+    setSelectedAges((prev) => prev.filter((a) => a !== age));
+};
 
   const removeOccupation = (occupation: any) => {
     setSelectedOccupation(selectedOccupation.filter((selectedOccupation) => selectedOccupation !== occupation));
@@ -232,7 +252,7 @@ const handleSubmit = async (e: any) => {
     <>
       <div className="flex bg-gray-100 justify-center text-xs">
       <Backdrop
-              sx={{ color: '#dc0000', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              sx={{ color: '#0000d3', zIndex: (theme) => theme.zIndex.drawer + 1 }}
               open={AudienceLoading}>
               <CircularProgress color="inherit" />
             </Backdrop>

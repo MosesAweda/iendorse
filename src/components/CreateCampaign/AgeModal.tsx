@@ -1,91 +1,131 @@
-import React, { useEffect, useState } from "react";
-import closeIcon from '../svg/close.svg';
+import React, { useState } from "react";
+import closeIcon from "../svg/close.svg";
 import { baseURL } from "../URL";
 import useFetch from "../Hooks/useFetch";
 import { Backdrop, CircularProgress } from "@mui/material";
 
+interface AgeRange {
+    id: number;
+    value: string;
+}
+
 interface AgeModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSelectAge: (age: string) => void;
+    onSelectAge: (ages: string[]) => void;
 }
 
-const AgeModal: React.FC<AgeModalProps> = ({ isOpen, onClose , onSelectAge }) => { 
-    const [ageRange, setAgeRange] = useState<string>('');
-    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(true);
+const AgeModal: React.FC<AgeModalProps> = ({ isOpen, onClose, onSelectAge }) => {
+    const [selectedAges, setSelectedAges] = useState<string[]>([]);
+
     const url = `${baseURL}/CampaignTargetAudience/GetAll`;
     const onSuccess = () => {};
     const onError = () => {};
-    const { data: apiData, refreshApi: refresh, error: Error, loading: loading } = useFetch(url, "GET", onSuccess, onError);
-    const ageValues = apiData && apiData.length > 0 ? apiData[0].values : [];
+    const { data: apiData, error, loading } = useFetch(url, "GET", onSuccess, onError);
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
+    const ageValues: string[] = apiData?.length > 0 ? apiData[0].values : [];
+
+    const handleSelectAge = (age: string) => {
+        const updatedSelectedAges = selectedAges.includes(age)
+            ? selectedAges.filter((a) => a !== age)
+            : [...selectedAges, age];
+        setSelectedAges(updatedSelectedAges);
     };
 
-    const selectAgeRange = (age: string) => {
-        setAgeRange(age);
-        setIsDropdownOpen(false);
-        onSelectAge(age);
+    const handleSelectAll = (isChecked: boolean) => {
+        const allAges = isChecked ? [...ageValues] : [];
+        setSelectedAges(allAges);
+    };
+
+    const handleSave = () => {
+        onSelectAge(selectedAges);
+        handleClearSelections();
+        handleModalClose();
+    };
+
+    const handleClearSelections = () => {
+        setSelectedAges([]);
+    };
+
+    const handleModalClose = () => {
+        setTimeout(() => handleClearSelections(), 300); 
         onClose();
-
     };
-
-  
-   
-
 
     if (!isOpen) return null;
 
     return (
-        <div className={`fixed inset-0 transition-opacity flex items-start sm:items-start justify-center`}>
-            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
-            <Backdrop
-              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={loading}>
-              <CircularProgress color="inherit" />
+        <div className="fixed inset-0 sm:pt-1 pt-20 flex sm:items-center items-start justify-center">
+            {/* Overlay */}
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
+
+            {/* Loading State */}
+            <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+                <CircularProgress color="inherit" />
             </Backdrop>
 
-
+            {/* Modal */}
             <div className="relative p-4 w-full max-w-md max-h-full">
-                <div className='flex justify-center p-4'>
-                    <span
-                        className="bg-transparent border-0 text-black text-3xl leading-none font-semibold outline-none focus:outline-none"
-                        onClick={onClose}
-                    >
+                {/* Close Icon */}
+                <div className="flex justify-center p-2">
+                    <button onClick={handleModalClose}>
                         <img src={closeIcon} alt="Close" width={40} height={40} />
-                    </span>
+                    </button>
                 </div>
-                {/* <div className="relative bg-white rounded-lg shadow h-64"> */}
-                    <div className="p-4 md:p-5">
-                        <div className='flex justify-center mt-8 mb-3 mx-2'>
-                            <div className='relative w-full flex justify-center'>
-                                <div className="relative w-full">
-                                    <button
-                                        type="button"
-                                        className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 px-4 py-2.5 text-left"
-                                        onClick={toggleDropdown}
-                                    >
-                                        {ageRange || "Select Age Range"}
-                                    </button>
-                                    {isDropdownOpen && (
-                                        <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                                            {ageValues.map((age: string, index: number) => (
-                                                <li
-                                                    key={index}
-                                                    className="cursor-pointer px-4 py-2 hover:bg-gray-100"
-                                                    onClick={() => selectAgeRange(age)}
-                                                >
-                                                    {age}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                </div>
-                            </div>
+
+                <div className="p-4 bg-white rounded-lg">
+                    {/* Modal Title */}
+                    <h2 className="text-center text-lg font-bold mb-4">Select Age Ranges</h2>
+
+                    {/* Select All Checkbox */}
+                    {ageValues.length > 0 && (
+                        <div className="flex items-center mb-3">
+                            <input
+                                type="checkbox"
+                                id="select-all"
+                                checked={selectedAges.length === ageValues.length}
+                                onChange={(e) => handleSelectAll(e.target.checked)}
+                                className="mr-2"
+                            />
+                            <label htmlFor="select-all">Select All</label>
                         </div>
+                    )}
+
+                    {/* Age Options */}
+                    <div className="max-h-60 overflow-y-auto border rounded-lg p-2">
+                        {ageValues.length === 0 ? (
+                            <div className="text-center text-gray-500">No age ranges available.</div>
+                        ) : (
+                            ageValues.map((age: string, index: number) => (
+                                <div key={index} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`age-${index}`}
+                                        checked={selectedAges.includes(age)}
+                                        onChange={() => handleSelectAge(age)}
+                                        className="mr-2"
+                                    />
+                                    <label htmlFor={`age-${index}`}>{age}</label>
+                                </div>
+                            ))
+                        )}
                     </div>
-                {/* </div> */}
+
+                    {/* Save Button */}
+                    <div className="flex justify-end mt-4">
+                        <button
+                            onClick={handleSave}
+                            disabled={selectedAges.length === 0}
+                            className={`px-4 py-2 rounded-lg ${
+                                selectedAges.length
+                                    ? "bg-customBlue text-white"
+                                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            }`}
+                        >
+                            Save
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
