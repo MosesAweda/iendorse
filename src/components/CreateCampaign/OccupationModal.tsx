@@ -13,7 +13,7 @@ interface OccupationModalProps {
 const OccupationModal: React.FC<OccupationModalProps> = ({ isOpen, onClose, onSelectOccupation }) => {
     const [selectedOccupations, setSelectedOccupations] = useState<string[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(true);
 
     const onSucces = () => {};
     const onError = () => {};

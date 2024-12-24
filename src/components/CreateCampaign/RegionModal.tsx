@@ -61,50 +61,65 @@ const RegionModal: React.FC<RegionModal> = ({ isOpen, onClose, onSelectRegion })
           </span>
         </div>
         <div className="relative bg-white rounded-lg shadow overflow-hidden pb-10">
-          <div className="p-4">
-            <div className="flex justify-center mt-8 mb-3">
-              <div className="w-full">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  placeholder="Search Region..."
-                  className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg px-4 py-2 mb-2"
-                />
-                <button
-                  type="button"
-                  className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg px-4 py-2 text-left"
-                  onClick={toggleDropdown}
-                >
-                  {searchQuery || "Select Region"}
-                </button>
-                {isDropdownOpen && (
-                  <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg max-h-40 shadow-lg overflow-y-auto">
-                    {filteredRegions.length > 0 ? (
-                      filteredRegions.map((region: string, index: number) => (
-                        <li
-                          key={index}
-                          className="cursor-pointer px-4 py-2 hover:bg-gray-100"
-                          onClick={() => selectRegion(region)}
-                        >
-                          {region}
-                        </li>
-                      ))
-                    ) : (
-                      <li className="px-4 py-2 text-gray-500">No regions found</li>
-                    )}
-                  </ul>
-                )}
-              </div>
-            </div>
-            <button
-              type="button"
-              className="w-full bg-blue-500 text-white rounded-lg px-4 py-2 mb-2"
-              onClick={() => selectRegion(Regions)}
-            >
-              Select All
-            </button>
-          </div>
+
+        <div className="p-4">
+  <div className="flex justify-center mt-8 mb-3">
+    <div className="w-full">
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={handleSearch}
+        placeholder="Search Region..."
+        className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg px-4 py-2 mb-2 text-xs" 
+      />
+      <button
+        type="button"
+        className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg px-4 py-2 text-left text-xs"
+        onClick={toggleDropdown}
+      >
+        {searchQuery || "Select Region"}
+      </button>
+      {isDropdownOpen && (
+        <ul className="z-10 mt-1 w-full bg-white-200 border border-gray-300 rounded-lg shadow-lg max-h-20 
+        overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 text-xs">
+          {filteredRegions.length > 0 ? (
+            filteredRegions.map((region: string, index: number) => (
+              <li
+                key={index}
+                className="cursor-pointer px-2 py-1 hover:bg-gray-100 text-xs"
+                onClick={() => selectRegion(region)}
+              >
+                {region}
+              </li>
+            ))
+          ) : (
+            <li className="px-1 py-1 text-gray-500">No regions found</li>
+          )}
+        </ul>
+      )}
+    </div>
+  </div>
+  <div className="flex items-center gap-2 mb-2">
+    <input
+      type="checkbox"
+      id="selectAllRegions"
+      className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-400"
+      onChange={(e) => {
+        if (e.target.checked) {
+          selectRegion(Regions);
+        } else {
+          // Optionally, clear selected regions if unchecked
+          resetModal();
+        }
+      }}
+    />
+    <label htmlFor="selectAllRegions" className="text-xs text-gray-700">
+      Select All Regions
+    </label>
+  </div>
+</div>
+
+
         </div>
       </div>
     </div>

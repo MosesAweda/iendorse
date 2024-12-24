@@ -86,65 +86,72 @@ const handleSubmit = async (e: any) => {
   }
 
   // Map formData to the expected backend structure
-  const transformedData = {
-    categoryId: formData.CampaignCategory,
-    campaignTitle: formData.CampaignTitle,
-    campaignLink: formData.CampaignLink,
-    description: formData.Description,
-    tags: formData?.tags.map((tag: any) => tag.id), // Convert to an array of tag IDs
-    campaignMedias: formData.campaignMedias, // Already an array of strings (base64)
-    campaignTargetAudienceAnswers: [
-      {
-        id: AgeId, 
-        answer: formData.Age
-      },
-      {
-        id: OccupationId, // Assuming 2 is for Occupation
-        answer: formData.Occupation
-      },
-      {
-        id: RegionId, // Assuming 3 is for Region
-        answer: formData.Region
-      },
-      {
-        id: GenderId, // Assuming 4 is for Gender
-        answer: formData.Gender
+
+    const transformedData = {
+      categoryId: formData.CampaignCategory,
+      campaignTitle: formData.CampaignTitle,
+      campaignLink: formData.CampaignLink,
+      description: formData.Description,
+      tags: formData?.tags?.map((tag: any) => tag.id) || [], // Handle empty or undefined tags
+      campaignMedias: formData.campaignMedias, // Already an array of strings (Base64)
+      campaignTargetAudienceAnswers: [
+        {
+          id: AgeId, 
+          answer: formData.Age,
+        },
+        {
+          id: OccupationId, // Assuming 2 is for Occupation
+          answer: formData.Occupation,
+        },
+        {
+          id: RegionId, // Assuming 3 is for Region
+          answer: formData.Region,
+        },
+        {
+          id: GenderId, // Assuming 4 is for Gender
+          answer: formData.Gender,
+        }
+      ],
+      campaignUnit: 10, // If campaignUnit is a fixed value or needs to be derived
+    };
+  
+    console.log("Transformed data:", transformedData);
+    console.log("Payload being sent:", JSON.stringify(transformedData)); // Log full request payload
+  
+    const apiUrl = `${baseURL}/Campaign/CreateCampaignV2`;
+    setCreateLoading(true); // Show loading indicator
+  
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${window.localStorage.getItem('token')}`, // Include auth token
+        },
+        body: JSON.stringify(transformedData), // Send the transformed data
+      });
+  
+      const data = await response.json(); // Parse response
+  
+      console.log("Response received:", data); // Log API response for debugging
+  
+      if (response.ok && data.succeeded) {
+        toast.success('Successfully created campaign');
+        
+        // Only navigate after confirming successful submission
+        navigate('/Feed');
+      } else {
+        toast.error(data.message || 'An error occurred while creating the campaign');
       }
-    ],
-    campaignUnit: 10 // If campaignUnit is a fixed value or needs to be derived from somewhere
-  };
-
-  const apiUrl = `${baseURL}/Campaign/CreateCampaignV2`;
-  setCreateLoading(true);
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-         'Authorization': `Bearer ${window.localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(transformedData), // Send the transformed data
-    });
-
-    const data = await response.json();
-
-    if (response.ok && data.succeeded) {
-      
-
-      navigate('/Feed');
-      toast('Successfully created campaign');
-    
-    } else {
-      toast.error(data.message || 'An error occurred while creating the campaign');
+    } catch (error) {
+      console.error('Error creating campaign:', error); // Log the error for debugging
+      toast.error('An error occurred while creating the campaign');
+    } finally {
+      setCreateLoading(false); // Hide loading indicator
     }
-  } catch (error) {
-    console.error('Error creating campaign:', error);
-    toast.error('An error occurred while creating the campaign');
-    setCreateLoading(false);
-  } finally {
-    setCreateLoading(false);
   }
-};
+  
+  
 
   
 
@@ -155,7 +162,7 @@ const handleSelectAge = (ages: string | string[]) => {
   if (filteredAges.length > 0) {
       setSelectedAges([...selectedAges, ...filteredAges]);
   } else if (!Array.isArray(ages)) {
-      toast.error(`You have already selected the age range ${ages}.`);
+    // toast.error(`You have already selected the age range ${ages}.`);
   }
 };
 
@@ -171,7 +178,7 @@ const handleOccupation = (occupations: string[]) => {
       setSelectedOccupation([...selectedOccupation, ...newOccupations]);
       handleFieldChange("Occupation")([...selectedOccupation, ...newOccupations]);
   } else {
-      toast.error("All selected occupations are already included.");
+    //  toast.error("All selected occupations are already included.");
   }
 };
 
@@ -183,17 +190,17 @@ const handleRegion = (region: any) => {
     const newRegions = region.filter((r) => !selectedRegion.includes(r));
     if (newRegions.length > 0) {
       setSelectedRegion([...selectedRegion, ...newRegions]);
-      toast.success(`All regions have been selected.`);
+     // toast.success(`All regions have been selected.`);
     } else {
-      toast.error(`All regions are already selected.`);
+    //  toast.error(`All regions are already selected.`);
     }
   } else {
     // Handle single region
     if (!selectedRegion.includes(region)) {
       setSelectedRegion([...selectedRegion, region]);
-      toast.success(`Region ${region} has been added.`);
+     // toast.success(`Region ${region} has been added.`);
     } else {
-      toast.error(`You have already selected the region ${region}.`);
+  //    toast.error(`You have already selected the region ${region}.`);
     }
   }
 };
@@ -201,14 +208,20 @@ const handleRegion = (region: any) => {
 
 
   
-  const handleGender = (gender: any) => {
+const handleGender = (gender: any | any[]) => {
+  if (Array.isArray(gender)) {
+    // Handle multiple selections (e.g., "Select All")
+    const newGenders = gender.filter((g) => !selectedGender.includes(g));
+    setSelectedGender([...selectedGender, ...newGenders]);
+  } else {
     if (!selectedGender.includes(gender)) {
       setSelectedGender([...selectedGender, gender]);
-     // handleFieldChange('Age')(selectedAges);
     } else {
-      toast.error(`You have already selected the gender ${gender}.`);
+    //  toast.error(`You have already selected the gender ${gender}.`);
     }
-  };
+  }
+};
+
  
   const removeAge = (age: string) => {
     setSelectedAges((prev) => prev.filter((a) => a !== age));
