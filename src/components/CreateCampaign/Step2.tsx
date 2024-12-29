@@ -138,9 +138,10 @@ const handleSubmit = async (e: any) => {
       if (response.ok && data.succeeded) {
         toast.success('Successfully created campaign');
         
-        // Only navigate after confirming successful submission
-        navigate('/Feed');
+        // Add a delay before navigating to the next page
+       // navigate('/Feed', { state: { fromCreateCampaign: true } });
       } else {
+        
         toast.error(data.message || 'An error occurred while creating the campaign');
       }
     } catch (error) {

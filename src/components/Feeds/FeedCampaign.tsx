@@ -14,6 +14,11 @@ import SummaryModal from "./SummaryModal";
 import usePost from "../Hooks/usePost";
 import PromotionSuccessfulModal from "./PromotionSuccessfulModal";
 import ShareCampaignModal from "../ViewCampaign/ShareCampaignModal";
+import Carousel from 'react-material-ui-carousel'
+import { Paper, Button } from '@mui/material'
+
+
+
 
 interface ApiResponse {
   data: any;
@@ -142,8 +147,8 @@ const endorseWithWalletData = {
     openPromotionSuccessfulModal();
  
     }
+    
   }, [ApiFeedback]);
-
   useEffect(() => {
     if (error) {
       console.error("Error fetching data:", error);
@@ -170,42 +175,21 @@ const endorseWithWalletData = {
           </div>
         </div>
 
+        <Carousel>
+            {
+              item?.campaignFiles.map((file:any, index:any) => (
+                <img src={file.filePath} alt={`Campaign ${index}`} className="w-full h-auto rounded-lg" />
+              ))
+            }
+        </Carousel>
+ 
+  {/* {item?.campaignFiles.map((file:any, index:any) => (
+ 
+        <img src={file.filePath} alt={`Campaign ${index}`} className="w-full h-auto rounded-lg" />
+   
+  ))} */}
+  
 
-        <div className="my-4">
-          <img src={item?.campaignFiles[0]?.filePath} alt="Campaign" />
-        </div>
-
-        <div className="my-4">
-          <h1 className="font-medium">{item?.campaignTitle}</h1>
-          <p className="text-customBlue font-medium my-3">
-            <img src={link} className="inline mr-1 w-3 h-4" />
-            www.powertothepeople.com
-          </p>
-          <p>{item?.description}</p>
-          <p className="text-xs my-4"> {formatDate(item?.created)}</p>
-          <div>
-            <p className="font-medium text-customBlue mb-2 mt-2 text-xs">
-              You tagged 3 Persons
-            </p>
-            <div className="flex items-center -space-x-4">
-              <img
-                alt="user 5"
-                src="images/searchPhoto1.png"
-                className="relative inline-block h-12 w-12 rounded-full border-2 border-customBlue object-cover object-center hover:z-10 focus:z-10"
-              />
-              <img
-                alt="user 5"
-                src="images/searchPhoto1.png"
-                className="relative inline-block h-12 w-12 rounded-full border-2 border-customBlue object-cover object-center hover:z-10 focus:z-10"
-              />
-              <img
-                alt="user 5"
-                src="images/searchPhoto1.png"
-                className="relative inline-block h-12 w-12 rounded-full border-2 border-customBlue object-cover object-center hover:z-10 focus:z-10"
-              />
-            </div>
-          </div>
-        </div>
 
 
   
