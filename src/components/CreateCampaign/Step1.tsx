@@ -17,10 +17,10 @@ interface person {
 const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange, formData }: any) => {
   const [peopleModal, setPeopleModal] = useState(false);
   const [selectedPeople, setSelectedPeople] = useState<any[]>(formData.tags || []);
-  const [uploadedImages, setUploadedImages] = useState<any[]>(formData.campaignMedias || []);
+ 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<{ [key: string]: string }>({});
-  const [uploadedVideos, setUploadedVideos] = useState([]);
+  const [uploadedMedia, setUploadedMedia] = useState<any[]>(formData.campaignMedias || []);
 
 
   const closePeopleModal = () => {
@@ -58,39 +58,43 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
       reader.onerror = error => reject(error);
     });
   };
-
-  const handleCampaignMedias = (fieldName: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCampaignMedias = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
   
     if (target && target.files && target.files.length > 0) {
       const newFiles = Array.from(target.files) as File[];
   
-      // Filter image and video files separately
       const images = newFiles.filter(file => file.type.startsWith('image/'));
       const videos = newFiles.filter(file => file.type.startsWith('video/'));
   
-      // Convert files to base64 strings (only images, if preview is needed)
+      // Convert images to Base64
       const newBase64Images = await Promise.all(images.map(file => convertToBase64(file)));
   
-      // Filter out duplicates for images
-      const uniqueNewBase64Images = newBase64Images.filter(newFile => !uploadedImages.includes(newFile));
+      // Create media objects for images and videos
+      const newMediaItems = [
+        ...newBase64Images.map(base64 => ({ type: 'image', src: base64 })),
+        ...videos.map(video => ({ type: 'video', src: video })),
+      ];
   
-      // Combine the unique images and original uploaded files (without duplicates)
-      const combinedFiles = [...uploadedImages, ...uniqueNewBase64Images];
+      // Remove duplicates and maintain a maximum of 5 items
+      const combinedMedia = [
+        ...uploadedMedia,
+        ...newMediaItems.filter(newItem =>
+          uploadedMedia.every(
+            existing =>
+              (existing.type === 'image' && existing.src !== newItem.src) ||
+              (existing.type === 'video' && existing.src !== newItem.src)
+          )
+        ),
+      ];
   
-      // Add videos as files, not base64 strings, since previews don't require conversion
-      const updatedVideos:any = [...uploadedVideos, ...videos];
-  
-      if (combinedFiles.length + updatedVideos.length > 5) {
-        setError(prev => ({ ...prev, fileUpload: 'You can upload a maximum of 5 media files.' }));
+      if (combinedMedia.length > 5) {
+        setError({ ...error, campaignMedias: 'You can upload a maximum of 5 media items (images or videos).' });
         return;
       }
   
-      setError(prev => ({ ...prev, fileUpload: '' }));
-  
-      // Update the state for both images and videos
-      setUploadedImages(combinedFiles);
-      setUploadedVideos(updatedVideos); // Maintain a separate state for videos
+      setError({ ...error, campaignMedias: '' });
+      setUploadedMedia(combinedMedia);
     }
   };
   
@@ -102,14 +106,19 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
     handleSelectPeople(updatedPeople);
   };
 
-  const removeImage = (index: number) => {
-    const updatedImages = uploadedImages.filter((_, i) => i !== index);
-    setUploadedImages(updatedImages);
-  };
+  // const removeImage = (index: number) => {
+  //   const updatedImages = uploadedImages.filter((_, i) => i !== index);
+  //   setUploadedImages(updatedImages);
+  // };
 
-  const removeVideo = (index: number) => {
-    const updatedVideos = uploadedVideos.filter((_, i) => i !== index);
-    setUploadedVideos(updatedVideos);
+  // const removeVideo = (index: number) => {
+  //   const updatedVideos = uploadedVideos.filter((_, i) => i !== index);
+  //   setUploadedVideos(updatedVideos);
+  // };
+
+  const removeMedia = (index: number) => {
+    const updatedMedia = uploadedMedia.filter((_, i) => i !== index);
+    setUploadedMedia(updatedMedia);
   };
 
   const requestURL = `${baseURL}/Category/GetCategories/`;
@@ -167,11 +176,18 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
   const triggerFileInput = () => {
     fileInputRef.current?.click();
   }
-
   useEffect(() => {
-    handleFileChange('campaignMedias')(uploadedImages);
-  }, [uploadedImages])
+    // Map the uploadedMedia to extract `src` as strings
+    const mediaSrcs = uploadedMedia.map(media =>
+      media.type === 'image' ? media.src : URL.createObjectURL(media.src as File)
+    );
+  
+    handleFileChange('campaignMedias')(mediaSrcs);
+  }, [uploadedMedia]);
 
+
+  
+  
 
   return (
     <>
@@ -296,91 +312,72 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
               </div>
             </>}
 
+{/* Upload Campaign Media Section */} 
+<div>
+  {/* Hidden File Input */}
+  <input
+    type="file"
+    name="campaignMedias"
+    accept="image/*,video/*"
+    onChange={handleCampaignMedias}
+    multiple
+    className="hidden"
+    ref={fileInputRef}
+  />
 
-            <div>
-              {/* Hidden Upload Campaign Media Section */}
-              <input
-              type="file"
-              placeholder="Upload Campaign Media"
-              name="campaignMedias"
-              onChange={handleCampaignMedias('campaignMedias')}
-              className="hidden"
-              ref={fileInputRef}
-              multiple
-              accept="image/*,video/*" // Accepts all images and video types
+  {uploadedMedia.length > 0 && (
+    <div className="border-2 p-4 rounded-lg">
+      <div className="text-gray-700 pb-1">Uploaded Media</div>
+      <div className="flex flex-wrap justify-start max-h-40 overflow-y-auto">
+        {uploadedMedia.map((media, index) => (
+          <div key={index} className="relative inline-block mx-2 mt-3">
+            <img
+              src={cancel}
+              alt="Remove"
+              onClick={() => removeMedia(index)}
+              className="absolute cursor-pointer"
+              style={{ top: '-5px', right: '-5px', width: '15px', height: '15px' }}
             />
+            {media.type === 'image' ? (
+              <img src={media.src as string} alt={`Uploaded ${index + 1}`} className="max-w-full max-h-full" />
+            ) : (
+              <video controls className="max-w-full max-h-full">
+                <source src={URL.createObjectURL(media.src as File)} type={(media.src as File).type} />
+              </video>
+            )}
+          </div>
+        ))}
 
-            </div>
-
-
-            {uploadedImages.length > 0 && (
-              <div className='border-2 p-4 rounded-lg'>
-                <div className='text-gray-700 pb-1'>Uploaded Images</div>
-                <div className="flex flex-wrap justify-start max-h-40 overflow-y-auto">
-  {uploadedImages.map((image, index) => (
-    <div key={`image-${index}`} className="relative inline-block mx-2 mt-3">
-      <img
-        src={cancel}
-        alt="Remove"
-        className="absolute cursor-pointer"
-        onClick={() => removeImage(index)}
-        style={{ top: '-5px', right: '-5px', width: '15px', height: '15px' }}
-      />
-      <img
-        src={image}
-        alt={`Uploaded ${index + 1}`}
-        style={{ maxWidth: '100%', maxHeight: '100%' }}
-      />
+        {/* Add Media Button */}
+        {uploadedMedia.length < 5 && (
+          <div className="relative inline-block mx-4 mt-3">
+            <img onClick={triggerFileInput} src={add} alt="Add Media" width={40} height={40} className="my-4" />
+          </div>
+        )}
+      </div>
     </div>
-  ))}
+  )}
 
-  {uploadedVideos.map((video, index) => (
-    <div key={`video-${index}`} className="relative inline-block mx-2 mt-3">
-      <img
-        src={cancel}
-        alt="Remove"
-        className="absolute cursor-pointer"
-        onClick={() => removeVideo(index)}
-        style={{ top: '-5px', right: '-5px', width: '15px', height: '15px' }}
-      />
-      <video
-        controls
-        style={{ maxWidth: '100%', maxHeight: '100%' }}
-        src={URL.createObjectURL(video)} // Use URL.createObjectURL for video previews
-      >
-        Your browser does not support video playback.
-      </video>
-    </div>
-  ))}
+  {/* Error Message */}
+  {error.campaignMedias && <p className="text-red-500 text-xs ml-1 my-1">{error.campaignMedias}</p>}
 
-  <div className="relative inline-block mx-4 mt-3">
-    <img onClick={triggerFileInput} src={add} width={40} height={40} className="my-4" />
-  </div>
+  {/* Upload Button */}
+  {uploadedMedia.length === 0 && (
+    <button
+      onClick={triggerFileInput}
+      className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center"
+    >
+      <img src={upload} alt="Upload" className="inline-block mr-2" />
+      Upload Campaign Media
+    </button>
+  )}
 </div>
 
-              </div>
-            )}
-
-{error.campaignMedias && <p className="text-red-500 text-xs ml-1 my-1">{error.campaignMedias}</p>}
-
-          
-
-            {
-
-              uploadedImages.length == 0 &&
-              (<button
-                onClick={triggerFileInput}
-                className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center"
-              >
-                <img src={upload} alt="upload" className='inline-block mr-2' />
-                Upload Campaign Media
-              </button>
-              )
-
-            }
-
+         {/* End Upload Campaign Media Section */}
             {error.fileUpload && <p className="text-red-500 text-xs pb-8">{error.fileUpload}</p>}
           
+
+ 
             <button
               onClick={handleNextStep}
               className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"

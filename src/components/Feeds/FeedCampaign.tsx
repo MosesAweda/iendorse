@@ -176,12 +176,30 @@ const endorseWithWalletData = {
         </div>
 
         <Carousel>
-            {
-              item?.campaignFiles.map((file:any, index:any) => (
-                <img src={file.filePath} alt={`Campaign ${index}`} className="w-full h-auto rounded-lg" />
-              ))
-            }
-        </Carousel>
+  {item?.campaignFiles.map((file: any, index: any) => (
+    <div key={index}>
+      {file.filePath.endsWith('.mp4') ? (
+        <video 
+          className="w-full h-auto rounded-lg object-cover" 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+        >
+          <source src={file.filePath} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <img 
+          src={file.filePath} 
+          alt={`Campaign ${index}`} 
+          className="w-full h-auto rounded-lg" 
+        />
+      )}
+    </div>
+  ))}
+</Carousel>
+
  
   {/* {item?.campaignFiles.map((file:any, index:any) => (
  

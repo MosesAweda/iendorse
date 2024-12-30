@@ -40,14 +40,15 @@ const CreateCampaign = () => {
 
 
  
-  
   const handleFileChange = (fieldName: string) => (files: string[]) => {
     setFormData({
       ...formData,
       [fieldName]: files,
     });
   };
-
+  
+   
+  
 
   // const handleSelectPeople = (selected: any) => {
   //   setFormData({ ...formData, selectedPeople: selected });
