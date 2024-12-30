@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { GoogleOAuthProvider  } from '@react-oauth/google';
-import { HelmetProvider } from 'react-helmet-async';
 
 const CLIENT_ID = "235778258186-5uv9grf9jq6st83cks5sej6ii9t0nvge.apps.googleusercontent.com"
 
@@ -15,9 +14,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={CLIENT_ID}>
-      <HelmetProvider >
+    
     <App />
-    </HelmetProvider>,
+  
     </GoogleOAuthProvider>
   </React.StrictMode>
 );

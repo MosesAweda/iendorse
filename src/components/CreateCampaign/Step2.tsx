@@ -87,13 +87,44 @@ const handleSubmit = async (e: any) => {
 
   // Map formData to the expected backend structure
 
+    // const transformedData = {
+    //   categoryId: formData.CampaignCategory,
+    //   campaignTitle: formData.CampaignTitle,
+    //   campaignLink: formData.CampaignLink,
+    //   description: formData.Description,
+    //   tags: formData?.tags?.map((tag: any) => tag.id) || [], // Handle empty or undefined tags
+    //   campaignMedias: formData.campaignMedias, // Already an array of strings (Base64)
+    //   campaignTargetAudienceAnswers: [
+    //     {
+    //       id: AgeId, 
+    //       answer: formData.Age,
+    //     },
+    //     {
+    //       id: OccupationId, // Assuming 2 is for Occupation
+    //       answer: formData.Occupation,
+    //     },
+    //     {
+    //       id: RegionId, // Assuming 3 is for Region
+    //       answer: formData.Region,
+    //     },
+    //     {
+    //       id: GenderId, // Assuming 4 is for Gender
+    //       answer: formData.Gender,
+    //     }
+    //   ],
+    //   campaignUnit: 10, // If campaignUnit is a fixed value or needs to be derived
+    // };
+    
     const transformedData = {
-      categoryId: formData.CampaignCategory,
-      campaignTitle: formData.CampaignTitle,
-      campaignLink: formData.CampaignLink,
-      description: formData.Description,
-      tags: formData?.tags?.map((tag: any) => tag.id) || [], // Handle empty or undefined tags
-      campaignMedias: formData.campaignMedias, // Already an array of strings (Base64)
+      categoryId: formData.CampaignCategory || 0, // Default to 0 if undefined
+      campaignTitle: formData.CampaignTitle || "string", // Default placeholder
+      campaignLink: formData.CampaignLink || "string", // Default placeholder
+      description: formData.Description || "string", // Default placeholder
+      tags: formData?.tags?.map((tag: any) => tag.id) || [0], // Default to [0] if undefined or empty
+      campaignMedias: formData.campaignMedias?.map((media: any) => ({
+        fileExtension: media.fileExtension || 'unknown',
+        campaignMedia: typeof media.campaignMedia === 'string' ? media.campaignMedia : '', // Ensure it's a string
+      })) || [],// Default placeholder if undefined or empty
       campaignTargetAudienceAnswers: [
         {
           id: AgeId, 
@@ -114,11 +145,12 @@ const handleSubmit = async (e: any) => {
       ],
       campaignUnit: 10, // If campaignUnit is a fixed value or needs to be derived
     };
-  
+
+    
     console.log("Transformed data:", transformedData);
     console.log("Payload being sent:", JSON.stringify(transformedData)); // Log full request payload
   
-    const apiUrl = `${baseURL}/Campaign/CreateCampaignV2`;
+    const apiUrl = `${baseURL}/Campaign/CreateCampaignV4`;
     setCreateLoading(true); // Show loading indicator
   
     try {

@@ -68,13 +68,23 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
       const videos = newFiles.filter(file => file.type.startsWith('video/'));
   
       // Convert images to Base64
-      const newBase64Images = await Promise.all(images.map(file => convertToBase64(file)));
+      const newBase64Images = await Promise.all(
+        images.map(async (image) => ({
+          fileExtension: `.${image.name.split('.').pop()}`, // Extract file extension from name
+          campaignMedia: await convertToBase64(image),
+        }))
+      );
   
-      // Create media objects for images and videos
-      const newMediaItems = [
-        ...newBase64Images.map(base64 => ({ type: 'image', src: base64 })),
-        ...videos.map(video => ({ type: 'video', src: video })),
-      ];
+      // Convert videos to Base64 asynchronously
+      const newBase64Videos = await Promise.all(
+        videos.map(async (video) => ({
+          fileExtension: `.${video.name.split('.').pop()}`, // Extract file extension from name
+          campaignMedia: await convertToBase64(video),
+        }))
+      );
+  
+      // Combine images and videos
+      const newMediaItems = [...newBase64Images, ...newBase64Videos];
   
       // Remove duplicates and maintain a maximum of 5 items
       const combinedMedia = [
@@ -82,23 +92,27 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
         ...newMediaItems.filter(newItem =>
           uploadedMedia.every(
             existing =>
-              (existing.type === 'image' && existing.src !== newItem.src) ||
-              (existing.type === 'video' && existing.src !== newItem.src)
+              existing.campaignMedia !== newItem.campaignMedia
           )
         ),
       ];
   
       if (combinedMedia.length > 5) {
-        setError({ ...error, campaignMedias: 'You can upload a maximum of 5 media items (images or videos).' });
+        setError({
+          ...error,
+          campaignMedias: 'You can upload a maximum of 5 media items (images or videos).',
+        });
         return;
       }
   
       setError({ ...error, campaignMedias: '' });
       setUploadedMedia(combinedMedia);
+  
+      // Update the parent form data
+      handleFileChange('campaignMedias')(combinedMedia);
     }
   };
   
-
 
 
   const removePerson = (id: number) => {
@@ -176,14 +190,6 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
   const triggerFileInput = () => {
     fileInputRef.current?.click();
   }
-  useEffect(() => {
-    // Map the uploadedMedia to extract `src` as strings
-    const mediaSrcs = uploadedMedia.map(media =>
-      media.type === 'image' ? media.src : URL.createObjectURL(media.src as File)
-    );
-  
-    handleFileChange('campaignMedias')(mediaSrcs);
-  }, [uploadedMedia]);
 
 
   
@@ -312,8 +318,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
               </div>
             </>}
 
-{/* Upload Campaign Media Section */} 
-<div>
+            <div>
   {/* Hidden File Input */}
   <input
     type="file"
@@ -331,6 +336,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
       <div className="flex flex-wrap justify-start max-h-40 overflow-y-auto">
         {uploadedMedia.map((media, index) => (
           <div key={index} className="relative inline-block mx-2 mt-3">
+            {/* Remove Button */}
             <img
               src={cancel}
               alt="Remove"
@@ -338,11 +344,17 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
               className="absolute cursor-pointer"
               style={{ top: '-5px', right: '-5px', width: '15px', height: '15px' }}
             />
-            {media.type === 'image' ? (
-              <img src={media.src as string} alt={`Uploaded ${index + 1}`} className="max-w-full max-h-full" />
+
+            {/* Check if media is an image or video */}
+            {media.fileExtension.startsWith('.jpg') || media.fileExtension.startsWith('.jpeg') || media.fileExtension.startsWith('.png') ? (
+              <img
+                src={media.campaignMedia}
+                alt={`Uploaded ${index + 1}`}
+                className="max-w-full max-h-full"
+              />
             ) : (
               <video controls className="max-w-full max-h-full">
-                <source src={URL.createObjectURL(media.src as File)} type={(media.src as File).type} />
+                <source src={media.campaignMedia} type={`video/${media.fileExtension.slice(1)}`} />
               </video>
             )}
           </div>
@@ -351,7 +363,14 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
         {/* Add Media Button */}
         {uploadedMedia.length < 5 && (
           <div className="relative inline-block mx-4 mt-3">
-            <img onClick={triggerFileInput} src={add} alt="Add Media" width={40} height={40} className="my-4" />
+            <img
+              onClick={triggerFileInput}
+              src={add}
+              alt="Add Media"
+              width={40}
+              height={40}
+              className="my-4"
+            />
           </div>
         )}
       </div>
@@ -372,6 +391,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
     </button>
   )}
 </div>
+
 
          {/* End Upload Campaign Media Section */}
             {error.fileUpload && <p className="text-red-500 text-xs pb-8">{error.fileUpload}</p>}

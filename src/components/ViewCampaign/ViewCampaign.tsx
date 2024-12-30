@@ -30,7 +30,6 @@ import EndorsementSuccessfulModal from "./EndorsementSuccessfulModal";
 import Initials from "../Initials";
 import ReportCampaign from "./ReportCampaign";
 import EndorsementFailed from "./EndorsementFailed";
-import { Helmet } from  'react-helmet-async';
 
 const ViewCampaign = ({ item }: any) => {
   const { uid } = useParams();

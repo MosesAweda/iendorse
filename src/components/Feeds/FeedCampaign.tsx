@@ -213,16 +213,16 @@ const endorseWithWalletData = {
   
         <div className="flex mt-10 text-sm justify-between mb-3">
           <div className="flex mr-5 items-center w-full">
-            <button onClick={openShareCampaignModal} className="p-3 bg-customBlue text-white rounded-md w-full">
+            <button onClick={openShareCampaignModal} className="p-2 text-xs bg-customBlue  text-white rounded-md w-full">
               Share Campaign
             </button>
           </div>
           <div className="flex items-center w-full">
             <button
-              className="p-3 bg-customBlue text-white rounded-md w-full"
+              className="p-2  bg-customBlue text-white rounded-md w-full"
               onClick={openPromoteModal}
             >
-              Promote Campaign
+              <span> Promote Campaign </span>
             </button>
           </div>
         </div>

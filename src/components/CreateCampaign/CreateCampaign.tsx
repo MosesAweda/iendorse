@@ -39,8 +39,7 @@ const CreateCampaign = () => {
   
 
 
- 
-  const handleFileChange = (fieldName: string) => (files: string[]) => {
+  const handleFileChange = (fieldName: string) => (files: { fileExtension: string; campaignMedia: string }[]) => {
     setFormData({
       ...formData,
       [fieldName]: files,
