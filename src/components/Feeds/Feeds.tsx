@@ -137,7 +137,7 @@ const Feed: React.FC = () => {
 
         {/* No More Items */}
         {!hasMore && data.length > 0 && (
-          <div className="text-center text-gray-500 mt-4">No more items to load</div>
+          <div className="text-center text-gray-500 mt-4 mb-5 pb-2">No more items to load</div>
         )}
       </div>
     </div>

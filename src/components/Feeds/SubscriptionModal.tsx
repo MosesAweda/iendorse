@@ -22,7 +22,7 @@ const SubscriptionModal: React.FC<SubscriptionModal> = ({ isOpen, onClose,  onSu
 
 
   return (
-    <div className="fixed inset-0 transition-opacity flex items-center justify-center">
+    <div className="fixed inset-0 transition-opacity flex items-center justify-center z-50">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
      
       <div className="relative p-4 w-full max-w-lg max-h-full">

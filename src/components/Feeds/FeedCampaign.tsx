@@ -27,6 +27,11 @@ interface ApiResponse {
   postData: (body: any) => Promise<void>;
 }
 
+interface CarouselProps {
+  children: React.ReactNode[];
+  showArrows?: boolean;
+  showIndicators?: boolean;
+}
 
 const FeedCampaign = ({ item }: any) => {
   const [campaignMenuOpen, setCampaignMenuOpen] = useState(false);
@@ -164,7 +169,7 @@ const endorseWithWalletData = {
   return (
     <>
       <div className="p-4 max-w-lg mx-1 border-gray-700 bg-white rounded-lg my-5">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-3" >
           <div>
             <button className="bg-green-100 text-green-600 rounded-lg px-4 py-2 text-xs font-medium">
             {item?.campaignUnit}  Points Left 
@@ -175,14 +180,17 @@ const endorseWithWalletData = {
           </div>
         </div>
 
-        <Carousel>
+        <Carousel 
+  indicators={item?.campaignFiles.length > 1} // Display indicators only if more than one file
+>
   {item?.campaignFiles.map((file: any, index: any) => (
-    <div key={index}>
+    <div 
+      key={index} 
+      className="flex items-center justify-center bg-black w-full h-[300px] rounded-lg"
+    >
       {file.filePath.endsWith('.mp4') ? (
         <video 
-          className="w-full h-auto rounded-lg object-cover" 
-          autoPlay 
-          loop 
+          className="w-full max-h-full object-cover" 
           muted 
           playsInline
         >
@@ -193,39 +201,39 @@ const endorseWithWalletData = {
         <img 
           src={file.filePath} 
           alt={`Campaign ${index}`} 
-          className="w-full h-auto rounded-lg" 
+          className="w-full max-h-full object-cover" 
         />
       )}
     </div>
   ))}
 </Carousel>
 
+
+
  
-  {/* {item?.campaignFiles.map((file:any, index:any) => (
  
-        <img src={file.filePath} alt={`Campaign ${index}`} className="w-full h-auto rounded-lg" />
-   
-  ))} */}
-  
 
 
 
   
-        <div className="flex mt-10 text-sm justify-between mb-3">
-          <div className="flex mr-5 items-center w-full">
-            <button onClick={openShareCampaignModal} className="p-2 text-xs bg-customBlue  text-white rounded-md w-full">
-              Share Campaign
-            </button>
-          </div>
-          <div className="flex items-center w-full">
-            <button
-              className="p-2  bg-customBlue text-white rounded-md w-full"
-              onClick={openPromoteModal}
-            >
-              <span> Promote Campaign </span>
-            </button>
-          </div>
-        </div>
+<div className="flex justify-between mt-10 mb-3 text-sm gap-x-2">
+  {[
+    { label: "Share Campaign", onClick: openShareCampaignModal },
+    { label: "Promote Campaign", onClick: openPromoteModal },
+  ].map((button, index) => (
+    <div key={index} className="flex items-center w-full">
+      <button
+        className="w-full p-2 bg-customBlue text-white rounded-md truncate"
+        onClick={button.onClick}
+        style={{ minWidth: "120px" }}
+      >
+        <span className="text-xs">{button.label}</span>
+      </button>
+    </div>
+  ))}
+</div>
+
+
        
       </div>
 

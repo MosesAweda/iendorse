@@ -22,7 +22,7 @@ interface ShareCampaignModalProps {
 
   const [copied, setCopied] = useState(false);
   const [copySuccess, setCopySuccess] = useState('');
-  const textToCopy = `https://iendorse.vercel.app/ViewCampaign/${details?.campaignId}`
+  const textToCopy = `https://iendorse.ng/ViewCampaign/${details?.campaignId}`
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(textToCopy);
@@ -39,7 +39,7 @@ interface ShareCampaignModalProps {
 
   const shareOnTwitter = (campaignId: number, campaignTitle: string, campaignDescription: string) => {
     const tweetText = `${campaignTitle} - ${campaignDescription}`;
-    const campaignUrl = `https://iendorse.vercel.app/ViewCampaign/${campaignId}`;
+    const campaignUrl = `https://iendorse.ng/ViewCampaign/${campaignId}`;
   
     const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       tweetText
@@ -52,7 +52,7 @@ interface ShareCampaignModalProps {
 
     return (
         <div>
-            <div className={`fixed inset-0 transition-opacity ${isOpen ? 'flex' : 'hidden'}  items-start mt-20 sm:mt-1 sm:items-center justify-center`}>
+            <div className={`fixed z-50 inset-0 transition-opacity ${isOpen ? 'flex' : 'hidden'}  items-start mt-20 sm:mt-1 sm:items-center justify-center`}>
         <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
      
         <div className="relative z-10 flex-col items-center justify-center max-h-screen">
