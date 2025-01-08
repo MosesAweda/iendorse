@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const CloudinaryUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -12,12 +15,18 @@ const CloudinaryUpload = () => {
     setUploadUrl(null); // Reset URL on new file selection
   };
 
+  var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
   const handleUpload = async () => {
     if (!selectedFile) {
       alert('Please select a file to upload.');
       return;
     }
-
     setIsLoading(true);
 
     const formData = new FormData();
@@ -40,7 +49,17 @@ const CloudinaryUpload = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-6 rounded-lg shadow-md max-w-md mx-auto mt-10">
+    <div className="bg-gray-100 p-6 rounded-lg shadow-md  mx-auto mt-10">
+      <div>
+      <Slider {...settings}>
+      <div className='bg-red-500 p-10'>
+        <h3>1</h3>
+      </div>
+    
+       
+        
+    </Slider>
+      </div>
       <h1 className="text-2xl font-bold text-center mb-6">Upload to Cloudinary</h1>
 
       <input
@@ -74,6 +93,8 @@ const CloudinaryUpload = () => {
         </div>
       )}
     </div>
+
+    
   );
 };
 

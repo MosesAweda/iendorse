@@ -17,6 +17,9 @@ import { isAuthenticated } from '../auth';
 import SignInFirst from "./SignInFirst";
 import { deflate } from "zlib";
 import Carousel from 'react-material-ui-carousel'
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const HomeCampaign = ({item}:any, index:any) => {
   const userData:any = window.localStorage.getItem("userData");
@@ -77,6 +80,13 @@ const HomeCampaign = ({item}:any, index:any) => {
   
 
   const { data:ApiFeedback, loading: ApiFeedbackLoading, error, postData} = usePost(endorseWithWalletURL);
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
 
  const fetchWalletBalance = async () => {
     setLoading(true);
@@ -188,10 +198,21 @@ const HomeCampaign = ({item}:any, index:any) => {
   
 console.log("cammpaign File", item?.campaignFiles)
 console.log("home campagin", item)
+
+var settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
+
+
+
   return (
     <>
       
-  
+    
     <div
       key={item.campaignId}
       className="p-4 w-full max-w-[350px] border-gray-200 border sm:border-0 bg-white rounded-2xl my-5 px-6"
@@ -257,7 +278,7 @@ console.log("home campagin", item)
         <div className="my-4">
           <div className="relative">
          
-              <Carousel indicators={item?.campaignFiles?.length > 2} animation="fade"  navButtonsAlwaysVisible={false}>
+              <Carousel indicators={item?.campaignFiles?.length > 1} autoPlay animation="fade"  navButtonsAlwaysInvisible >
                 {item?.campaignFiles.map((file: any, index: any) => (
                   <div
                     key={index}
@@ -312,6 +333,7 @@ console.log("home campagin", item)
       </div>
    
 </div>
+
 
 
 
