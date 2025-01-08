@@ -16,6 +16,7 @@ import {toast} from "react-toastify";
 import { isAuthenticated } from '../auth';
 import SignInFirst from "./SignInFirst";
 import { deflate } from "zlib";
+import Carousel from 'react-material-ui-carousel'
 
 const HomeCampaign = ({item}:any, index:any) => {
   const userData:any = window.localStorage.getItem("userData");
@@ -33,6 +34,10 @@ const HomeCampaign = ({item}:any, index:any) => {
  const [summaryModal, setSummaryModal] = useState(false);
  const [endorsementSuccessfulModal, setEndorsementSuccessfulModal] = useState(false);
  const [shareCampaignModal, setShareCampaignModal] = useState(false);
+ const [isExpanded, setIsExpanded] = useState(false);
+  const toggleReadMore = () => setIsExpanded(!isExpanded);
+
+  const maxLength = 100; 
  const isUserAuthenticated = isAuthenticated();
 
   const openEndorseMenu = () => {
@@ -186,87 +191,127 @@ console.log("home campagin", item)
   return (
     <>
       
-        <div className="p-4  max-w-lg border-gray-200  border sm:border-0 bg-white rounded-2xl my-5 mx-1 p-3  px-6">
-          <Link to={`/ViewCampaign/${item?.campaignId}`} className={""}> 
-          <div>
-            <div className="flex items-center justify-between ">
-              <div className="flex items-center">
-            <div className="  inline-block  z-1 mr-3 " >
-          {item?.campaignOwnerImage ? (
-            // <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
-            //  src={item?.campaignOwnerImage} width={45} height={45} alt="Avatar" />
-            <img className="rounded-full border-2  w-10 h-10 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
-             src={item?.campaignOwnerImage}  alt="Avatar" />
-          ):(
-            <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full text-customBlue p-2">
-            <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />  
-            </div>
-          )
-        }
-          </div>
-
-
-          
-              <div>
-                <div className="font-semibold text-lg w-[200px] leading-tight">
-                 {item?.campaignOwner}
-                </div>
-                <div className='text-xs'>
-                  <i> {item?.campaignOwnerTitle}</i>
-                </div>
-              </div>
-              </div>
-
-              
-              <div>
-            <button className="bg-green-100 text-green-600 rounded-lg px-4 py-2 text-xs font-medium">
-            {item?.campaignUnit}  Points Left 
-            </button>
-          </div>
-            </div>
-          </div>
-          <div className="my-4 min-w-[300px] max-w-[648px]   rounded-lg">
-            <h1 className="font-medium">
-              {item?.campaignTitle}
-            </h1>
-            <p className="text-justify">
-              {item?.description}
-            </p>
-          </div>
-
-
-
-          <div>
-          <div className="my-4">
-      {item?.campaignFiles?.length > 0 && (
-          <div className="">
-          <img className="rounded-2xl"  src={item?.campaignFiles[0]?.filePath  }   
+  
+    <div
+      key={item.campaignId}
+      className="p-4 w-full max-w-[350px] border-gray-200 border sm:border-0 bg-white rounded-2xl my-5 px-6"
+    >
+      {/* Header Section */}
+      <div className="flex items-start justify-end sm:flex-wrap">
+         
+        <div className="mt-1 sm:mt-0">
+          <button className="bg-green-100 text-green-600 rounded-lg px-2 py-1 font-medium" style={{fontSize: '0.7rem'}}>
+            {item?.campaignUnit} Points Left
+          </button>
+        </div>
+      </div>
+      <div className="flex items-start justify-between sm:flex-wrap">
+        <div className="flex items-center gap-3">
+          <div className="inline-block z-1">
+            {item?.campaignOwnerImage ? (
+              <img
+                className="rounded-full border-2 border-white w-10 h-10 object-cover flex-shrink-0"
+                style={{ boxShadow: '0 0 0 1px #0D236E' }}
+                src={item?.campaignOwnerImage}
+                alt="Avatar"
               />
-                </div>
+            ) : (
+              <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full text-customBlue p-2">
+                <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />
+              </div>
+            )}
+          </div>
+          <div>
+            <div className="font-semibold text-xs leading-tight max-w-[130px] break-words">
+              {item?.campaignOwner}
+            </div>
+            <div className="text-xs text-gray-600">
+              <i>{item?.campaignOwnerTitle}</i>
+            </div>
+          </div>
+        </div>
+       
+      </div>
+
+      {/* Campaign Title & Description */}
+      <div className="my-4">
+        <h1 className="font-medium text-lg truncate">{item?.campaignTitle}</h1>
+        <div className="mt-2">
+          <p className="text-justify text-sm">
+            {isExpanded ? item?.description : `${item?.description.slice(0, maxLength)}...`}
+          </p>
+          {item?.description?.length > maxLength && (
+            <button
+              onClick={toggleReadMore}
+              className="text-customBlue font-medium mt-2"
+            >
+              {isExpanded ? 'Read Less' : 'Read More'}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Media Section */}
+      {item?.campaignFiles?.length > 0 && (
+        <div className="my-4">
+          <div className="relative">
+
+              <Carousel indicators={item?.campaignFiles.length > 1}>
+                {item?.campaignFiles.map((file: any, index: any) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-center bg-black w-full h-[300px] rounded-lg"
+                  >
+                    {file.filePath.endsWith('.mp4') ? (
+                      <Link to={`/ViewCampaign/${item?.campaignId}`}>
+                        <video
+                        className="w-full h-full object-cover rounded-lg"
+                        muted
+                        playsInline
+                      >
+                        <source src={file.filePath} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                      </Link>
+                    ) : (
+                      <Link to={`/ViewCampaign/${item?.campaignId}`}>
+                      <img
+                        src={file.filePath}
+                        alt={`Campaign ${index}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </Carousel>
+          
+          </div>
+        </div>
       )}
 
-
+      {/* Actions Section */}
+      <div className="flex mt-4 mb-3 text-sm gap-5">
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={openShareCampaignModal}
+        >
+          <img src={share} width={20} height={20} className="mr-2" alt="share" />
+          <span>Share</span>
+        </div>
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={openEndorseMenu}
+        >
+          <img src={endorse} width={20} height={20} className="mr-2" alt="endorse" />
+          <span>Endorse</span>
+        </div>
       </div>
-          </div>
+   
+</div>
 
-          </Link>
-          <div className='flex mt-4 mb-3 text-sm'>
-            <div className='flex mr-5 items-center cursor-pointer'  onClick={()=> openShareCampaignModal()}>
-            <div >
-                <img src={share} width={20} height={20} className='mr-1' alt="share" />
-              </div>
-              <div>Share</div>
-            </div>
 
-            <div className='flex items-center cursor-pointer' onClick={() => openEndorseMenu()}>
-              <div>
-                <img src={endorse} width={20} height={20} className='mr-1' alt="Endorse" />
-              </div>
-              <div>Endorse</div>
-            </div>
-          </div>
-          </div>
-      
+
 
       <EndorseCampaignModal
         isOpen={endorseMenu}

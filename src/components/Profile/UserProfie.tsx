@@ -138,13 +138,12 @@ const UserProfile = () => {
         <div className='bg-gray-100 min-h-screen'>
             <Navbar />
             <div className="bg-gray-100 px-10 pt-10 mb-20">
-                <div className="relative mt-16 max-w-2xl mx-auto mt-24 rounded-lg">
-                    <div className="rounded-3xl overflow-hidden shadow-md bg-white"> 
-                       <div className="flex justify-end p-4  z-100 "  >
+                <div className="relative mt-16 max-w-2xl mx-auto  mt-24 rounded-lg">
+                    <div className="rounded-3xl overflow-hidden  shadow-md bg-white"> 
+                       <div className="flex justify-end p-2 z-100 "  >
                                     <img src={edit2} alt="Edit"    />
-                                    <span className='ml-1 text-customBlue mr-4'  >Edit</span>
+                                    <span className='ml-1 text-customBlue mr-1 hidden md:block'  >Edit</span>
                        </div>
-
 
                         <div className="absolute -mt-32 w-full flex justify-center "  onClick={openEditModal}>
 
@@ -153,7 +152,7 @@ const UserProfile = () => {
                                     {parsedUserData.imageUrl ? (
                                         <img
                                             src={parsedUserData.imageUrl}
-                                            className="rounded-full object-cover h-full w-full shadow-md"
+                                            className="rounded-full object-cover max-h-full max-w-full  shadow-md"
                                             alt="Profile"
                                         />
                                     ) : (
@@ -246,12 +245,16 @@ const UserProfile = () => {
               </div>
 
               <div>
-                <div className="font-semibold text-xs" style={{ fontSize: '10px' }}>
+                <div className="font-semibold text-xs w-20 truncate" style={{ fontSize: '10px' }}>
                   {item?.campaignTitle}
                 </div>
-                <div className="text-xs mt-0" style={{ fontSize: '7px' }}>
-                  <i>{item?.description}</i>
-                </div>
+                <div
+  className="text-xs mt-0 truncate w-20"
+  style={{ fontSize: '7px' }}
+>
+  <i>{item?.description}</i>
+</div>
+
               </div>
             </div>
           </div>

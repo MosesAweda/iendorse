@@ -254,7 +254,7 @@ const ViewCampaign = ({ item }: any) => {
                   <div className="  inline-block  z-1 mr-3" >
                     {campaignData?.campaignOwnerImage ? (
                       <img className="rounded-full border-2 w-10 h-10    border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
-                        src={campaignData?.campaignOwnerImage}  alt="Avatar" />
+                        src={campaignData?.campaignOwnerImage}  alt="" />
                     ) : (
                       <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
                         <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />

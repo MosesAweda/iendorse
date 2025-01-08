@@ -148,7 +148,7 @@ const handleScroll = () => {
                   <button className='p-1 bg-customBlue text-white rounded-lg px-5 mr-4'>
                     <div className='flex items-center'>
                       <img src={apple} alt="Download on the App Store" width={20} height={20} />
-                      <div className='ml-2 text-xs'>
+                      <div className='ml-2 text-xs p-1'>
                         <div>Download on the</div>
                         <div>App Store</div>
                       </div>
@@ -159,7 +159,7 @@ const handleScroll = () => {
                   <button className='p-1 bg-customBlue text-white rounded-lg px-5'>
                     <div className='flex items-center'>
                       <img src={playstore} alt="Get it on Google Play" width={20} height={20} />
-                      <div className='ml-2 text-xs'>
+                      <div className=' text-xs p-1 px-3'>
                         <div>Get it on</div>
                         <div>Google Play</div>
                       </div>
@@ -199,32 +199,28 @@ const handleScroll = () => {
 
   
   
-  <div className='bg-white'> 
-    
-  <div className='flex mt-2 justify-center sm:hidden'>
-                <Link to='/'>
-                  <button className=' bg-customBlue text-white rounded-lg px-3 mr-4'>
-                    <div className='flex items-center px-10'>
-                      <img src={apple} alt="Download on the App Store" width={32} height={32} />
-                      <div className=' text-start ml-3 text-sm py-4'>
-                        <div>Download on the</div>
-                        <div>App Store</div>
-                      </div>
-                    </div>
-                  </button>
-                </Link>
-                <Link to='/'>
-                  <button className='bg-customBlue text-white rounded-lg px-5'>
-                    <div className='flex items-center px-10'>
-                      <img src={playstore} alt="Get it on Google Play" width={35} height={35} />
-                      <div className=' text-start ml-2 text-sm py-4'>
-                        <div>Get it on</div>
-                        <div>Google Play</div>
-                      </div>
-                    </div>
-                  </button>
-                </Link>
-        </div>
+  <div className='bg-white p-4 rounded-t-3xl w-full '> 
+  <div className="flex mt-2 justify-center sm:hidden space-x-2">
+  <Link to="/">
+    <button className="bg-customBlue text-white rounded-lg px-2 py-1 flex items-center">
+      <img src={apple} alt="Download on the App Store" className="w-5 h-5" />
+      <div className="text-start ml-2 text-xs">
+        <div>Download on the</div>
+        <div>App Store</div>
+      </div>
+    </button>
+  </Link>
+  <Link to="/">
+    <button className="bg-customBlue text-white rounded-lg px-2 py-1 flex items-center">
+      <img src={playstore} alt="Get it on Google Play" className="w-5 h-5" />
+      <div className="text-start ml-2 text-xs">
+        <div>Get it on</div>
+        <div>Google Play</div>
+      </div>
+    </button>
+  </Link>
+</div>
+
     <div className='font-bold text-3xl p-2 px-3 mt-4 mx-2'>
       Discover, Endorse, Transform
     </div>
