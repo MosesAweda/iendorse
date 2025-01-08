@@ -186,7 +186,7 @@ const HomeCampaign = ({item}:any, index:any) => {
     }
   }, [error]);
   
-//console.log("cammpaign File", item?.campaignFiles[0]?.filePath)
+console.log("cammpaign File", item?.campaignFiles)
 console.log("home campagin", item)
   return (
     <>
@@ -233,6 +233,7 @@ console.log("home campagin", item)
        
       </div>
 
+      <Link to={`/ViewCampaign/${item?.campaignId}`}>
       {/* Campaign Title & Description */}
       <div className="my-4">
         <h1 className="font-medium text-lg truncate">{item?.campaignTitle}</h1>
@@ -250,45 +251,47 @@ console.log("home campagin", item)
           )}
         </div>
       </div>
-
+      </Link>
       {/* Media Section */}
       {item?.campaignFiles?.length > 0 && (
         <div className="my-4">
           <div className="relative">
-
-              <Carousel indicators={item?.campaignFiles.length > 1}>
+         
+              <Carousel indicators={item?.campaignFiles?.length > 2} animation="fade"  navButtonsAlwaysVisible={false}>
                 {item?.campaignFiles.map((file: any, index: any) => (
                   <div
                     key={index}
-                    className="flex items-center justify-center bg-black w-full h-[300px] rounded-lg"
+                    className="flex items-center justify-center bg-white w-full h-[300px] rounded-lg"
                   >
                     {file.filePath.endsWith('.mp4') ? (
-                      <Link to={`/ViewCampaign/${item?.campaignId}`}>
+                      
                         <video
-                        className="w-full h-full object-cover rounded-lg"
+                        className="w-full h-full object-contain rounded-lg"
                         muted
                         playsInline
                       >
                         <source src={file.filePath} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
-                      </Link>
+                       
                     ) : (
-                      <Link to={`/ViewCampaign/${item?.campaignId}`}>
+                  
                       <img
                         src={file.filePath}
                         alt={`Campaign ${index}`}
-                        className="w-full h-full object-cover rounded-lg"
+                        className="w-full h-full object-contain rounded-lg"
                       />
-                      </Link>
+                       
                     )}
                   </div>
                 ))}
-              </Carousel>
+                </Carousel>
+                
           
           </div>
         </div>
       )}
+  
 
       {/* Actions Section */}
       <div className="flex mt-4 mb-3 text-sm gap-5">
