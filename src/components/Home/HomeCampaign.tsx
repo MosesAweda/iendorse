@@ -80,14 +80,7 @@ const HomeCampaign = ({item}:any, index:any) => {
   
 
   const { data:ApiFeedback, loading: ApiFeedbackLoading, error, postData} = usePost(endorseWithWalletURL);
-  var settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
-
+  
  const fetchWalletBalance = async () => {
     setLoading(true);
 
@@ -278,7 +271,9 @@ var settings = {
         <div className="my-4">
           <div className="relative">
          
-              <Carousel indicators={item?.campaignFiles?.length > 1} autoPlay animation="fade"  navButtonsAlwaysInvisible >
+         {
+            item?.campaignFiles.length > 1 ?
+           <Slider {...settings}  className="mb-10">
                 {item?.campaignFiles.map((file: any, index: any) => (
                   <div
                     key={index}
@@ -287,7 +282,7 @@ var settings = {
                     {file.filePath.endsWith('.mp4') ? (
                       
                         <video
-                        className="w-full h-full object-contain rounded-lg"
+                        className="w-full h-full object-cover rounded-lg"
                         muted
                         playsInline
                       >
@@ -300,13 +295,36 @@ var settings = {
                       <img
                         src={file.filePath}
                         alt={`Campaign ${index}`}
-                        className="w-full h-full object-contain rounded-lg"
+                        className="w-full h-full object-cover rounded-lg"
                       />
                        
                     )}
                   </div>
                 ))}
-                </Carousel>
+                </Slider>
+                :
+                (
+                  <div className="flex items-center justify-center bg-white w-full h-[300px] rounded-lg">
+                  {item?.campaignFiles[0].filePath.endsWith(".mp4") ? (
+                    <video
+                      className="w-full h-full object-cover rounded-lg"
+                      muted
+                      playsInline
+                      controls
+                    >
+                      <source src={item?.campaignFiles[0].filePath} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <img
+                      src={item?.campaignFiles[0].filePath}
+                      alt="Campaign Media"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  )}
+                </div>
+                )
+            }
                 
           
           </div>

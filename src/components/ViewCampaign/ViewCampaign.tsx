@@ -284,7 +284,7 @@ const ViewCampaign = ({ item }: any) => {
 
                 <div className="text-justify my-2 pb-3  description-container">
                   {campaignData?.description}
-                  <p className="text-justify text-xs py-2">{formatDate(campaignData?.createdDate)}</p>
+                  <p className="text-justify text-xs py-2">{formatDate(campaignData?.created)}</p>
                 </div>
               </  div>
 
@@ -303,9 +303,7 @@ const ViewCampaign = ({ item }: any) => {
 
 
           </div>
-
-
-           <h1>hjk</h1>
+ 
         </div>
 
         
