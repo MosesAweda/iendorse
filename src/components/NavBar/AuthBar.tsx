@@ -16,7 +16,7 @@ import wallet from '../svg/wallet.svg';
 import battery from '../svg/battery.svg';
 import support from '../svg/support.svg';
 import Initials from "../Initials";
-import Logout from "../Logout";
+import Logout from "../authentication/Logout";
 
 
 const AuthBar= ({toggleSidebar}:any)=> {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { isAuthenticated } from "../auth";
+import { isAuthenticated } from "../authentication/auth";
 import DefaultNav from './DefaultNav';
 import GuestNavbar from "./GuestNavBar";
 import AuthBar from "./AuthBar";
@@ -13,7 +13,7 @@ import deleteAccount from '../svg/deleteAccount.svg';
 import wallet from '../svg/wallet.svg';
 import battery from '../svg/battery.svg';
 import support from '../svg/support.svg';
-import Logout from "../Logout";
+import Logout from "../authentication/Logout";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);

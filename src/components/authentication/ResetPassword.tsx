@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import logo from './svg/logo.svg';
 import facebook from './svg/facebook.svg';
 import instagram from './svg/instagram.svg';
-import { baseURL } from './URL';
+import { baseURL } from '../URL';
 
  
 

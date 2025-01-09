@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { account } from '../appwrite';
+import { account } from '../../appwrite';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 

@@ -13,7 +13,7 @@ import { baseURL } from "../URL";
 import useFetch from "../Hooks/useFetch";
 import usePost from "../Hooks/usePost";
 import {toast} from "react-toastify";
-import { isAuthenticated } from '../auth';
+import { isAuthenticated } from '../authentication/auth';
 import SignInFirst from "./SignInFirst";
 import { deflate } from "zlib";
 import Carousel from 'react-material-ui-carousel'
