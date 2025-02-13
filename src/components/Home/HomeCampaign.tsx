@@ -208,7 +208,7 @@ var settings = {
     
     <div
       key={item.campaignId}
-      className="p-4 w-full max-w-[350px] border-gray-200 border sm:border-0 bg-white rounded-2xl my-5 px-6"
+      className="p-4 w-full  sm:max-w-[500px] max-w-[350px] border-gray-200 border sm:border-0 bg-white rounded-2xl my-5 px-6"
     >
       {/* Header Section */}
       <div className="flex items-start justify-end sm:flex-wrap">

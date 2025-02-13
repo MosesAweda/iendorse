@@ -122,56 +122,47 @@ const handleScroll = () => {
     <>
       <Navbar />
 
-      <div
-        className="hidden sm:block flex flex-col w-full h-screen"
-        style={{
-          backgroundImage: 'url(https://res.cloudinary.com/dgso4wgqt/image/upload/v1733496676/hero_awra5e.png)',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          margin: 0,
-          padding: 0,
-        }}
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 h-full gap-4 p-4">
-          <div className="flex justify-center items-center p-2">
-            <div className="mx-3 max-w-md">
-              <h1 className="text-4xl font-bold mb-4" style={{ fontFamily: "Georgia" }}>
-                Discover, Endorse, Transform
-              </h1>
-              <p className="text-sm md:text-base leading-relaxed">
-                Dive into our platform to discover a world of impactful campaigns, each one a beacon of hope, a catalyst for transformation.
-                With iEndorse, you have the power to endorse causes close to your heart, amplifying their reach and influence.
-                Every endorsement is a vote for change, a commitment to shaping a better tomorrow for all.
-              </p>
-              <div className='flex mt-8'>
-                <Link to='/'>
-                  <button className='p-1 bg-customBlue text-white rounded-lg px-5 mr-4'>
-                    <div className='flex items-center'>
-                      <img src={apple} alt="Download on the App Store" width={20} height={20} />
-                      <div className='ml-2 text-xs p-1'>
-                        <div>Download on the</div>
-                        <div>App Store</div>
-                      </div>
-                    </div>
-                  </button>
-                </Link>
-                <Link to='/'>
-                  <button className='p-1 bg-customBlue text-white rounded-lg px-5'>
-                    <div className='flex items-center'>
-                      <img src={playstore} alt="Get it on Google Play" width={20} height={20} />
-                      <div className=' text-xs p-1 px-3'>
-                        <div>Get it on</div>
-                        <div>Google Play</div>
-                      </div>
-                    </div>
-                  </button>
-                </Link>
-              </div>
-            </div>
+      <div className="hidden sm:block w-full">
+    <div 
+      className="w-full min-h-[700px] bg-cover bg-center flex items-center"
+      style={{
+        backgroundImage: 'url(https://res.cloudinary.com/dgso4wgqt/image/upload/v1733496676/hero_awra5e.png)'
+      }}
+    >
+      <div className="container mx-auto px-4">
+        <div className="max-w-lg">
+          <h1 className="text-4xl font-bold mb-6" style={{ fontFamily: "Georgia" }}>
+            Discover, Endorse, Transform
+          </h1>
+          <p className="text-base leading-relaxed mb-8 sm:max-w-sm sm:max-w-none">
+            Dive into our platform to discover a world of impactful campaigns, each one a beacon of hope, a catalyst for transformation.
+            With iEndorse, you have the power to endorse causes close to your heart, amplifying their reach and influence.
+            Every endorsement is a vote for change, a commitment to shaping a better tomorrow for all.
+          </p>
+          <div className="flex space-x-4">
+            <Link to="/">
+              <button className="bg-customBlue text-white rounded-lg px-5 py-2 flex items-center">
+                <img src={apple} alt="App Store" className="w-5 h-5" />
+                <div className="ml-2 text-xs">
+                  <div>Download on the</div>
+                  <div>App Store</div>
+                </div>
+              </button>
+            </Link>
+            <Link to="/">
+              <button className="bg-customBlue text-white rounded-lg px-5 py-2 flex items-center">
+                <img src={playstore} alt="Play Store" className="w-5 h-5" />
+                <div className="ml-2 text-xs">
+                  <div>Get it on</div>
+                  <div>Google Play</div>
+                </div>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
-
+    </div>
+  </div>
 
       <div 
   style={{
@@ -185,7 +176,7 @@ const handleScroll = () => {
     flexDirection: 'column', // Stack children vertically
     justifyContent: 'flex-end' // Align children to the bottom
   }} 
-  className="flex flex-col justify-center items-center text-xs  sm:hidden ">
+  className="flex flex-col justify-center items-center text-xs  sm:hidden block" >
   
   <img 
     src='images/mobileHero.png' 

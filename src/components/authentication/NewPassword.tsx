@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import logo from './svg/logo.svg';
+import logo from '../svg/logo.svg';
 import { Link } from 'react-router-dom';
 import { baseURL } from '../URL';
 import { useLocation } from 'react-router-dom';

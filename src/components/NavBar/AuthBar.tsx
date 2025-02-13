@@ -112,118 +112,126 @@ const AuthBar= ({toggleSidebar}:any)=> {
       };
     return(
       <>
-      <nav className={getNavClasses()}>
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-            <img src="/images/logo.png" className="h-12 md:ml-10" alt="iendorse" />
-          </a>
-          <div className="flex lg:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-         
-     <div  className="relative inline-block text-left">
-      <div className="flex cursor-pointer "
-        aria-current="page"
-        onClick={() => {
-          toggleSidebar();
-          setMenuOpen(false);
-        }}>
-      <div className="  inline-block flex items-center z-1 mr-3 " >
-          {userImage ? (
-            <img className="rounded-full border-2 border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
-             src={userImage} width={36} height={36} alt="Avatar" />
-          ):(
-            <div className="flex items-center justify-center h-10 w-10 bg-blue-100 rounded-full text-customBlue p-2">
-            <Initials fullName={userName} className="text-xs " />  
-            </div>
-          )
-        } 
-        <span className="ml-2 align-middle  text-sm text-gray-700">  {userName} </span>
-        
-          </div>
-          </div>
-  
-      
-    </div>
-  
-            <button
-              onClick={toggleMenu}
-              data-collapse-toggle="navbar-sticky"
-              type="button"
-              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-              aria-controls="navbar-sticky"
-              aria-expanded={menuOpen}
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 17 14"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M1 1h15M1 7h15M1 13h15"
-                />
-              </svg>
-            </button>
-          </div>
-          <div
-  className={` items-center justify-between ${
-    menuOpen ? '' : 'hidden'
-  } w-full lg:flex lg:w-auto lg:order-1`}
-  id="navbar-sticky"
->
-  <ul className="flex flex-col p-4 lg:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-white">
-    {[
-      { to: '/', label: 'Home', icon: home },
-      { to: '/Search', label: 'Search', icon: search },
-      { to: '/CreateCampaign', label: 'Create Campaign', icon: plus },
-      { to: '/Feed', label: 'My Feed', icon: feed },
-      {
-        label: 'My Account',
-        icon: account,
-        onClick: () => {
-          toggleSidebar();
-          setMenuOpen(false);
-        },
-      },
-      { to: '/Notifications', label: 'Notification', icon: bell },
-    ].map((item, index) =>
-      item.to ? (
-        <li key={index}>
-          <Link
-            to={item.to}
-            className="block py-2 px-3 text-xs rounded lg:bg-transparent lg:p-0"
-            aria-current="page"
-          >
-            <span className="flex items-center">
-              <img src={item.icon} className="h-5 mr-2" alt={`${item.label} icon`} /> {item.label}
-            </span>
-          </Link>
-        </li>
-      ) : (
-        <li key={index}>
-          <a
-            href="#"
-            onClick={item.onClick}
-            className="block py-2 px-3 text-xs rounded lg:bg-transparent lg:p-0"
-            aria-current="page"
-          >
-            <span className="flex items-center">
-              <img src={item.icon} className="h-5 mr-2" alt={`${item.label} icon`} /> {item.label}
-            </span>
-          </a>
-        </li>
-      )
-    )}
-  </ul>
-</div>
+ 
+<nav className={getNavClasses()}>
+  <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    {/* Logo Section */}
+    <Link to="/" className="flex items-center">
+      <img src="/images/logo.png" className="h-8 sm:h-10 md:h-12 md:ml-10" alt="iendorse" />
+    </Link>
 
+    {/* Profile and Mobile Menu Section */}
+    <div className="flex items-center gap-4 lg:order-2">
+      {token ? (
+        // Authenticated User Display
+        <div className="relative inline-block text-left">
+          <div 
+            className="flex items-center cursor-pointer"
+            onClick={() => {
+              toggleSidebar();
+              setMenuOpen(false);
+            }}
+          >
+            <div className="flex items-center z-1">
+              {userImage ? (
+                <img 
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 border-white" 
+                  style={{ boxShadow: '0 0 0 1px #0D236E' }}
+                  src={userImage} 
+                  alt="Avatar" 
+                />
+              ) : (
+                <div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 bg-blue-100 rounded-full text-customBlue">
+                  <Initials fullName={userName} className="text-xs" />
+                </div>
+              )}
+              <span className="hidden sm:block ml-2 text-sm text-gray-700">{userName}</span>
+            </div>
+          </div>
         </div>
-      </nav>
+      ) : (
+        // Sign In Button for Non-authenticated Users
+        <Link 
+          to="/signin" 
+          className="inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2.5 text-sm font-medium text-white bg-customBlue rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 transition-colors"
+        >
+          Sign in
+        </Link>
+      )}
+
+      {/* Mobile Menu Button */}
+      <button
+        onClick={toggleMenu}
+        className="inline-flex items-center p-2 w-10 h-10 justify-center text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        aria-controls="navbar-sticky"
+        aria-expanded={menuOpen}
+      >
+        <span className="sr-only">Open main menu</span>
+        <svg
+          className="w-5 h-5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 17 14"
+        >
+          <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M1 1h15M1 7h15M1 13h15"
+          />
+        </svg>
+      </button>
+    </div>
+
+    {/* Navigation Menu */}
+    <div
+      className={`${
+        menuOpen ? 'block' : 'hidden'
+      } w-full lg:flex lg:w-auto lg:order-1`}
+      id="navbar-sticky"
+    >
+      <ul className="flex flex-col p-4 lg:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-white">
+        {[
+          { to: '/', label: 'Home', icon: home },
+          { to: '/Search', label: 'Search', icon: search },
+          { to: '/CreateCampaign', label: 'Create Campaign', icon: plus },
+          { to: '/Feed', label: 'My Feed', icon: feed },
+          {
+            label: 'My Account',
+            icon: account,
+            onClick: () => {
+              toggleSidebar();
+              setMenuOpen(false);
+            },
+          },
+          { to: '/Notifications', label: 'Notification', icon: bell },
+        ].map((item, index) => (
+          <li key={index}>
+            {item.to ? (
+              <Link
+                to={item.to}
+                className="flex items-center py-2 px-3 text-gray-700 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-blue-700 lg:p-0"
+              >
+                <img src={item.icon} className="h-5 w-5 mr-2" alt={`${item.label} icon`} />
+                <span className="text-sm">{item.label}</span>
+              </Link>
+            ) : (
+              <button
+                onClick={item.onClick}
+                className="flex w-full items-center py-2 px-3 text-gray-700 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:hover:text-blue-700 lg:p-0"
+              >
+                <img src={item.icon} className="h-5 w-5 mr-2" alt={`${item.label} icon`} />
+                <span className="text-sm">{item.label}</span>
+              </button>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</nav>
   
       </>
   

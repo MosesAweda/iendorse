@@ -68,6 +68,9 @@ const FeedCampaign = ({ item }: any) => {
   const closePromotionSuccessfulModal = () => {setPromotionSuccessfulModal(false); setAllData({})};
   const openShareCampaignModal = () => setShareCampaignModal(true);
   const closeShareCampaignModal = () =>   setShareCampaignModal(false);
+   const [isExpanded, setIsExpanded] = useState(false);
+    const toggleReadMore = () => setIsExpanded(!isExpanded);
+    const maxLength = 100; 
 
 const campaignId = item.campaignId;
 const walletURL = `${baseURL}/Wallet/WalletProfile`
@@ -208,7 +211,24 @@ const endorseWithWalletData = {
   ))}
 </Carousel>
 
-
+<div>
+<div className="my-4">
+        <h1 className="font-medium text-lg truncate">{item?.campaignTitle}</h1>
+        <div className="mt-2">
+          <p className="text-justify text-sm">
+            {isExpanded ? item?.description : `${item?.description.slice(0, maxLength)}...`}
+          </p>
+          {item?.description?.length > maxLength && (
+            <button
+              onClick={toggleReadMore}
+              className="text-customBlue font-medium mt-2"
+            >
+              {isExpanded ? 'Read Less' : 'Read More'}
+            </button>
+          )}
+        </div>
+      </div>
+</div>
 
  
  

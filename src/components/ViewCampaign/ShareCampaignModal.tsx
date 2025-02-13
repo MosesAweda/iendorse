@@ -53,7 +53,7 @@ interface ShareCampaignModalProps {
     return (
         <div>
             <div className={`fixed z-50 inset-0 transition-opacity ${isOpen ? 'flex' : 'hidden'}  items-start mt-20 sm:mt-1 sm:items-center justify-center`}>
-        <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
+        <div className="fixed z-50 inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
      
         <div className="relative z-10 flex-col items-center justify-center max-h-screen">
         <div className='  flex justify-center p-4'>      

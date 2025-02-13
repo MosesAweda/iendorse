@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, } from 'react-router-dom';
 import logo from './logo.svg';
 import Home from "./components/Home/Home"
-import SignUp from './components/SignUp';
-import SignIn from './components/SignIn';
-import Login from './components/SignIn';
+import SignUp from './components/authentication/SignUp';
+import SignIn from './components/authentication/SignIn';
+import Login from './components/authentication/SignIn';
 import ConfirmOTP from './components/ConfirmOTP';
 import ResetPassword from './components/authentication/ResetPassword';
 import NewPasword from './components/authentication/NewPassword';
@@ -31,6 +31,7 @@ import {Sample} from './components/sample';
 import AuthCallback from './components/authentication/AuthCallback';
 import TandC from './components/TandC';
 import CloudinaryApp from './components/CloudinaryApp';
+import NotFound from './components/notfound';
 
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
           <Route path='/sample' element={<Sample />} />
           <Route path='/TermsAndConditions' element={<TandC />} />
           <Route path='/CloudinaryApp' element={<CloudinaryApp />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </Router>
     </>

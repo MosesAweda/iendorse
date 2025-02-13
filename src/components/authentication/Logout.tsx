@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import close from './svg/close.svg';
-import exit from './svg/exit.svg'
+import close from '../svg/close.svg';
+import exit from '../svg/exit.svg'
 import { toast } from 'react-toastify';
 
 interface LogutProps  {

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import close from '../svg/close.svg';
 import insufficient from '../svg/insufficient.svg'
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 interface InsufficientWalletBalanceModalProps  {
   isOpen: boolean;
@@ -17,7 +18,7 @@ const InsufficientWalletBalanceModal: React.FC<InsufficientWalletBalanceModalPro
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 transition-opacity flex  items-start sm:items-center justify-center">
+    <div className="fixed inset-0 transition-opacity flex  z-50 sm:mt-1 sm:items-center items-start mt-20  justify-center">
     <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
 
     <div className="relative p-4 w-full max-w-md max-h-full">
@@ -43,9 +44,11 @@ const InsufficientWalletBalanceModal: React.FC<InsufficientWalletBalanceModalPro
             </div>
             <div className="flex mt-10 text-sm justify-between mb-3">
           <div className="flex mr-5 items-center w-full">
+            <Link to="/Wallet" className='w-full cursor-pointer'>  
             <button className="p-3 bg-customBlue text-white rounded-md w-full">
               Fund Walllet
             </button>
+            </Link>
           </div>
           <div className="flex items-center w-full">
             <button

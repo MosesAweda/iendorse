@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, ChangeEvent, KeyboardEvent, FormEvent } from 'react';
-import logo from './svg/logo.svg';
-import facebook from './svg/facebook.svg';
-import instagram from './svg/instagram.svg';
+import logo from '../svg/logo.svg';
+import facebook from '../svg/facebook.svg';
+import instagram from '../svg/instagram.svg';
 import { baseURL } from '../URL';
 import { toast } from "react-toastify";
 import { useNavigate, Link } from 'react-router-dom';

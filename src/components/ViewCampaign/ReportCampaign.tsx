@@ -92,7 +92,7 @@ const ReportCampaign: React.FC<ReportCampaignProps> = ({ isOpen, onClose, campai
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 transition-opacity flex items-start sm:items-center justify-center">
+    <div className="fixed z-50 inset-0 transition-opacity flex items-center justify-center">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
 
       <div className="relative p-4 w-full max-w-md max-h-full">
@@ -112,7 +112,7 @@ const ReportCampaign: React.FC<ReportCampaignProps> = ({ isOpen, onClose, campai
               <div>
                 <select
                   onChange={handleComplaint}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   value={complaint} // Ensure controlled component behavior
                 >
                   <option disabled value="">Complaint</option>
@@ -133,7 +133,7 @@ const ReportCampaign: React.FC<ReportCampaignProps> = ({ isOpen, onClose, campai
                     id="note"
                     value={description}
                     rows={6}
-                    className="resize-none text-gray-900 text-sm block w-full p-2.5"
+                    className="resize-none text-gray-900 text-md block w-full p-2.5"
                     placeholder="Description"
                   />
                 </div>

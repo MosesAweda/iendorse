@@ -1,14 +1,16 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import logo from './svg/logo.svg';
-import facebook from './svg/facebook.svg';
-import instagram from './svg/instagram.svg';
+import logo from '../svg/logo.svg';
+import facebook from '../svg/facebook.svg';
+import instagram from '../svg/instagram.svg';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-import './PhoneInput.css';
-import { baseURL } from './URL';
+import '../PhoneInput.css';
+import { baseURL } from '../URL';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Audio, LineWave } from 'react-loader-spinner';
+import { GoogleLogin } from '@react-oauth/google';
+import {jwtDecode, JwtPayload} from 'jwt-decode'; 
 
 interface Errors {
   fullName?: string;
@@ -17,6 +19,12 @@ interface Errors {
   confirmPass?: string;
   phone?: string;
 }
+interface MyJwtPayload extends JwtPayload {
+  name: string;
+  // Add other properties that your JWT payload contains
+  email?: string;
+}
+
 
 const SignUp: React.FC = () => {
   const [fullName, setFullName] = useState<string>('');
@@ -30,6 +38,57 @@ const SignUp: React.FC = () => {
   const [errors, setErrors] = useState<Errors>({});
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+ 
+  const handleGoogleSignIn = async (credentialResponse: any) => {
+    if (credentialResponse.credential) {
+      const decodedUser = jwtDecode<MyJwtPayload>(credentialResponse.credential);
+  
+      console.log("Credential Response", credentialResponse);
+      console.log('Google Sign-In successful:', decodedUser);
+  
+      // Prepare the request body for the API endpoint
+      const requestBody = {
+        fullName: decodedUser.name,
+        emailAddress: decodedUser.email,
+        socialMediaPlatform: "Google",
+      };
+  
+      try {
+        // Send the user data to the backend
+        const response = await fetch(`${baseURL}/Account/CreateAccountForUserWithSocialMedia`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+  
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log("User successfully created/validated:", responseData);
+            window.localStorage.setItem("userData", JSON.stringify(responseData.data));
+            window.localStorage.setItem("token", responseData.data.jwtToken);
+          // Show success notification
+          toast.success(`Welcome, ${decodedUser.name}!`);
+  
+          // Navigate to the desired page
+          navigate('/');
+        } else {
+          const errorData = await response.json();
+          console.error("Error from API:", errorData);
+          toast.error("Failed to create or validate the user.");
+        }
+      } catch (error) {
+        console.error("Error during Google Sign-In:", error);
+        toast.error("An unexpected error occurred during Google Sign-In.");
+      }
+    } else {
+      toast.error("Google Sign-In failed.");
+    }
+  };
+  
+
+
 
   const validateField = (name: string, value: string): string | undefined => {
     switch (name) {
@@ -279,17 +338,25 @@ const SignUp: React.FC = () => {
         <div className="flex items-center justify-center">
           <div className="flex-1 border-t border-gray-300"></div>
           <p className="px-4">Or Sign up with</p>
+          
           <div className="flex-1 border-t border-gray-300"></div>
+          
         </div>
         <div className="flex justify-center space-x-4">
+                <GoogleLogin
+                  onSuccess={handleGoogleSignIn}
+                  onError={() => toast.error('Google Sign-In failed.')}
+                />
+              </div>
+        {/* <div className="flex justify-center space-x-4">
           <img src={facebook} alt="Facebook"  width={30} height={30}/>
           <img src={instagram} alt="Instagram"   width={30} height={30} />
-        </div>
+        </div> */}
         <div className="flex items-center justify-center">
           <p className="px-4">You already have an account? <a href="/SignIn" className='text-customBlue hover:text-blue-500'>Sign in</a></p>
         </div>
         <div className="flex items-center justify-center">
-      
+    
         </div>
       </div>
     </div>

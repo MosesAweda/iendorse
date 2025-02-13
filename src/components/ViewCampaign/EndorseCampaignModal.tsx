@@ -61,7 +61,7 @@ const EndorseCampaignModal: React.FC<EndorseCampaignModalProps> = ({ isOpen, onC
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 transition-opacity flex items-start mt-20 sm:mt-1 sm:items-center justify-center">
+    <div className="fixed z-50 inset-0 transition-opacity flex items-start mt-20 sm:mt-1 sm:items-center justify-center">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
 
       <div className="relative p-4 w-full max-w-md max-h-full">
@@ -82,16 +82,18 @@ const EndorseCampaignModal: React.FC<EndorseCampaignModalProps> = ({ isOpen, onC
                 <input
                   onChange={handleNumberOfUnits}
                   id="units"
-                  className="w-full py-2 px-3 text-sm mb-1 rounded-md border text-gray-900"
+                  className="w-full py-2 px-3 text-md mb-1 rounded-md border text-gray-900"
                   placeholder="Number of units"
                 />
-                {unitsError && <p className="text-red-500 text-xs mb-2 mx-1">{unitsError}</p>}
+                {unitsError && 
+                <p className="text-red-500 text-xs mb-2 mx-1">{unitsError}</p>}
                 <div className="mt-2 mb-4">
 
-               {units > 0 &&   
-                <span className="bg-blue-50 text-blue-500 px-2 text-xs rounded-full py-2 mt-2">
+               { /* units > 0 &&   
+                <span className="bg-blue-50 text-blue-500 px-2 text-md rounded-full py-2 mt-2">
                     1000 naira equals 1 unit
-                  </span>}
+                  </span>
+                  */}
                 </div>
               </div>
 
@@ -103,7 +105,7 @@ const EndorseCampaignModal: React.FC<EndorseCampaignModalProps> = ({ isOpen, onC
                     id="note"
                     value={note}
                     rows={6}
-                    className="resize-none text-gray-900 text-sm block w-full p-2.5"
+                    className="resize-none text-gray-900 text-md block w-full p-2.5"
                     placeholder="Leave an Endorse note"
                   />
                  

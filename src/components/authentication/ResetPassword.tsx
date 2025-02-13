@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import logo from './svg/logo.svg';
-import facebook from './svg/facebook.svg';
-import instagram from './svg/instagram.svg';
+import logo from '../svg/logo.svg';
+import facebook from '../svg/facebook.svg';
+import instagram from '../svg/instagram.svg';
 import { baseURL } from '../URL';
 
  

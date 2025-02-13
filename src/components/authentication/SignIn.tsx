@@ -3,7 +3,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import {jwtDecode, JwtPayload} from 'jwt-decode'; // Import without brackets for default export
 import logo from './svg/logo.svg';
 import google from './svg/google.svg';
-import { baseURL } from './URL';
+import { baseURL } from '../URL';
 import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import { LineWave } from 'react-loader-spinner';
@@ -23,14 +23,11 @@ const SignIn: React.FC = () => {
   const handleGoogleSignIn = (credentialResponse: any) => {
     if (credentialResponse.credential) {
       const decodedUser = jwtDecode<MyJwtPayload>(credentialResponse.credential);
- 
+      console.log("Credential Response", credentialResponse);
       console.log('Google Sign-In successful:', decodedUser);
+ 
 
-      // Save the token and user data to localStorage
-      window.localStorage.setItem('token', credentialResponse.credential);
-      window.localStorage.setItem('userData', JSON.stringify(decodedUser));
-
-      toast.success(`Welcome back, ${decodedUser.name}!`);
+     // toast.success(`Welcome back, ${decodedUser.name}!`);
       navigate('/');
     } else {
       toast.error('Google Sign-In failed.');
@@ -59,7 +56,7 @@ const SignIn: React.FC = () => {
 
         const intendedUrl = new URLSearchParams(window.location.search).get('next') || "/";
         navigate(intendedUrl);
-        toast.success('Welcome ' + data.data.fullName + '!', { autoClose: 3000,'position': 'top-center' });
+       // toast.success('Welcome ' + data.data.fullName + '!', { autoClose: 3000,'position': 'top-center' });
       } else {
         toast.error(data.message || 'An error occurred while signing in');
       }

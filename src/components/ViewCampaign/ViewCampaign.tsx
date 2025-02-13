@@ -191,6 +191,11 @@ const ViewCampaign = ({ item }: any) => {
     return dateObj.toLocaleDateString('en-GB', options);
   }
  
+  useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+  }, []);
+
 
   return (
     <>
@@ -211,7 +216,7 @@ const ViewCampaign = ({ item }: any) => {
       )}
 
       {!DataLoading && (!campaignData || DataError) && (
-        <div className="sm:bg-gray-100 bg-white h-screen flex justify-center items-center">
+        <div className="sm:bg-gray-100 bg-white flex justify-center items-start h-screen">
           <div className="text-center p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-customBlue mb-4">Campaign Not Found</h2>
             <p className="text-gray-600 mb-4">
