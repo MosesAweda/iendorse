@@ -85,37 +85,10 @@ const handleSubmit = async (e: any) => {
     return;
   }
 
-  // Map formData to the expected backend structure
-
-    // const transformedData = {
-    //   categoryId: formData.CampaignCategory,
-    //   campaignTitle: formData.CampaignTitle,
-    //   campaignLink: formData.CampaignLink,
-    //   description: formData.Description,
-    //   tags: formData?.tags?.map((tag: any) => tag.id) || [], // Handle empty or undefined tags
-    //   campaignMedias: formData.campaignMedias, // Already an array of strings (Base64)
-    //   campaignTargetAudienceAnswers: [
-    //     {
-    //       id: AgeId, 
-    //       answer: formData.Age,
-    //     },
-    //     {
-    //       id: OccupationId, // Assuming 2 is for Occupation
-    //       answer: formData.Occupation,
-    //     },
-    //     {
-    //       id: RegionId, // Assuming 3 is for Region
-    //       answer: formData.Region,
-    //     },
-    //     {
-    //       id: GenderId, // Assuming 4 is for Gender
-    //       answer: formData.Gender,
-    //     }
-    //   ],
-    //   campaignUnit: 10, // If campaignUnit is a fixed value or needs to be derived
-    // };
+  
     
     const transformedData = {
+
       categoryId: formData.CampaignCategory || 0, // Default to 0 if undefined
       campaignTitle: formData.CampaignTitle || "string", // Default placeholder
       campaignLink: formData.CampaignLink || "string", // Default placeholder
@@ -151,6 +124,7 @@ const handleSubmit = async (e: any) => {
     console.log("Payload being sent:", JSON.stringify(transformedData)); // Log full request payload
   
     const apiUrl = `${baseURL}/Campaign/CreateCampaignV4`;
+    const facebookApiUrl = `http://50.16.151.222:4000/upload-photoV1`;
     setCreateLoading(true); // Show loading indicator
   
     try {
@@ -180,12 +154,107 @@ const handleSubmit = async (e: any) => {
       console.error('Error creating campaign:', error); // Log the error for debugging
       toast.error('An error occurred while creating the campaign');
     } finally {
+      sendToFacebook();
+      sendVideoToFacebook();
       setCreateLoading(false); // Hide loading indicator
     }
   }
   
   
+  const categories = ["Education", "Church",  "Politics",
+    "Gaming", "Sports", "Music", "Health & Fitness",
+    "Travel",     "Cooking",   "Art & Craft"
+  ];
+  
 
+  const sendToFacebook = async () => {
+    setCreateLoading(true); // Show loading indicator
+  
+    const apiUrl = `http://50.16.151.222:4000/upload-photoV1`;
+  
+    if (!formData.rawPhotos || formData.rawPhotos.length === 0) {
+      console.log("No file selected for upload.");
+      setCreateLoading(false);
+      return;
+    }
+  
+
+    const formDataPayload = new FormData();
+    formDataPayload.append("campaignTitle", formData.CampaignTitle); 
+    formDataPayload.append("photo", formData.rawPhotos[0]); 
+    formDataPayload.append("description", formData.Description); 
+    formDataPayload.append("campaignLink", formData.CampaignLink);
+    formDataPayload.append("campaignTargetAudienceAnswer", '#' + categories[formData.CampaignCategory - 1]);
+    console.log("Payload being sent:", formDataPayload); // Log full request payload
+ 
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        body: formDataPayload, // Send FormData
+      });
+  
+      const data = await response.json(); // Parse response
+  
+      console.log("Response received:", data); // Log API response for debugging
+  
+      if (response.ok && data.succeeded) {
+        console.log("Successfully uploaded campaign media to Facebook");
+     //   toast.success("Successfully uploaded campaign media to Facebook");
+      } else {
+       // toast.error(data.message || "An error occurred while uploading campaign media to Facebook");
+      }
+    } catch (error) {
+      console.error("Facebook upload error:", error); // Log the error for debugging
+     // toast.error("An error occurred while uploading campaign media to Facebook");
+    } finally {
+      setCreateLoading(false); // Hide loading indicator
+    }
+  };
+  
+  const sendVideoToFacebook = async () => {
+    setCreateLoading(true); // Show loading indicator
+    console.log("Video data:", formData.rawVideos);
+    const apiUrl = `http://50.16.151.222:4000/upload-videoV1`;
+  
+    if (!formData.rawVideos|| formData.rawVideos.length === 0) {
+      console.log("No video available for upload.");
+      setCreateLoading(false);
+      return;
+    }
+  
+
+    
+    const formDataPayload = new FormData();
+    formDataPayload.append("campaignTitle", formData.CampaignTitle); 
+    formDataPayload.append("video", formData.rawVideos[0]); 
+    formDataPayload.append("description", formData.Description); 
+    formDataPayload.append("campaignLink", formData.CampaignLink);
+    formDataPayload.append("campaignTargetAudienceAnswer", '#' + categories[formData.CampaignCategory - 1]);
+ 
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        body: formDataPayload, // Send FormData
+      });
+  
+      const data = await response.json(); // Parse response
+  
+      console.log("Response received:", data); // Log API response for debugging
+  
+      if (response.ok && data.succeeded) {
+        console.log("Successfully uploaded campaign video to Facebook");
+      } else {
+        console.log(data.message || "An error occurred while uploading campaign media to Facebook");
+      }
+    } catch (error) {
+      console.error("Facebook upload error:", error); // Log the error for debugging
+      toast.error("An error occurred while uploading campaign video to Facebook");
+    } finally {
+      setCreateLoading(false); // Hide loading indicator
+    }
+  };
+  
+  
   
 
 const handleSelectAge = (ages: string | string[]) => {

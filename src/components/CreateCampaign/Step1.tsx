@@ -14,7 +14,7 @@ interface person {
   imageUrl?: string;
 }
 
-const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange, formData }: any) => {
+const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange, handleRawFileChange, formData }: any) => {
   const [peopleModal, setPeopleModal] = useState(false);
   const [selectedPeople, setSelectedPeople] = useState<any[]>(formData.tags || []);
  
@@ -63,8 +63,10 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
   
     if (target && target.files && target.files.length > 0) {
       const newFiles = Array.from(target.files) as File[];
+
   
       const images = newFiles.filter(file => file.type.startsWith('image/'));
+
       const videos = newFiles.filter(file => file.type.startsWith('video/'));
   
       // Convert images to Base64
@@ -89,6 +91,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
       // Remove duplicates and maintain a maximum of 5 items
       const combinedMedia = [
         ...uploadedMedia,
+
         ...newMediaItems.filter(newItem =>
           uploadedMedia.every(
             existing =>
@@ -110,6 +113,9 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
   
       // Update the parent form data
       handleFileChange('campaignMedias')(combinedMedia);
+      handleRawFileChange('rawPhotos')(images);
+      handleRawFileChange('rawVideos')(videos);
+       
     }
   };
   

@@ -191,10 +191,10 @@ const ViewCampaign = ({ item }: any) => {
     return dateObj.toLocaleDateString('en-GB', options);
   }
  
-  useEffect(() => {
-    // Scroll to top when component mounts
-    window.scrollTo(0, 0);
-  }, []);
+  // useEffect(() => {
+  //   // Scroll to top when component mounts
+  //   window.scrollTo(0, 0);
+  // }, []);
 
 
   return (
@@ -244,12 +244,23 @@ const ViewCampaign = ({ item }: any) => {
             <div className="p-4 max-w-lg border-gray-700 bg-white rounded-lg my-5  mx-0  sm:mx-1  mb-20">
               <div className="my-4">
 
-                {campaignData?.campaignFiles?.length > 0 && (
-                  <div className="">
-                    <img className="rounded-2xl" src={campaignData?.campaignFiles[0]?.filePath}
-                    />
-                  </div>
-                )}
+              {campaignData?.campaignFiles[0]?.filePath.endsWith('.mp4') ? (
+  <video
+    className="rounded-2xl w-full"
+    controls
+    muted
+    playsInline
+  >
+    <source src={campaignData?.campaignFiles[0]?.filePath} type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+) : (
+  <img 
+    className="rounded-2xl w-full" 
+    src={campaignData?.campaignFiles[0]?.filePath}
+    alt="Campaign Media"
+  />
+)}
 
 
               </div>

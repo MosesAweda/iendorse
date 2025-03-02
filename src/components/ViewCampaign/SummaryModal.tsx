@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import close from '../svg/close.svg';
 import paystack from '../svg/paystack.svg'
 import paypal from '../svg/paypal.svg'
@@ -16,10 +16,40 @@ interface SummaryModalProps {
 }
 
 const SummaryModal: React.FC<SummaryModalProps> = ({ isOpen, onClose,onSubmit, details, ApiLoading }) => {
+  // useEffect(() => {
+  //     if (isOpen) {
+  //       // Save the current scroll position
+  //       const scrollY = window.scrollY;
+        
+  //       // Add styles to prevent scrolling and maintain position
+  //       document.body.style.position = 'fixed';
+  //       document.body.style.top = `-${scrollY}px`;
+  //       document.body.style.width = '100%';
+  //     } else {
+  //       // Get the scroll position from the body's top property
+  //       const scrollY = document.body.style.top;
+        
+  //       // Remove the styles
+  //       document.body.style.position = '';
+  //       document.body.style.top = '';
+  //       document.body.style.width = '';
+        
+  //       // Restore scroll position
+  //       window.scrollTo(0, parseInt(scrollY || '0') * -1);
+  //     }
+  
+  //     // Cleanup function
+  //     return () => {
+  //       document.body.style.position = '';
+  //       document.body.style.top = '';
+  //       document.body.style.width = '';
+  //     };
+  //   }, [isOpen]);
+  
 
   if (!isOpen) return null;
   return (
-    <div className="fixed  z-50 inset-0 transition-opacity flex  items-start mt-20 sm:mt-1 sm:items-center justify-center">
+    <div className="z-50 fixed inset-0 transition-opacity flex items-center justify-center">
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
       <div className="relative p-4 w-full max-w-md max-h-full">
       <div className='  flex justify-center p-4'>      

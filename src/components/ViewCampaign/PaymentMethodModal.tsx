@@ -33,6 +33,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
     };
 
  
+    
   if (!isOpen) return null;
 
   return (

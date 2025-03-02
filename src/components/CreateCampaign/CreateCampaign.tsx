@@ -47,6 +47,13 @@ const CreateCampaign = () => {
   };
   
    
+  const handleRawFileChange = (fieldName: string) => (files: File[]) => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [fieldName]: files,
+    }));
+  };
+  
   
 
   // const handleSelectPeople = (selected: any) => {
@@ -60,7 +67,7 @@ const CreateCampaign = () => {
   const renderStep = (currentStep:any, formData:any, handleTagChange:any, handleFieldChange:any,  nextStep:any, prevStep:any) => {
     switch (currentStep) {
       case 1:
-        return <Step1 nextStep={nextStep} handleFieldChange={handleFieldChange} handleTagChange={handleFieldChange} handleFileChange={handleFileChange} formData={formData} />;
+        return <Step1 nextStep={nextStep} handleFieldChange={handleFieldChange} handleTagChange={handleFieldChange} handleFileChange={handleFileChange} handleRawFileChange={handleRawFileChange} formData={formData} />;
  
         
       case 2:
