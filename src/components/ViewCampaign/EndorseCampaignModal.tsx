@@ -21,14 +21,15 @@ const EndorseCampaignModal: React.FC<EndorseCampaignModalProps> = ({ isOpen, onC
   };
 
   const handleNumberOfUnits = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (isNaN(value) || value < 0) {
-      setUnits(0);
-      setUnitsError("Please enter a valid number of units.");
-    } else {
-      setUnits(value);
-      setUnitsError(""); // Clear error when valid input
-    }
+    // Only allow digits in the input
+    const sanitizedValue = e.target.value.replace(/\D/g, '');
+
+    // Convert to number or default to 0 if empty
+    const value = sanitizedValue === '' ? 0 : parseInt(sanitizedValue);
+
+    // Update state
+    setUnits(value);
+    setUnitsError(value === 0 && sanitizedValue !== '' ? "Please enter a valid number of units." : "");
   };
 
   const handleSubmit = () => {
@@ -79,17 +80,22 @@ const EndorseCampaignModal: React.FC<EndorseCampaignModalProps> = ({ isOpen, onC
 
             <div className="flex-col max-w-sm space-y-2 justify-center mb-10">
               <div>
+
                 <input
                   onChange={handleNumberOfUnits}
                   id="units"
+                  value={units || ''}
                   className="w-full py-2 px-3 text-md mb-1 rounded-md border text-gray-900"
                   placeholder="Number of units"
+                  type="text" // Using "text" instead of "number" for better control
+                  inputMode="numeric" // Shows numeric keyboard on mobile
                 />
-                {unitsError && 
-                <p className="text-red-500 text-xs mb-2 mx-1">{unitsError}</p>}
+
+                {unitsError &&
+                  <p className="text-red-500 text-xs mb-2 mx-1">{unitsError}</p>}
                 <div className="mt-2 mb-4">
 
-               { /* units > 0 &&   
+                  { /* units > 0 &&   
                 <span className="bg-blue-50 text-blue-500 px-2 text-md rounded-full py-2 mt-2">
                     1000 naira equals 1 unit
                   </span>
@@ -108,11 +114,11 @@ const EndorseCampaignModal: React.FC<EndorseCampaignModalProps> = ({ isOpen, onC
                     className="resize-none text-gray-900 text-md block w-full p-2.5"
                     placeholder="Leave an Endorse note"
                   />
-                 
+
                 </div>
-              
-              </div> 
-                {noteError && <p className="text-red-500 text-sm">{noteError}</p>}
+
+              </div>
+              {noteError && <p className="text-red-500 text-sm">{noteError}</p>}
             </div>
 
             <button

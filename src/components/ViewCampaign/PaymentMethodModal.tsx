@@ -75,7 +75,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                 </label>
               </div>
 
-              <div
+              {/* <div
                 className="flex items-center ps-4 border border-gray-200 rounded-lg cursor-pointer"
                 onClick={() => handleDivClick(paystackRef, "Paystack")}
               >
@@ -158,7 +158,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
 
           
 
-          
+           */}
 
  
 
