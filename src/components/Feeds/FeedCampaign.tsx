@@ -50,14 +50,14 @@ const FeedCampaign = ({ item }: any) => {
   const [allData, setAllData] = useState<any>({});
   const onSuccess = () => {}
   const onError = () => {}
-  const openCampaignMenu = () => setCampaignMenuOpen(true);
-  const closeCampaignMenu = () => setCampaignMenuOpen(false);
-  const openPromoteModal = () => setShowPromoteModal(true);
-  const closePromoteModal = () => setShowPromoteModal(false);
-  const openSubscriptionModal = () => setShowSubscriptionModal(true);
-  const closeSubscriptionModal = () => setShowSubscriptionModal(false);
-  const openPurchaseUnitsModal = () => setPurchaseUnitsModal(true);
-  const closePurchaseUnitsModal = () => setPurchaseUnitsModal(false);
+  const openCampaignMenu = () => { setCampaignMenuOpen(true);  document.body.style.overflow = 'hidden'; };
+  const closeCampaignMenu = () => {setCampaignMenuOpen(false); document.body.style.overflow = 'auto'; };
+  const openPromoteModal = () => {setShowPromoteModal(true); document.body.style.overflow = 'hidden'; };
+  const closePromoteModal = () => {setShowPromoteModal(false); document.body.style.overflow = 'auto'; };
+  const openSubscriptionModal = () => { setShowSubscriptionModal(true);  };
+  const closeSubscriptionModal = () =>{  setShowSubscriptionModal(false)  };
+  const openPurchaseUnitsModal = () => { setPurchaseUnitsModal(true); document.body.style.overflow = 'hidden'; };
+  const closePurchaseUnitsModal = () => {setPurchaseUnitsModal(false); document.body.style.overflow = 'auto'; };
   const openPaymentMethodModal = () => setPaymentMethodModal(true);
   const closePaymentMethodModal = () => setPaymentMethodModal(false);
   const openInsufficientWalletModal = () => setInsufficientWalletModal(true);
@@ -171,7 +171,7 @@ const endorseWithWalletData = {
   }
   return (
     <>
-      <div className="p-4 w-full max-w-md mx-1 border-gray-700 bg-white rounded-lg my-5">
+      <div className="p-4 w-full  max-w-lg sm:border-gray-200 sm:border  bg-white rounded-2xl my-5 px-6">
       <div className="flex items-center justify-between mb-3" >
           <div>
             <button className="bg-green-100 text-green-600 rounded-lg px-4 py-2 text-xs font-medium">

@@ -69,7 +69,6 @@ const HomeCampaign = ({item}:any, index:any) => {
   const closeSummaryModal = () => { setSummaryModal(false); document.body.style.overflow = 'auto'; }
   const openShareCampaignModal = () =>  { setShareCampaignModal(true); document.body.style.overflow = 'hidden'; }
   const closeShareCampaignModal = () =>   {setShareCampaignModal(false); document.body.style.overflow = 'auto'; }
-
   const openEndorsementSuccessfulModal = () => { setEndorsementSuccessfulModal(true); document.body.style.overflow = 'hidden'; }
   const closeEndorsementSuccessfulModal = () => {setEndorsementSuccessfulModal(false); setAllData({}); document.body.style.overflow = 'auto'; };
  
@@ -257,7 +256,7 @@ var settings = {
     
     <div
       key={item.campaignId}
-      className="p-4 w-full  max-w-lg border-gray-200 border sm:border-0 bg-white rounded-2xl my-5 px-6"
+      className="p-4 w-full  max-w-lg sm:border-gray-200 sm:border  bg-white rounded-2xl my-5 px-6 "
     >
       {/* Header Section */}
       <div className="flex items-start justify-end sm:flex-wrap">

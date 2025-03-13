@@ -97,7 +97,7 @@ const Feed: React.FC = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
-      <div className="flex flex-col bg-gray-100 justify-center items-center">
+      <div className="flex flex-col bg-white sm:bg-gray-100 justify-center items-center">
         {/* Initial Loading */}
         {pageNumber === 1 && loading && (
           <div className="flex items-center justify-center h-screen">
