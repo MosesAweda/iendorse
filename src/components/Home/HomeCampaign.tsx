@@ -61,8 +61,8 @@ const HomeCampaign = ({item}:any, index:any) => {
   const onError = () => {}
   const openSignInPrompt = () => setSignInFirstModal(true)
   const closeSignInPrompt = () => {setSignInFirstModal(false); document.body.style.overflow = 'auto'}
-  const openPaymentMethodModal = () => setPaymentMethodModal(true);
-  const closePaymentMethodModal = () => setPaymentMethodModal(false);
+  const openPaymentMethodModal = () => {setPaymentMethodModal(true);    document.body.style.overflow = 'hidden';  }
+  const closePaymentMethodModal = () => {setPaymentMethodModal(false);   document.body.style.overflow = 'auto';  }
   const openInsufficientWalletModal = () => setInsufficientWalletModal(true);
   const closeInsufficientWalletModal = () => setInsufficientWalletModal(false);
   const opensummarymodal = () => setSummaryModal(true);
@@ -113,15 +113,61 @@ const HomeCampaign = ({item}:any, index:any) => {
   };
 
 
+  const sendToFacebook = async () => {
+   // setCreateLoading(true); // Show loading indicator
+  
+    const apiUrl = `http://50.16.151.222:4000/upload-photoV1`;
+  
+    if (!item.rawPhotos || item.rawPhotos.length === 0) {
+      console.log("No file selected for upload.");
+     // setCreateLoading(false);
+      return;
+    }
+  
+
+    const formDataPayload = new FormData();
+    formDataPayload.append("campaignTitle", item.CampaignTitle); 
+    formDataPayload.append("photo", item.rawPhotos[0]); 
+    formDataPayload.append("description", item.Description); 
+    formDataPayload.append("campaignLink", item.CampaignLink);
+    formDataPayload.append("campaignTargetAudienceAnswer", '#' );
+    console.log("Payload being sent:", formDataPayload); // Log full request payload
+ 
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        body: formDataPayload, // Send FormData
+      });
+  
+      const data = await response.json(); // Parse response
+  
+      console.log("Response received:", data); // Log API response for debugging
+  
+      if (response.ok && data.succeeded) {
+        console.log("Successfully uploaded campaign media to Facebook");
+     //   toast.success("Successfully uploaded campaign media to Facebook");
+      } else {
+       // toast.error(data.message || "An error occurred while uploading campaign media to Facebook");
+      }
+    } catch (error) {
+      console.error("Facebook upload error:", error); // Log the error for debugging
+     // toast.error("An error occurred while uploading campaign media to Facebook");
+    } finally {
+     // setCreateLoading(false); // Hide loading indicator
+    }
+  };
+
   const endorseWithWalletData = {
     campaignId: item.campaignId,
     numberOfUnits: unitsToPurchase,
     endorsementNote: endorsementNote
   }
   const PayWithWallet = async () => {
+    sendToFacebook();
     console.log("..........Paying with wallet");
     try {
       await postData(endorseWithWalletData);
+      
     } catch (err) {
       console.error("Error posting data:", err);
     //  toast.error("Failed to Endorse. Please try again.");
@@ -129,6 +175,7 @@ const HomeCampaign = ({item}:any, index:any) => {
     }
   };
 
+  
   const submitEndorsement= (units:number, note: any) => {
     setUnitsToPurchase(units)
     setEndorsementNote(note)
@@ -199,7 +246,7 @@ var settings = {
   slidesToShow: 1,
   slidesToScroll: 1,
 };
-
+ 
 
 
   return (
@@ -208,7 +255,7 @@ var settings = {
     
     <div
       key={item.campaignId}
-      className="p-4 w-full  max-w-[350px] border-gray-200 border sm:border-0 bg-white rounded-2xl my-5 px-6"
+      className="p-4 w-full  max-w-[400px] border-gray-200 border sm:border-0 bg-white rounded-2xl my-5 px-6"
     >
       {/* Header Section */}
       <div className="flex items-start justify-end sm:flex-wrap">

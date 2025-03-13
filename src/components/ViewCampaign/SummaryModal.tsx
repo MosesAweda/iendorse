@@ -16,35 +16,7 @@ interface SummaryModalProps {
 }
 
 const SummaryModal: React.FC<SummaryModalProps> = ({ isOpen, onClose,onSubmit, details, ApiLoading }) => {
-  // useEffect(() => {
-  //     if (isOpen) {
-  //       // Save the current scroll position
-  //       const scrollY = window.scrollY;
-        
-  //       // Add styles to prevent scrolling and maintain position
-  //       document.body.style.position = 'fixed';
-  //       document.body.style.top = `-${scrollY}px`;
-  //       document.body.style.width = '100%';
-  //     } else {
-  //       // Get the scroll position from the body's top property
-  //       const scrollY = document.body.style.top;
-        
-  //       // Remove the styles
-  //       document.body.style.position = '';
-  //       document.body.style.top = '';
-  //       document.body.style.width = '';
-        
-  //       // Restore scroll position
-  //       window.scrollTo(0, parseInt(scrollY || '0') * -1);
-  //     }
   
-  //     // Cleanup function
-  //     return () => {
-  //       document.body.style.position = '';
-  //       document.body.style.top = '';
-  //       document.body.style.width = '';
-  //     };
-  //   }, [isOpen]);
   
 
   if (!isOpen) return null;
