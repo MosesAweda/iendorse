@@ -122,23 +122,22 @@ const HomeCampaign = ({item}:any, index:any) => {
 
 
   const sendToFacebook = async () => {
+    const categories = ["Education", "Church",  "Politics",
+      "Gaming", "Sports", "Music", "Health & Fitness",
+      "Travel",     "Cooking",   "Art & Craft"
+    ];
     // setCreateLoading(true); // Show loading indicator
       console.log("Sending to facebook", item)
-     const apiUrl = `http://50.16.151.222:4000/upload-photoV1`;
- 
- 
+     const apiUrl = `http://50.16.151.222:4000/endorse-campaign`;
      const formDataPayload = new FormData();
-     formDataPayload.append("campaignTitle", item.campaignTitle); 
-    //  formDataPayload.append("photo", item.rawPhotos[0]); 
-     formDataPayload.append("description", item.description); 
-     formDataPayload.append("campaignLink", item.campaignLink);
-     formDataPayload.append("campaignTargetAudienceAnswer", '#' );
-     console.log("Payload being sent:", formDataPayload); // Log full request payload
-  
+     formDataPayload.append("campaignId", item.campaignId); 
+     formDataPayload.append("numberOfUnits", unitsToPurchase.toString());
+     formDataPayload.append("endorsementNote", endorsementNote); 
+ 
      try {
        const response = await fetch(apiUrl, {
          method: "POST",
-         body: formDataPayload, // Send FormData
+         body: formDataPayload
        });
    
        const data = await response.json(); // Parse response
@@ -146,10 +145,10 @@ const HomeCampaign = ({item}:any, index:any) => {
        console.log("Response received:", data); // Log API response for debugging
    
        if (response.ok && data.succeeded) {
-         console.log("Successfully uploaded campaign media to Facebook");
+         console.log("Successfully Posted campaign  to Facebook");
       //   toast.success("Successfully uploaded campaign media to Facebook");
        } else {
-        // toast.error(data.message || "An error occurred while uploading campaign media to Facebook");
+        console.error(data.message || "An error occurred while uploading campaign media to Facebook");
        }
      } catch (error) {
        console.error("Facebook upload error:", error); // Log the error for debugging
