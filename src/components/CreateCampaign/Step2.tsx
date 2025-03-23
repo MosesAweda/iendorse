@@ -154,7 +154,7 @@ const handleSubmit = async (e: any) => {
       console.error('Error creating campaign:', error); // Log the error for debugging
       toast.error('An error occurred while creating the campaign');
     } finally {
-      sendToFacebook();
+    //  sendToFacebook();
       sendVideoToFacebook();
       setCreateLoading(false); // Hide loading indicator
     }

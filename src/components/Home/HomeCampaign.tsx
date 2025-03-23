@@ -128,7 +128,7 @@ const HomeCampaign = ({item}:any, index:any) => {
     ];
     // setCreateLoading(true); // Show loading indicator
       console.log("Sending to facebook", item)
-     const apiUrl = `http://50.16.151.222:4000/endorse-campaign`;
+     const apiUrl = `https://50.16.151.222:4000/endorse-campaign`;
      const formDataPayload = new FormData();
      formDataPayload.append("campaignId", item.campaignId); 
      formDataPayload.append("numberOfUnits", unitsToPurchase.toString());
@@ -161,11 +161,10 @@ const HomeCampaign = ({item}:any, index:any) => {
 
 
   const PayWithWallet = async () => {
-
     console.log("..........Paying with wallet");
     try {
       await postData(endorseWithWalletData);
-      
+        
     } catch (err) {
       console.error("Error posting data:", err);
     //  toast.error("Failed to Endorse. Please try again.");
@@ -225,6 +224,7 @@ const HomeCampaign = ({item}:any, index:any) => {
       console.log(ApiFeedback);
          closeSummaryModal()
     openEndorsementSuccessfulModal();
+    sendToFacebook();
  
     }
   }, [ApiFeedback]);
