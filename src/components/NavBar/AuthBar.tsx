@@ -80,7 +80,7 @@ const AuthBar= ({toggleSidebar}:any)=> {
           // Set new timeout to show navbar after scrolling stops
           const newTimer = setTimeout(() => {
             setPosition('visible');
-          }, 150);
+          }, 400);
     
           setScrollTimer(newTimer);
           setLastScrollY(currentScrollY);

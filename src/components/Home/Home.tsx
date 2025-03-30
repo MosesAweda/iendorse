@@ -33,7 +33,8 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [dataArray, setDataArray] = useState<any[]>([]);
   const [infiniteLoading, setInfiniteLoading] = useState(false);
-  const [categoryId, setCategoryId] = useState<any>(0);
+  const [loadingScroll, setLoadingScroll] = useState(false);
+  const [categoryId, setCategoryId] = useState<number>(Number(sessionStorage.getItem('selectedCategoryId')) || 0);
 
   const onSuccess = () => {
     // setDataArray((prev) => [...prev, ...responseData?.data || []]);
@@ -110,6 +111,7 @@ const handleScroll = () => {
     setDataArray([]); // Clear the existing data
     setCategoryId(newCategoryId); // Update the selected category
     setInfiniteLoading(false); // Reset infinite loading state
+    sessionStorage.setItem('selectedCategoryId', newCategoryId.toString());
   };
 
   useEffect(() => {
@@ -117,6 +119,44 @@ const handleScroll = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [dataArray.length, totalRecords]);
 
+  useEffect(() => {
+    setLoadingScroll(true); // Start loading when beginning the scroll restoration
+  
+    // First attempt at scroll restoration
+    const timer = setTimeout(() => {
+      restoreScrollPosition();
+    }, 300);
+  
+    // Second attempt after images might have loaded
+    const longTimer = setTimeout(() => {
+      restoreScrollPosition();
+    }, 1000);
+  
+    function restoreScrollPosition() {
+      const savedPosition = localStorage.getItem('listScrollPosition');
+      if (savedPosition) {
+        window.scrollTo({
+          top: parseInt(savedPosition),
+          behavior: 'auto'
+        });
+      }
+    }
+   
+
+    // Only remove the saved position after the longer timer
+    const cleanupTimer = setTimeout(() => {
+      localStorage.removeItem('listScrollPosition');
+     sessionStorage.removeItem('selectedCategoryId');
+      setLoadingScroll(false); // End loading after restoring the scroll position
+    }, 1500);
+  
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(longTimer);
+      clearTimeout(cleanupTimer);
+    };
+  }, []);
+  
 
   return (
     <>
@@ -227,21 +267,27 @@ const handleScroll = () => {
     </div>
 
     <div className="flex flex-wrap justify-center p-4 text-xs bg-white sm:bg-gray-100">
+  <button 
+    className={`px-5 py-2 m-2 rounded-full text-white 
+    ${categoryId === 0 ? 'bg-blue-800' : 'bg-customBlue hover:bg-blue-900'}`}
+    onClick={() => handleCategoryChange(0)} >
+      All Campaigns
+    </button>
   {categories?.map((item: any) => (
     <button 
       key={item.id} 
       className={`px-5 py-2 m-2 rounded-full text-white 
         ${item.id === categoryId ? 'bg-blue-800' : 'bg-customBlue hover:bg-blue-900'}`}
-      onClick={() => handleCategoryChange(item.id)}
+      onClick={() => handleCategoryChange(item.id === categoryId ? 0 : item.id)}
     >
       {item.categoryName}
     </button>
   ))}
-    </div>
+</div>
 
       <div className="flex flex-col bg-white sm:bg-gray-100 justify-center items-center overflow-x-hidden">
       {/* {error && <p>Error: {error.message}</p>} */}
-      {loading && !infiniteLoading ? (
+      {(loading )&&  !infiniteLoading ? (
   // Display the loading skeleton while data is being fetched
   <SkeletonCampaign />
 ) : dataArray.length === 0 ? (
@@ -263,7 +309,7 @@ const handleScroll = () => {
       <HomeCampaign key={index} item={item} />
     ))}
     {dataArray.length >= totalRecords && (
-      <div className="text-center text-gray-500 mt-4 mb-20">
+      <div className="text-center  text-gray-500 mt-4 mb-20">
         <p>You have reached the end of the campaigns.</p>
       </div>
     )}

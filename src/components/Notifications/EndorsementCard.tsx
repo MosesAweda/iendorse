@@ -38,25 +38,25 @@ const EndorsementCard = ({item}: any) => {
       };
       
 
-      // const SendThankYou = async (id: number) => {
-      //   try {
-      //     const response = await fetch(`${baseURL}/EndorseNotification/ReadNotification?NotificationId=${id}`, {
-      //       method: 'POST', 
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //       },   
-      //     });
+      const SendThankYou = async (id: number) => {
+        try {
+          const response = await fetch(`${baseURL}/EndorseNotification/ReadNotification?NotificationId=${id}`, {
+            method: 'POST', 
+            headers: {
+              'Content-Type': 'application/json',
+            },   
+          });
       
-      //     if (response.ok) {
-      //       console.log('Notification marked as read');
-      //     //  toast.success("Mark as Read")
-      //     } else {
-      //       console.error('Failed to mark notification as read');
-      //     }
-      //   } catch (error) {
-      //     console.error('Error:', error);
-      //   }
-      // };
+          if (response.ok) {
+            console.log('Notification marked as read');
+          //  toast.success("Mark as Read")
+          } else {
+            console.error('Failed to mark notification as read');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
 
 
       
@@ -84,9 +84,9 @@ const EndorsementCard = ({item}: any) => {
                                    {item.message}
 
                                  
-                               <div className="flex items-center my-2" >
-                                {/* <img src={send} alt="send" className="mr-1" />
-                                <span className='text-customBlue font-medium'>Send A Thank You</span> */}
+                               <div className="flex items-center my-2"  onClick={()=> SendThankYou(item.id)}>
+                                <img src={send} alt="send" className="mr-1" />
+                                <span className='text-customBlue font-medium'>Send A Thank You</span>
                                 </div>
                             
 

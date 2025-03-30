@@ -197,7 +197,15 @@ const ViewCampaign = ({ item }: any) => {
   }, []);
 
 
-
+  function TextComponent() {
+    // The string with literal \n characters
+    const text = "action is specifically designed to address their feelings.\\nThe Magic is here";
+    
+    // Convert literal \n to actual newlines
+    const formattedText = text.replace(/\\n/g, '\n');
+    
+    return <div style={{ whiteSpace: 'pre-line' }}>{formattedText}</div>;
+  }
 
   return (
     <>
@@ -218,22 +226,22 @@ const ViewCampaign = ({ item }: any) => {
       )}
 
       {!DataLoading && (!campaignData || DataError) && (
-        <div className="sm:bg-gray-100 bg-white flex justify-center items-start h-screen">
-          <div className="text-center p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold text-customBlue mb-4">Campaign Not Found</h2>
-            <p className="text-gray-600 mb-4">
-              The campaign you are looking for might have been removed or is currently unavailable.
-            </p>
-            <div className="flex justify-center">
-              <button 
-                onClick={() => window.history.back()} 
-                className="bg-customBlue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-              >
-                Go Back
-              </button>
-            </div>
-          </div>
+      <div className=" flex justify-center items-center pb-20  px-10 h-screen">
+      <div className="text-center p-6 bg-white rounded-lg shadow-md mb-20">
+        <h2 className="text-2xl font-bold text-customBlue mb-4">Campaign Not Found</h2>
+        <p className="text-gray-600 mb-4">
+          The campaign you are looking for might have been removed or is currently unavailable.
+        </p>
+        <div className="flex justify-center">
+          <button 
+            onClick={() => window.history.back()} 
+            className="bg-customBlue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Go Back
+          </button>
         </div>
+      </div>
+    </div>
       )}
 
       {campaignData && (
@@ -300,10 +308,10 @@ const ViewCampaign = ({ item }: any) => {
                   <a href={campaignData?.campaignUrl} ><span className="px-1">{campaignData?.campaignUrl}</span> </a>
                 </p>
 
-                <div className="text-justify my-2 pb-3  description-container">
-                  {campaignData?.description}
-                  <p className="text-justify text-xs py-2">{formatDate(campaignData?.created)}</p>
-                </div>
+                <div className="text-justify my-2 pb-3 description-container">
+              <div style={{ whiteSpace: 'pre-line' }}>{campaignData?.description}</div>
+              <p className="text-justify text-xs py-2">{formatDate(campaignData?.created)}</p>
+            </div>
               </  div>
 
 

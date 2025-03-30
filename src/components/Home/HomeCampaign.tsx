@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import share from '../svg/share.svg';
 import endorse from '../svg/endorse.svg';
 import Initials from "../Initials";
@@ -22,6 +22,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const HomeCampaign = ({item}:any, index:any) => {
+  const navigate = useNavigate();
   const userData:any = window.localStorage.getItem("userData");
   const parsedUserData = JSON.parse(userData);
   const [endorseMenu, setEndorseMenu] = useState(false);
@@ -248,6 +249,10 @@ var settings = {
 };
  
 
+const handleItemClick = (x:any) => {
+  localStorage.setItem('listScrollPosition', window.pageYOffset.toString());
+  navigate(`/viewcampaign/${x}`);
+};
 
   return (
     <>
@@ -257,6 +262,8 @@ var settings = {
       key={item.campaignId}
       className="p-4 w-full  max-w-lg sm:border-gray-200 sm:border  bg-white rounded-2xl my-5 px-6 "
     >
+            {/* <Link to={`/ViewCampaign/${item?.campaignId}`}> */}
+            <div onClick={() => handleItemClick(item?.campaignId)} className="cursor-pointer">
       {/* Header Section */}
       <div className="flex items-start justify-end sm:flex-wrap">
          
@@ -294,12 +301,12 @@ var settings = {
        
       </div>
 
-      <Link to={`/ViewCampaign/${item?.campaignId}`}>
+
       {/* Campaign Title & Description */}
       <div className="my-4">
         <h1 className="font-medium text-lg truncate">{item?.campaignTitle}</h1>
         <div className="mt-2">
-          <p className="text-justify text-sm">
+          <p className="text-justify text-sm" style={{ whiteSpace: 'pre-line' }}>
             {isExpanded ? item?.description : `${item?.description.slice(0, maxLength)}...`}
           </p>
           {item?.description?.length > maxLength && (
@@ -312,7 +319,7 @@ var settings = {
           )}
         </div>
       </div>
-      </Link>
+     
       {/* Media Section */}
       {item?.campaignFiles?.length > 0 && (
         <div className="my-4">
@@ -377,7 +384,8 @@ var settings = {
           </div>
         </div>
       )}
-  
+  </div>
+    
 
       {/* Actions Section */}
       <div className="flex mt-4 mb-3 text-sm gap-5">
