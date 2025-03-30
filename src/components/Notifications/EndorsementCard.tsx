@@ -8,8 +8,10 @@ import { toast } from 'react-toastify';
 
 const EndorsementCard = ({item}: any) => {
   
-  const markAsReadUrl =   `${baseURL}/EndorseNotification/ReadNotification`;
+  // const markAsReadUrl =   `${baseURL}/EndorseNotification/ReadNotification`;
    
+
+  
     function formatDate(timestamp:string) {
         const dateObj = new Date(timestamp);
         const options:any = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -36,32 +38,32 @@ const EndorsementCard = ({item}: any) => {
       };
       
 
-      const SendThankYou = async (id: number) => {
-        try {
-          const response = await fetch(`${baseURL}/EndorseNotification/ReadNotification?NotificationId=${id}`, {
-            method: 'POST', 
-            headers: {
-              'Content-Type': 'application/json',
-            },   
-          });
+      // const SendThankYou = async (id: number) => {
+      //   try {
+      //     const response = await fetch(`${baseURL}/EndorseNotification/ReadNotification?NotificationId=${id}`, {
+      //       method: 'POST', 
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //       },   
+      //     });
       
-          if (response.ok) {
-            console.log('Notification marked as read');
-          //  toast.success("Mark as Read")
-          } else {
-            console.error('Failed to mark notification as read');
-          }
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      };
+      //     if (response.ok) {
+      //       console.log('Notification marked as read');
+      //     //  toast.success("Mark as Read")
+      //     } else {
+      //       console.error('Failed to mark notification as read');
+      //     }
+      //   } catch (error) {
+      //     console.error('Error:', error);
+      //   }
+      // };
 
 
       
     return (
         <div>
                        
-            <Link to={`/ViewCampaign/${item.id}`} onClick={()=> MarkAsRead(item.id)}>
+            <Link to={`/ViewCampaign/${item.campaignId}`} onClick={()=> MarkAsRead(item.id)}>
               <div className="p-4 max-w-md border-gray-700 bg-white rounded-lg my-2" >
                             <div className="flex items-center justify-between ">
                                 <div className="flex">
@@ -82,9 +84,9 @@ const EndorsementCard = ({item}: any) => {
                                    {item.message}
 
                                  
-                               <div className="flex items-center my-2" onClick={() => SendThankYou(item.campaignEndorsementId)}>
-                                <img src={send} alt="send" className="mr-1" />
-                                <span className='text-customBlue font-medium'>Send A Thank You</span>
+                               <div className="flex items-center my-2" >
+                                {/* <img src={send} alt="send" className="mr-1" />
+                                <span className='text-customBlue font-medium'>Send A Thank You</span> */}
                                 </div>
                             
 

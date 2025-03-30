@@ -191,10 +191,12 @@ const ViewCampaign = ({ item }: any) => {
     return dateObj.toLocaleDateString('en-GB', options);
   }
  
-  // useEffect(() => {
-  //   // Scroll to top when component mounts
-  //   window.scrollTo(0, 0);
-  // }, []);
+  useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+  }, []);
+
+
 
 
   return (
