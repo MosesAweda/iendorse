@@ -137,7 +137,7 @@ const UserProfile = () => {
         <>
         <div className='bg-gray-100 min-h-screen'>
             <Navbar />
-            <div className="bg-gray-100 px-10 pt-10 mb-20">
+            <div className="bg-gray-100 px-10 pt-10 mb-20 mt-10">
                 <div className="relative mt-16 max-w-2xl mx-auto  mt-24 rounded-lg">
                     <div className="rounded-3xl overflow-hidden  shadow-md bg-white"> 
                        <div className="flex justify-end p-2 z-100 "  >

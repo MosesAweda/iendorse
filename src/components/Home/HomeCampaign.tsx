@@ -321,69 +321,34 @@ const handleItemClick = (x:any) => {
       </div>
      
       {/* Media Section */}
-      {item?.campaignFiles?.length > 0 && (
-        <div className="my-4">
-          <div className="relative">
-         
-         {
-            item?.campaignFiles.length > 1 ?
-           <Slider {...settings}  className="mb-10">
-                {item?.campaignFiles.map((file: any, index: any) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-center bg-white w-full h-[300px] rounded-lg"
-                  >
-                    {file.filePath.endsWith('.mp4') ? (
-                      
-                        <video
-                        className="w-full h-full object-cover rounded-lg"
-                        muted
-                        playsInline
-                      >
-                        <source src={file.filePath} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                       
-                    ) : (
-                  
-                      <img
-                        src={file.filePath}
-                        alt={`Campaign ${index}`}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                       
-                    )}
-                  </div>
-                ))}
-                </Slider>
-                :
-                (
-                  <div className="flex items-center justify-center bg-white w-full h-[300px] rounded-lg">
-                  {item?.campaignFiles[0].filePath.endsWith(".mp4") ? (
-                    <video
-                      className="w-full h-full object-cover rounded-lg"
-                      muted
-                      playsInline
-                      controls
-                    >
-                      <source src={item?.campaignFiles[0].filePath} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <img
-                      src={item?.campaignFiles[0].filePath}
-                      alt="Campaign Media"
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  )}
-                </div>
-                )
-            }
-                
-          
+       <Carousel 
+        indicators={item?.campaignFiles.length > 1} // Display indicators only if more than one file
+      >
+        {item?.campaignFiles.map((file: any, index: any) => (
+          <div 
+            key={index} 
+            className="flex items-center justify-center bg-black w-full h-[300px] rounded-lg"
+          >
+            {file.filePath.endsWith('.mp4') ? (
+              <video 
+                className="w-full max-h-full object-cover" 
+                muted 
+                playsInline
+              >
+                <source src={file.filePath} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <img 
+                src={file.filePath} 
+                alt={`Campaign ${index}`} 
+                className="w-full max-h-full object-cover" 
+              />
+            )}
           </div>
-        </div>
-      )}
+        ))}
+              </Carousel>
+      
   </div>
     
 

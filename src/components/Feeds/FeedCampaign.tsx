@@ -209,7 +209,7 @@ const endorseWithWalletData = {
       )}
     </div>
   ))}
-</Carousel>
+        </Carousel>
 
 <div>
 <div className="my-4">

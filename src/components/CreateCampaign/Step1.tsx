@@ -17,7 +17,8 @@ interface person {
 const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange, handleRawFileChange, formData }: any) => {
   const [peopleModal, setPeopleModal] = useState(false);
   const [selectedPeople, setSelectedPeople] = useState<any[]>(formData.tags || []);
- 
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<{ [key: string]: string }>({});
   const [uploadedMedia, setUploadedMedia] = useState<any[]>(formData.campaignMedias || []);
@@ -60,15 +61,15 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
   };
   const handleCampaignMedias = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
-  
+
     if (target && target.files && target.files.length > 0) {
       const newFiles = Array.from(target.files) as File[];
 
-  
+
       const images = newFiles.filter(file => file.type.startsWith('image/'));
 
       const videos = newFiles.filter(file => file.type.startsWith('video/'));
-  
+
       // Convert images to Base64
       const newBase64Images = await Promise.all(
         images.map(async (image) => ({
@@ -76,7 +77,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
           campaignMedia: await convertToBase64(image),
         }))
       );
-  
+
       // Convert videos to Base64 asynchronously
       const newBase64Videos = await Promise.all(
         videos.map(async (video) => ({
@@ -84,10 +85,10 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
           campaignMedia: await convertToBase64(video),
         }))
       );
-  
+
       // Combine images and videos
       const newMediaItems = [...newBase64Images, ...newBase64Videos];
-  
+
       // Remove duplicates and maintain a maximum of 5 items
       const combinedMedia = [
         ...uploadedMedia,
@@ -99,7 +100,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
           )
         ),
       ];
-  
+
       if (combinedMedia.length > 5) {
         setError({
           ...error,
@@ -107,18 +108,18 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
         });
         return;
       }
-  
+
       setError({ ...error, campaignMedias: '' });
       setUploadedMedia(combinedMedia);
-  
+
       // Update the parent form data
       handleFileChange('campaignMedias')(combinedMedia);
       handleRawFileChange('rawPhotos')(images);
       handleRawFileChange('rawVideos')(videos);
-       
+
     }
   };
-  
+
 
 
   const removePerson = (id: number) => {
@@ -198,23 +199,45 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
   }
 
 
-  
-  
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+    // Auto-resize
+    e.target.style.height = "auto";
+    e.target.style.height = `${e.target.scrollHeight}px`;
+
+    // Update state (respecting max length)
+    if (value.length <= 300) {
+      handleFileChange("Description")(value);
+    }
+  };
+
 
   return (
     <>
-      <div className="flex bg-gray-100 justify-center text-xs ">
-        <div className='bg-white p-5 rounded-lg max-w-md h-auto my-10'>
-        <Backdrop
-              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={categoriesLoading}>
-              <CircularProgress color="inherit" />
-            </Backdrop>
+      <div className="flex bg-gray-100 justify-center text-xs  ">
+        <div className='bg-white p-5 rounded-lg max-w-md h-auto mb-10 mt-36  mx-5'>
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={categoriesLoading}>
+            <div className="flex items-center mt-4 justify-center">
+              <div className="flex justify-center items-center ">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-500"></div>
+              </div>
+            </div>
+          </Backdrop>
+
           <div className="flex items-center justify-center mb-5">
             <div className="flex-1 border-2 border-t border-customBlue"></div>
             <div className="flex-1 border-t border-a-300"></div>
           </div>
-          <img src="https://res.cloudinary.com/dgso4wgqt/image/upload/v1733390897/frame1_pqfed6.png" alt="frame1" className='mx-auto' />
+          <img
+            src="https://res.cloudinary.com/dgso4wgqt/image/upload/v1733390897/frame1_pqfed6.png"
+            alt="frame1"
+            onLoad={() => setIsLoaded(true)}
+            className={`w-full transition-all duration-500 ${isLoaded ? "blur-0" : "blur-md"
+              }`}
+          />
+
           <form className="space-y-4 mt-4 " action="#" onSubmit={(e) => { e.preventDefault() }}>
             <div>
               <select
@@ -251,13 +274,20 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
             </div>
 
             <div>
-              <textarea
-                placeholder='Description'
-                name="Description"
-                onChange={handleFieldChange('Description')} value={formData.Description}
-                className="border border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            <textarea
+        placeholder="Description"
+        name="Description"
+        maxLength={300}
+        value={formData.Description}
+        onChange={handleChange}
+        className="border border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 overflow-hidden resize-none leading-relaxed"
+        rows={3} // Start small, grow as needed
+      />
 
-              />
+      <div className="text-sm text-gray-500 text-right mt-1">
+        {formData?.Description?.length}/{300} characters
+      </div>
+
               {error.Description && <p className="text-red-500 text-xs ml-1 my-1">{error.Description}</p>}
 
             </div>
@@ -298,7 +328,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
                           className="rounded-full border-2 border-white mt-2 w-10 h-10 mx-4"
                           style={{ boxShadow: '0 0 0 1px #0D236E' }}
                           src={person.imageUrl}
-                      
+
                           alt={person.fullName}
                         />
                       ) : (
@@ -325,85 +355,85 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
             </>}
 
             <div>
-  {/* Hidden File Input */}
-  <input
-    type="file"
-    name="campaignMedias"
-    accept="image/*,video/*"
-    onChange={handleCampaignMedias}
-    multiple
-    className="hidden"
-    ref={fileInputRef}
-  />
-
-  {uploadedMedia.length > 0 && (
-    <div className="border-2 p-4 rounded-lg">
-      <div className="text-gray-700 pb-1">Uploaded Media</div>
-      <div className="flex flex-wrap justify-start max-h-40 overflow-y-auto">
-        {uploadedMedia.map((media, index) => (
-          <div key={index} className="relative inline-block mx-2 mt-3">
-            {/* Remove Button */}
-            <img
-              src={cancel}
-              alt="Remove"
-              onClick={() => removeMedia(index)}
-              className="absolute cursor-pointer"
-              style={{ top: '-5px', right: '-5px', width: '15px', height: '15px' }}
-            />
-
-            {/* Check if media is an image or video */}
-            {media.fileExtension.startsWith('.jpg') || media.fileExtension.startsWith('.jpeg') || media.fileExtension.startsWith('.png') ? (
-              <img
-                src={media.campaignMedia}
-                alt={`Uploaded ${index + 1}`}
-                className="max-w-full max-h-full"
+              {/* Hidden File Input */}
+              <input
+                type="file"
+                name="campaignMedias"
+                accept="image/*,video/*"
+                onChange={handleCampaignMedias}
+                multiple
+                className="hidden"
+                ref={fileInputRef}
               />
-            ) : (
-              <video controls className="max-w-full max-h-full">
-                <source src={media.campaignMedia} type={`video/${media.fileExtension.slice(1)}`} />
-              </video>
-            )}
-          </div>
-        ))}
 
-        {/* Add Media Button */}
-        {uploadedMedia.length < 5 && (
-          <div className="relative inline-block mx-4 mt-3">
-            <img
-              onClick={triggerFileInput}
-              src={add}
-              alt="Add Media"
-              width={40}
-              height={40}
-              className="my-4"
-            />
-          </div>
-        )}
-      </div>
-    </div>
-  )}
+              {uploadedMedia.length > 0 && (
+                <div className="border-2 p-4 rounded-lg">
+                  <div className="text-gray-700 pb-1">Uploaded Media</div>
+                  <div className="flex flex-wrap justify-start max-h-40 overflow-y-auto">
+                    {uploadedMedia.map((media, index) => (
+                      <div key={index} className="relative inline-block mx-2 mt-3">
+                        {/* Remove Button */}
+                        <img
+                          src={cancel}
+                          alt="Remove"
+                          onClick={() => removeMedia(index)}
+                          className="absolute cursor-pointer"
+                          style={{ top: '-5px', right: '-5px', width: '15px', height: '15px' }}
+                        />
 
-  {/* Error Message */}
-  {error.campaignMedias && <p className="text-red-500 text-xs ml-1 my-1">{error.campaignMedias}</p>}
+                        {/* Check if media is an image or video */}
+                        {media.fileExtension.startsWith('.jpg') || media.fileExtension.startsWith('.jpeg') || media.fileExtension.startsWith('.png') ? (
+                          <img
+                            src={media.campaignMedia}
+                            alt={`Uploaded ${index + 1}`}
+                            className="max-w-full max-h-full"
+                          />
+                        ) : (
+                          <video controls className="max-w-full max-h-full">
+                            <source src={media.campaignMedia} type={`video/${media.fileExtension.slice(1)}`} />
+                          </video>
+                        )}
+                      </div>
+                    ))}
 
-  {/* Upload Button */}
-  {uploadedMedia.length === 0 && (
-    <button
-      onClick={triggerFileInput}
-      className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center"
-    >
-      <img src={upload} alt="Upload" className="inline-block mr-2" />
-      Upload Campaign Media
-    </button>
-  )}
-</div>
+                    {/* Add Media Button */}
+                    {uploadedMedia.length < 5 && (
+                      <div className="relative inline-block mx-4 mt-3">
+                        <img
+                          onClick={triggerFileInput}
+                          src={add}
+                          alt="Add Media"
+                          width={40}
+                          height={40}
+                          className="my-4"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {error.campaignMedias && <p className="text-red-500 text-xs ml-1 my-1">{error.campaignMedias}</p>}
+
+              {/* Upload Button */}
+              {uploadedMedia.length === 0 && (
+                <button
+                  onClick={triggerFileInput}
+                  className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center"
+                >
+                  <img src={upload} alt="Upload" className="inline-block mr-2" />
+                  Upload Campaign Media
+                </button>
+              )}
+            </div>
 
 
-         {/* End Upload Campaign Media Section */}
+            {/* End Upload Campaign Media Section */}
             {error.fileUpload && <p className="text-red-500 text-xs pb-8">{error.fileUpload}</p>}
-          
 
- 
+
+
             <button
               onClick={handleNextStep}
               className="w-full text-white bg-customBlue hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"

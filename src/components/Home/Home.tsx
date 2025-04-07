@@ -35,6 +35,9 @@ const Home = () => {
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [loadingScroll, setLoadingScroll] = useState(false);
   const [categoryId, setCategoryId] = useState<number>(Number(sessionStorage.getItem('selectedCategoryId')) || 0);
+  const [showNoCampaignsMessage, setShowNoCampaignsMessage] = useState(false);
+
+
 
   const onSuccess = () => {
     // setDataArray((prev) => [...prev, ...responseData?.data || []]);
@@ -104,6 +107,18 @@ const handleScroll = () => {
   }
 };
 
+useEffect(() => {
+  if (!loading && !infiniteLoading && !loadingScroll && dataArray.length === 0) {
+    const timer = setTimeout(() => {
+      setShowNoCampaignsMessage(true);
+    }, 1000); // Delay of 1 second (1000 milliseconds)
+
+    return () => clearTimeout(timer); // Clear timer if component unmounts or dependencies change
+  } else {
+    setShowNoCampaignsMessage(false); // Reset state when loading or data changes
+  }
+}, [loading, infiniteLoading, loadingScroll, dataArray]);
+
 
   // Handle category change
   const handleCategoryChange = (newCategoryId: any) => {
@@ -125,12 +140,12 @@ const handleScroll = () => {
     // First attempt at scroll restoration
     const timer = setTimeout(() => {
       restoreScrollPosition();
-    }, 300);
+    }, 600);
   
     // Second attempt after images might have loaded
     const longTimer = setTimeout(() => {
       restoreScrollPosition();
-    }, 1000);
+    }, 1500);
   
     function restoreScrollPosition() {
       const savedPosition = localStorage.getItem('listScrollPosition');
@@ -145,7 +160,7 @@ const handleScroll = () => {
 
     // Only remove the saved position after the longer timer
     const cleanupTimer = setTimeout(() => {
-      localStorage.removeItem('listScrollPosition');
+     localStorage.removeItem('listScrollPosition');
      sessionStorage.removeItem('selectedCategoryId');
       setLoadingScroll(false); // End loading after restoring the scroll position
     }, 1500);
@@ -161,10 +176,13 @@ const handleScroll = () => {
   return (
     <>
       <Navbar />
+      
+      
+    <>
 
-      <div className="hidden sm:block w-full">
+<div className="hidden sm:block w-full ">
     <div 
-      className="w-full min-h-[700px] bg-cover bg-center flex items-center"
+      className="w-full min-h-[700px] bg-cover bg-center flex items-center mt-16 "
       style={{
         backgroundImage: 'url(https://res.cloudinary.com/dgso4wgqt/image/upload/v1733496676/hero_awra5e.png)'
       }}
@@ -209,7 +227,7 @@ const handleScroll = () => {
     background: 'radial-gradient(circle, rgba(194,192,227,1) 30%, rgba(194,192,227,1) 36%, rgba(255,255,255,1) 66%)',
     backgroundRepeat: 'no-repeat', 
     backgroundSize: 'cover', 
-    margin: 0, 
+    marginTop: '80px',
     padding: 0, 
     // height: '100vh', // Ensure the container takes full viewport height
     
@@ -229,7 +247,9 @@ const handleScroll = () => {
   />
 
   
-  
+
+
+
   <div className='bg-white p-4 rounded-t-3xl w-full '> 
   <div className="flex mt-2 justify-center sm:hidden space-x-2">
   <Link to="/">
@@ -285,6 +305,14 @@ const handleScroll = () => {
   ))}
 </div>
 
+
+{loadingScroll && (
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        </div>
+      )}
+
+      
       <div className="flex flex-col bg-white sm:bg-gray-100 justify-center items-center overflow-x-hidden">
       {/* {error && <p>Error: {error.message}</p>} */}
       {(loading )&&  !infiniteLoading ? (
@@ -292,9 +320,10 @@ const handleScroll = () => {
   <SkeletonCampaign />
 ) : dataArray.length === 0 ? (
   // Display a message when there's no data
-  <div className="text-center text-gray-500 mt-4 mb-20">
-    {!loading && !infiniteLoading && <p>No campaigns found.</p>}
-  </div>
+<div className="text-center text-gray-500 mt-4 mb-20">
+  {showNoCampaignsMessage && <p>No campaigns found.</p>}
+</div>
+
 ) :
 !dataArray ? (
   <div className="text-center text-gray-500 mt-4 mb-20">
@@ -320,11 +349,16 @@ const handleScroll = () => {
 
         {infiniteLoading && (
           <div className="flex items-center mt-4 justify-center">
-            <Puff color='#0D236E'  height="40"
-              width="40" />
+                <div className="flex justify-center items-center ">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-500"></div>
+        </div>
           </div>
         )}
       </div>
+    </>
+    
+  
+
     </>
   );
 };

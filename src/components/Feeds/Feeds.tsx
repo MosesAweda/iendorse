@@ -67,7 +67,7 @@ const Feed: React.FC = () => {
   }, [handleScroll]);
 
   const renderNoCampaigns = () => (
-    <div className="flex flex-col items-center justify-center h-[calc(100vh-100px)] text-center">
+    <div className="flex mt-10 flex-col items-center justify-center h-[calc(100vh-100px)] text-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-24 w-24 text-gray-400 mb-4"
@@ -95,19 +95,14 @@ const Feed: React.FC = () => {
   );
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 min-h-screen ">
       <Navbar />
-      <div className="flex flex-col bg-white sm:bg-gray-100 justify-center items-center">
+      <div className=" mt-20 flex flex-col bg-white sm:bg-gray-100 justify-center items-center">
         {/* Initial Loading */}
         {pageNumber === 1 && loading && (
           <div className="flex items-center justify-center h-screen">
-            <ThreeCircles
-              visible={true}
-              height="40"
-              width="40"
-              color="#0D236E"
-              ariaLabel="three-circles-loading"
-            />
+                     <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-500"></div>
+
           </div>
         )}
 
@@ -122,13 +117,9 @@ const Feed: React.FC = () => {
         {/* Loading More Campaigns */}
         {loading && data.length > 0 && (
           <div className="flex items-center justify-center mt-4">
-            <ThreeCircles
-              visible={true}
-              height="40"
-              width="40"
-              color="#0D236E"
-              ariaLabel="three-circles-loading"
-            />
+             <div className="flex justify-center items-center ">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        </div>
           </div>
         )}
 

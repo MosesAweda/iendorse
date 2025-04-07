@@ -50,7 +50,7 @@ const GuestNavbar = () => {
   return (
     <>
     
-   <nav className="bg-white w-full z-20 top-0 start-0 border-b border-gray-200 sticky">
+   <nav className="bg-white w-full z-20 border-b border-gray-200 transition-all duration-300 fixed top-0 left-0 shadow-md">
   <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     {/* Logo */}
     <Link to="/" className="flex items-center">

@@ -97,23 +97,25 @@ const AuthBar= ({toggleSidebar}:any)=> {
       }, [lastScrollY, scrollTimer]);
     
       const getNavClasses = () => {
-        const baseClasses = 'bg-white w-full z-20 border-b border-gray-200 transition-all duration-300';
+        // const baseClasses = 'bg-white w-full z-20 border-b border-gray-200 transition-all duration-300';
         
-        switch (position) {
-          case 'initial':
-            return `${baseClasses} relative`;
-          case 'hidden':
-            return `${baseClasses} fixed top-0 left-0 -translate-y-full shadow-md`;
-          case 'visible':
-            return `${baseClasses} fixed top-0 left-0 translate-y-0 shadow-md`;
-          default:
-            return baseClasses;
-        }
+        // switch (position) {
+        //   case 'initial':
+        //     return `${baseClasses} relative`;
+        //   case 'hidden':
+        //     return `${baseClasses} fixed top-0 left-0 -translate-y-full shadow-md`;
+        //   case 'visible':
+        //     return `${baseClasses} fixed top-0 left-0 translate-y-0 shadow-md`;
+        //   default:
+        //     return baseClasses;
+        // }
+          return 'bg-white w-full z-20 border-b border-gray-200 transition-all duration-300 fixed top-0 left-0 shadow-md';
+        
       };
     return(
       <>
  
-<nav className={getNavClasses()}>
+<nav className={getNavClasses()} >
   <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     {/* Logo Section */}
     <Link to="/" className="flex items-center">

@@ -80,9 +80,9 @@ const Notifications = () => {
     <div className='bg-gray-100 min-h-screen'>
       <Navbar />
 
-      <div className="flex bg-gray-100 justify-center">
+      <div className="flex bg-gray-100 justify-center mt-20">
         <div className="flex flex-col mt-10 mx-3">
-          <div className="flex text-sm justify-between mb-3 bg-white rounded-lg py-3 px-10">
+          <div className="flex text-sm justify-between mb-3  bg-white rounded-lg py-3 px-10">
             <div className="flex mr-5 items-center w-full">
               <button
                 className={`px-6 py-2 ${isNotifications ? 'bg-customBlue text-white' : 'bg-white text-gray-800'} rounded-md w-full`}

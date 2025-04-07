@@ -166,8 +166,8 @@ const Search = () => {
     return (
         <div className='bg-gray-100 min-h-screen'>
             <Navbar />
-            <div className='flex justify-center mt-8 mb-3 mx-3'>
-                <div className='relative w-1/2'>
+            <div className='flex justify-center mt-20 mb-3 mx-3'>
+                <div className='relative sm:w-1/2 mt-20'>
                     <form onSubmit={handleSubmit} className=''>
                         <input 
                             type='text'
@@ -205,19 +205,21 @@ const Search = () => {
                     >
                         Campaigns
                     </button>
-                    <button
-                        className={`px-6 py-2 ${!isCampaigns ? 'bg-customBlue text-white' : 'bg-white text-gray-800'} rounded-md w-full`}
-                        onClick={() => setIsCampaigns(false)}
-                    >
-                        Accounts
-                    </button>
+                        {/* <button
+                            className={`px-6 py-2 ${!isCampaigns ? 'bg-customBlue text-white' : 'bg-white text-gray-800'} rounded-md w-full`}
+                            onClick={() => setIsCampaigns(false)}
+                        >
+                            Accounts
+                        </button> */}
                 </div>
             </div>
 
             {loading ? (
-                <div className='flex items-center justify-center h-screen'>
-                    <ThreeCircles height="40" width="40" color="#0D236E" />
-                </div>
+             
+                       <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        </div>
+           
             ) : (
                 isCampaigns ? (
                     apiData.length === 0 ? (

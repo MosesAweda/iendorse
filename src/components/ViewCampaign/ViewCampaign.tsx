@@ -212,17 +212,9 @@ const ViewCampaign = ({ item }: any) => {
       <Navbar />
 
       {DataLoading && (
-        <div className="sm:bg-gray-100 bg-white h-screen flex justify-center items-center">
-          <ThreeCircles
-            height="80"
-            width="80"
-            color="#0D236E"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-            ariaLabel="three-circles-rotating"
-          />
-        </div>
+        <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-colorBlue"></div>
+      </div>
       )}
 
       {!DataLoading && (!campaignData || DataError) && (
@@ -246,7 +238,7 @@ const ViewCampaign = ({ item }: any) => {
 
       {campaignData && (
         <>
-        <div className="sm:bg-gray-100  bg-white h-screen">
+        <div className="sm:bg-gray-100  bg-white h-screen mt-20">
 
 
           <div className="flex flex-col sm:bg-gray-100  bg-white justify-center items-center      ">
