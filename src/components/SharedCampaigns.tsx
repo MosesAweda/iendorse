@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import { Search, X } from 'lucide-react';
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Puff } from "react-loader-spinner"
@@ -14,7 +14,7 @@ import Initials from "./Initials"
 
 const SharedCampaigns = () => {
   const navigate = useNavigate()
-  const [isCampaigns, setIsCampaigns] = useState(true)
+ 
   const [loading, setLoading] = useState(false)
   const [infiniteLoading, setInfiniteLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState<string>("")
@@ -23,9 +23,8 @@ const SharedCampaigns = () => {
   const [apiData, setApiData] = useState<any[]>([])
   const [page, setPage] = useState<number>(1)
   const [totalRecords, setTotalRecords] = useState<number>(0)
-
-  const discoverURL = `${baseURL}/Campaign/SharedCampaignsV2?pageNumber=${page}&pageSize=100`
-  const searchURL = `${baseURL}/Campaign/SearchCampaign?pageNumber=${page}&pageSize=2&searchTerm=${searchQuery}`
+ 
+  const url = `${baseURL}/Campaign/SharedCampaigns?Page=${page}&PageSize=10&search=${searchQuery}`
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
@@ -36,7 +35,7 @@ const SharedCampaigns = () => {
     setSearchMode(false)
     setLoading(true)
     try {
-      const response = await fetch(discoverURL, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,7 +66,7 @@ const SharedCampaigns = () => {
     setPage(1) // Reset page to first page on new search
 
     try {
-      const response = await fetch(searchURL, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -96,13 +95,13 @@ const SharedCampaigns = () => {
 
   useEffect(() => {
     loadDefaultData()
-  }, [])
+  }, [searchQuery])
 
   useEffect(() => {
     const fetchData = async () => {
       setInfiniteLoading(true)
       try {
-        const response = await fetch(searchMode ? searchURL : discoverURL, {
+        const response = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -169,7 +168,7 @@ const SharedCampaigns = () => {
   // Handle navigation to campaign view
   const handleCampaignClick = (campaignId: string, e: React.MouseEvent) => {
     e.preventDefault()
-    navigate(`/ViewCampaign/${campaignId}`)
+    navigate(`/shared-campaign-details/${campaignId}`)
   }
 
   // Handle navigation to user profile
@@ -184,60 +183,34 @@ const SharedCampaigns = () => {
       <Navbar />
       <div className="flex justify-center mt-20 mb-3 mx-3">
         <div className="relative sm:w-1/2 mt-20">
-        <h1 className="text-3xl font-bold mb-4 flex justify-center">Shared Campaigns</h1>
-          <form onSubmit={handleSubmit} className="">
+          <h1 className="text-xl font-bold mb-4 text-gray-800 text-center">Shared Campaigns</h1>
+          <form onSubmit={handleSubmit} className="relative">
             <input
               type="text"
               value={searchQuery}
               onChange={handleSearch}
-              className={`w-full bg-white border ${formError ? "border-red-500" : "border-gray-300"} rounded-lg p-2 pl-10`}
+              className={`w-full bg-white border ${formError ? "border-red-500" : "border-gray-300"} rounded-lg p-3 pl-10`}
               placeholder="Search"
             />
-            <img
-              src={searchIcon || "/placeholder.svg"}
-              onClick={handleSubmit}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 cursor-pointer"
-              width={16}
-              height={16}
-              alt="Search"
-            />
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+              <Search size={16} className="text-gray-400 cursor-pointer" onClick={handleSubmit} />
+            </div>
             {searchQuery && (
-              <img
-                src={closeIcon || "/placeholder.svg"}
-                onClick={clearSearch}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                width={16}
-                height={16}
-                alt="Clear"
-              />
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <X size={16} className="text-gray-400 cursor-pointer" onClick={clearSearch} />
+              </div>
             )}
           </form>
         </div>
       </div>
+   
       {formError && <div className="text-red-500 flex justify-center ">{formError}</div>}
-
-      <div className="flex justify-center mt-8 mb-10 mx-3">
-        <div className="flex text-sm justify-center mb-3 bg-white rounded-lg py-2 px-10">
-          <button
-            className={`px-6 py-2 ${isCampaigns ? "bg-customBlue text-white" : "bg-white text-gray-800"} rounded-md w-full`}
-            onClick={() => setIsCampaigns(true)}
-          >
-            Campaigns
-          </button>
-          {/* <button
-                            className={`px-6 py-2 ${!isCampaigns ? 'bg-customBlue text-white' : 'bg-white text-gray-800'} rounded-md w-full`}
-                            onClick={() => setIsCampaigns(false)}
-                        >
-                            Accounts
-                        </button> */}
-        </div>
-      </div>
-
+ 
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
         </div>
-      ) : isCampaigns ? (
+      ) : (
         apiData.length === 0 ? (
           renderEmptyState()
         ) : (
@@ -316,28 +289,6 @@ const SharedCampaigns = () => {
             )}
           </div>
         )
-      ) : (
-        <div className="flex justify-center">
-          <div className="bg-white p-10 w-full mx-1 sm:w-3/4 rounded-md mb-10">
-            {/* Accounts section remains the same */}
-            <div className="flex items-center justify-between my-8 mx-1">
-              <div className="flex">
-                <div className="mr-4 rounded-full mx-1">
-                  <img src="/images/Avatar.png" width={45} height={45} alt="Avatar" />
-                </div>
-                <div>
-                  <div className="font-semibold text-lg">Poster</div>
-                  <div className="text-xs">
-                    <span>Human Right Activist</span>
-                  </div>
-                </div>
-              </div>
-              <div className="p-1 cursor-pointer">
-                <img alt="Report" />
-              </div>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   )

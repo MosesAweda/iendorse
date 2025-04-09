@@ -34,6 +34,7 @@ import TandC from './components/TandC';
 import CloudinaryApp from './components/CloudinaryApp';
 import NotFound from './components/notfound';
 import SharedCampaigns from './components/SharedCampaigns';
+import ViewSharedDetails from './components/ViewSharedDetails';
 
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
           <Route path='/EditCampaign' element={<EditCampaign />} />
             <Route path='/CreateCampaign' element={<CreateCampaign />} />
             <Route path='/SharedCampaigns' element={<SharedCampaigns />} />
+            <Route path='/shared-campaign-details/:uid' element={<ViewSharedDetails />} />
             <Route path='/MyProfile' element={<MyProfile />} />
             <Route path='/UserProfile' element={<UserProfile />} />
             <Route path='/Wallet' element={<Wallet />} />
