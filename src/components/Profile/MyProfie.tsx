@@ -14,7 +14,7 @@ import edit2 from '../svg/edit2.svg'
 import docCopy from '../svg/docCopy.svg'
 import EditProfile from './EditProfile';
 
-const UserProfile = () => {
+const MyProfile = () => {
     const userData: any = window.localStorage.getItem("userData");
     const parsedUserData = JSON.parse(userData);
     const [copied, setCopied] = useState(false);
@@ -301,4 +301,4 @@ const UserProfile = () => {
     );
 };
 
-export default UserProfile;
+export default MyProfile;

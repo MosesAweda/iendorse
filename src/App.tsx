@@ -20,7 +20,8 @@ import EditCampaign from './components/EditCampaign/EditCampaign';
 import Feed from './components/Feeds/Feeds';
 import Analytics from './components/Feeds/Analytics';
 import Sidebar from './components/Sidebar';
-import UserProfile from './components/Profile/UserProfie';
+import  MyProfile from './components/Profile/MyProfie';
+import UserProfile from './components/Profile/UserProfile';
 import HomeCampaign from './components/Home/HomeCampaign';
 import Wallet from './components/Wallet/Wallet';
 import Support from './components/Support';
@@ -32,6 +33,7 @@ import AuthCallback from './components/authentication/AuthCallback';
 import TandC from './components/TandC';
 import CloudinaryApp from './components/CloudinaryApp';
 import NotFound from './components/notfound';
+import SharedCampaigns from './components/SharedCampaigns';
 
 
 function App() {
@@ -55,6 +57,8 @@ function App() {
           <Route element={<ProtectedRoute />}>
           <Route path='/EditCampaign' element={<EditCampaign />} />
             <Route path='/CreateCampaign' element={<CreateCampaign />} />
+            <Route path='/SharedCampaigns' element={<SharedCampaigns />} />
+            <Route path='/MyProfile' element={<MyProfile />} />
             <Route path='/UserProfile' element={<UserProfile />} />
             <Route path='/Wallet' element={<Wallet />} />
             <Route path='Feed/Analytics/:uid' element={<Analytics />} />
@@ -68,6 +72,8 @@ function App() {
           {/* Public routes */}
           <Route path='/' element={<Home />} />
           <Route path='/auth-callback' element={<AuthCallback />} />
+       
+
           <Route path='/SignIn' element={<SignIn />} />
           <Route path='/SignUp' element={<SignUp />} />
           <Route path='/ConfirmOTP' element={<ConfirmOTP />} />
@@ -75,6 +81,7 @@ function App() {
           <Route path='/VerifyEmail' element={<VerifyEmail />} />
           <Route path='/NewPassword' element={<NewPasword />} />
           <Route path='/Search' element={<Search />} />
+          <Route path='/UserProfile' element={<UserProfile />} />
           <Route path='/ViewCampaign/:uid' element={<ViewCampaign />} />
           <Route path='/Support/' element={<Support />} />
           <Route path='/sample' element={<Sample />} />

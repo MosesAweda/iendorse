@@ -78,7 +78,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
               </div>
 
 
-              <div
+              {/* <div
                 className="flex items-center ps-4 border border-gray-200 rounded-lg cursor-pointer"
                 onClick={() => handleDivClick(paypalRef, "Paypal")}
               >
@@ -96,9 +96,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                   <img src={paypal} className='inline mr-2' /> Paypal
                 </label>
               </div>
-            
-
-
+          
       
               <div
                 className="flex items-center ps-4 border border-gray-200 rounded-lg cursor-pointer"
@@ -136,7 +134,7 @@ const PaymentMethodModal: React.FC<PaymentMethodProps> = ({ isOpen, onClose,onSu
                 >
                   <img src={flutterwave} className='inline mr-2' /> Flutterwave
                 </label>
-              </div>
+              </div> */}
              
 
           

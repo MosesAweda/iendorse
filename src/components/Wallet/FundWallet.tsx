@@ -61,7 +61,7 @@ const FundWallet: React.FC<FundWalletProps> = ({ isOpen, onClose, onSubmit }) =>
                   placeholder="Number of units"
                 />
                 <div>  
-                    <span className='bg-blue-50 text-blue-500 px-2 text-xs rounded-full py-2 mt-6' > 1000 naira equals 1 unit </span>
+                    <span className='bg-blue-50 text-blue-500 px-2 text-xs rounded-full py-2 mt-6' > 1 naira equals 1 unit </span>
                  
                     </div>
 

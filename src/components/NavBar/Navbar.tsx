@@ -126,34 +126,34 @@ const Navbar = () => {
           <div>
             <ul className="py-2 space-y-2 text-sm mx-4 text-gray-800" aria-labelledby="dropdownDefaultButton">
               <li className="hover:bg-gray-100 rounded-lg">
-                <a href="/UserProfile" className="block px-16 py-2">
+                <Link to="/MyProfile" className="block px-16 py-2">
                   <img src={profile} className="align-middle mr-2 inline w-4 h-4" />
                   <span className="inline align-middle"> My Profile </span>
-                </a>
+                </Link>
               </li>
               <li className="hover:bg-gray-100 rounded-lg">
-                <a href="/Earnings" className="block px-16 py-2">
+                <Link to="/Earnings" className="block px-16 py-2">
                   <img src={money} className="align-middle mr-2 inline w-4 h-4" />
                   <span className="inline align-middle"> My Earnings </span>
-                </a>
+                </Link>
               </li>
               <li className="hover:bg-gray-100 rounded-lg">
-                <a href="/wallet" className="block px-16 py-2">
+                <Link to="/wallet" className="block px-16 py-2">
                   <img src={wallet} className="align-middle mr-2 inline w-4 h-4" />
                   <span className="inline align-middle"> My Wallet </span>
-                </a>
+                </Link>
               </li>
-              {/* <li className="hover:bg-gray-100 rounded-lg">
-                <a href="#" className="block px-16 py-2">
+              <li className="hover:bg-gray-100 rounded-lg">
+                <Link to="/SharedCampaigns"  className="block px-16 py-2">
                   <img src={battery} className="align-middle mr-2 inline w-4 h-4" />
                   <span className="inline align-middle"> Shared Campaigns </span>
-                </a>
-              </li> */}
+                </Link>
+              </li>
               <li className="hover:bg-gray-100 rounded-lg">
-                <a href="/support" className="block px-16 py-2">
+                <Link to="/support" className="block px-16 py-2">
                   <img src={support} className="align-middle mr-2 inline w-4 h-4" />
                   <span className="inline align-middle"> Support </span>
-                </a>
+                </Link>
               </li>
               <li className="hover:bg-gray-100 rounded-lg">
                 <a onClick={openLogoutModal} href="#" className="block px-16 py-2">

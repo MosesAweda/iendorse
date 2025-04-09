@@ -12,7 +12,7 @@ import closeIcon from "./svg/close.svg"
 import { baseURL } from "./URL"
 import Initials from "./Initials"
 
-const Search = () => {
+const SharedCampaigns = () => {
   const navigate = useNavigate()
   const [isCampaigns, setIsCampaigns] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -24,7 +24,7 @@ const Search = () => {
   const [page, setPage] = useState<number>(1)
   const [totalRecords, setTotalRecords] = useState<number>(0)
 
-  const discoverURL = `${baseURL}/Campaign/DiscoverCampaign?pageNumber=${page}&pageSize=10`
+  const discoverURL = `${baseURL}/Campaign/SharedCampaignsV2?pageNumber=${page}&pageSize=100`
   const searchURL = `${baseURL}/Campaign/SearchCampaign?pageNumber=${page}&pageSize=2&searchTerm=${searchQuery}`
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,6 +184,7 @@ const Search = () => {
       <Navbar />
       <div className="flex justify-center mt-20 mb-3 mx-3">
         <div className="relative sm:w-1/2 mt-20">
+        <h1 className="text-3xl font-bold mb-4 flex justify-center">Shared Campaigns</h1>
           <form onSubmit={handleSubmit} className="">
             <input
               type="text"
@@ -342,4 +343,4 @@ const Search = () => {
   )
 }
 
-export default Search
+export default SharedCampaigns
