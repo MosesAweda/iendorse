@@ -83,7 +83,7 @@ const PeopleModal: React.FC<PeopleModalProps> = ({ isOpen, onClose, onSelectPeop
                     type='text'
                     value={searchQuery}
                     onChange={handleSearch}
-                    className={`w-full bg-white border rounded-lg p-2 pl-10`}
+                    className={`w-full bg-white border text-sm rounded-lg p-2 pl-10`}
                     placeholder='Search'
                   />
                   <img
