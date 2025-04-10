@@ -46,7 +46,7 @@ const RegionModal: React.FC<RegionModal> = ({ isOpen, onClose, onSelectRegion })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-start justify-center z-50">
+    <div className="fixed inset-0 flex items-start pt-20 sm:pt-1 sm:items-center justify-center">
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
       <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
         <CircularProgress color="inherit" />
