@@ -258,7 +258,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
                 placeholder='Campaign Title'
                 name="CampaignTitle"
                 onChange={handleFieldChange('CampaignTitle')} value={formData.CampaignTitle}
-                className={`border border-gray-300 text-gray-700 rounded-lg  text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${error.CampaignTitle ? 'border-red-500' : ''}`}
+                className={`border border-gray-300 text-gray-700 rounded-lg  text-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${error.CampaignTitle ? 'border-red-500' : ''}`}
               />
               {error.CampaignTitle && <p className="text-red-500 text-xs  ml-1 my-1">{error.CampaignTitle}</p>}
             </div>
@@ -268,7 +268,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
                 placeholder='Campaign Link'
                 name="CampaignLink"
                 onChange={handleFieldChange('CampaignLink')} value={formData.CampaignLink}
-                className="border text-sm  border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 
+                className="border text-md  border-gray-300 text-gray-700 rounded-lg focus:ring-blue-500 
                 focus:border-blue-500 block w-full p-2.5"
               />
               {error.CampaignLink && <p className="text-red-500 text-xs ml-1 my-1">{error.CampaignLink}</p>}
@@ -304,7 +304,7 @@ const Step1 = ({ nextStep, handleFieldChange, handleTagChange, handleFileChange,
 
                 readOnly
 
-                className="border border-gray-300 text-a-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className="border border-gray-300  text-md text-a-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Tag People"
               />
             </div>

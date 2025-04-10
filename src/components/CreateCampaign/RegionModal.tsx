@@ -70,7 +70,7 @@ const RegionModal: React.FC<RegionModal> = ({ isOpen, onClose, onSelectRegion })
         value={searchQuery}
         onChange={handleSearch}
         placeholder="Search Region..."
-        className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg px-4 py-2 mb-2 text-sm" 
+        className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg px-4 py-2 mb-2 text-md" 
       />
       <button
         type="button"
@@ -103,7 +103,7 @@ const RegionModal: React.FC<RegionModal> = ({ isOpen, onClose, onSelectRegion })
     <input
       type="checkbox"
       id="selectAllRegions"
-      className="w-4 h-4 text-blue-500 border-gray-300 text-sm rounded focus:ring-blue-400"
+      className="w-4 h-4 text-blue-500 border-gray-300 text-md rounded focus:ring-blue-400"
       onChange={(e) => {
         if (e.target.checked) {
           selectRegion(Regions);

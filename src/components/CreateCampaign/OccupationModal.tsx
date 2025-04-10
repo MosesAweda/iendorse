@@ -92,7 +92,7 @@ const OccupationModal: React.FC<OccupationModalProps> = ({ isOpen, onClose, onSe
                         onChange={handleSearch}
                         placeholder="Search Occupation..."
                         className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 
-                        text-xs placeholder-gray-400 mb-3 focus:ring-blue-500 focus:border-blue-500"
+                        text-md placeholder-gray-400 mb-3 focus:ring-blue-500 focus:border-blue-500"
                     />
 
                     {/* Dropdown */}
@@ -115,7 +115,7 @@ const OccupationModal: React.FC<OccupationModalProps> = ({ isOpen, onClose, onSe
                                         type="checkbox"
                                         checked={isAllSelected}
                                         onChange={handleSelectAll}
-                                        className="mr-2 text-xs"
+                                        className="mr-2 text-md"
                                     />
                                     Select All
                                 </label>
@@ -132,7 +132,7 @@ const OccupationModal: React.FC<OccupationModalProps> = ({ isOpen, onClose, onSe
                                                 type="checkbox"
                                                 checked={selectedOccupations.includes(occupation)}
                                                 onChange={() => handleSelectOccupation(occupation)}
-                                                className="mr-2 text-xs"
+                                                className="mr-2 text-md"
                                             />
                                             {occupation}
                                         </label>

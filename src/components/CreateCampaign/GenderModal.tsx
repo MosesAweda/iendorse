@@ -76,7 +76,7 @@ const GenderModal: React.FC<GenderModalProps> = ({
                   value={searchQuery}
                   onChange={handleSearch}
                   placeholder="Search Gender..."
-                  className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg px-4 py-2 mb-2 text-xs"
+                  className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg px-4 py-2 mb-2 text-md"
                 />
                 <button
                   type="button"
@@ -110,7 +110,7 @@ const GenderModal: React.FC<GenderModalProps> = ({
               <input
                 type="checkbox"
                 id="selectAllGenders"
-                className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-400"
+                className="w-4 h-4 text-blue-500 border-gray-300 text-md rounded focus:ring-blue-400"
                 onChange={(e) => {
                   if (e.target.checked) {
                     selectGender(Genders); // Select all genders

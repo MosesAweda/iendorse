@@ -85,7 +85,7 @@ const AgeModal: React.FC<AgeModalProps> = ({ isOpen, onClose, onSelectAge }) => 
                                 id="select-all"
                                 checked={selectedAges.length === ageValues.length}
                                 onChange={(e) => handleSelectAll(e.target.checked)}
-                                className="mr-2"
+                                className="mr-2 text-md"
                             />
                             <label htmlFor="select-all">Select All</label>
                         </div>
@@ -103,7 +103,7 @@ const AgeModal: React.FC<AgeModalProps> = ({ isOpen, onClose, onSelectAge }) => 
                                         id={`age-${index}`}
                                         checked={selectedAges.includes(age)}
                                         onChange={() => handleSelectAge(age)}
-                                        className="mr-2"
+                                        className="mr-2 text-md"
                                     />
                                     <label htmlFor={`age-${index}`}>{age}</label>
                                 </div>
