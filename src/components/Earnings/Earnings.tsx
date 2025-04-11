@@ -73,57 +73,10 @@ const   Earnings = () => {
         openSummaryModal()
     }
 
-
-    const handleSummary = () =>{
-          RedeemEarnedPoints()
-        
-    }
+ 
 
     const URL = `${baseURL}/Wallet/ReedeemPoint`;
-
-    const RedeemEarnedPoints = async () => {
-        setLoading(true);
-    
-        try {
-            const response = await fetch(URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${window.localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({ accountId : accountId,
-                                     redeemedPoints: points ,
-                                     campaignId : 20   }),
-            });
-    
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-    
-            const responseData = await response.json();
-    
-            // Set the API response in state
-            setApiResponse(responseData.data);
-    
-            if (responseData) {
-                // Open the authorization URL in a new tab
-             toast.success("Points Redeemed Successfully")
-             console.log(responseData);
-            } 
-        } catch (err) {
-            console.error((err as Error).message);
-            toast.error("Something went wrong");
-          
-        } finally {
-            setLoading(false);
-            closeSummaryModal();
-            
-            
-        }
-    };
-    
-
-
+ 
    
    
 
@@ -152,10 +105,10 @@ const   Earnings = () => {
               <CircularProgress color="inherit" />
             </Backdrop>
            
-            <div className={`flex bg-gray-100 justify-center `}>
-                <div className=" mt-10  ">
+            <div className={`flex bg-gray-100 justify-center px-4 sm:px-6 md:px-8 mt-20 `}>
+                <div className=" mt-10 w-full max-w-md mt-10  ">
                 <div className={`p-4 w-full md:max-w-md border-gray-700 bg-white rounded-lg my-2 bg-cover  bg-center overflow-hidden ${pointsDataLoading && 'animate-pulse'}`} 
-                style={{ backgroundImage: 'url(https://res.cloudinary.com/dgso4wgqt/image/upload/v1733390900/frame2_zxp52a.png)' }}>
+                style={{ backgroundImage: 'url(https://res.cloudinary.com/dgso4wgqt/image/upload/v1744376587/Frame_1000001220_1_emgqml.png)' }}>
                           
                  <div className="mt-3  pl-2 pr-40">
                         <h1 className="text-sm text-white pr-36" >
@@ -233,7 +186,7 @@ const   Earnings = () => {
                 <SummaryModal 
                     isOpen={summaryModal}
                     onClose={closeSummaryModal}
-                    onSubmit={handleSummary}
+          
                     details={allData}
                 />
 

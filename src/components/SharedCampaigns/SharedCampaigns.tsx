@@ -6,11 +6,11 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Puff } from "react-loader-spinner"
 import { toast } from "react-toastify"
-import Navbar from "./NavBar/Navbar"
+import Navbar from "../NavBar/Navbar"
 import searchIcon from "./svg/search.svg"
 import closeIcon from "./svg/close.svg"
-import { baseURL } from "./URL"
-import Initials from "./Initials"
+import { baseURL } from "../URL"
+import Initials from "../Initials"
 
 const SharedCampaigns = () => {
   const navigate = useNavigate()

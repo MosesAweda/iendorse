@@ -33,8 +33,8 @@ import AuthCallback from './components/authentication/AuthCallback';
 import TandC from './components/TandC';
 import CloudinaryApp from './components/CloudinaryApp';
 import NotFound from './components/notfound';
-import SharedCampaigns from './components/SharedCampaigns';
-import ViewSharedDetails from './components/ViewSharedDetails';
+import SharedCampaigns from './components/SharedCampaigns/SharedCampaigns';
+import ViewSharedDetails from './components/SharedCampaigns/ViewSharedDetails';
 
 
 function App() {
