@@ -16,6 +16,7 @@ import PromotionSuccessfulModal from "./PromotionSuccessfulModal";
 import ShareCampaignModal from "../ViewCampaign/ShareCampaignModal";
 import Carousel from 'react-material-ui-carousel'
 import { Paper, Button } from '@mui/material'
+import ConfirmSubscription from "./ConfirmSubscription";
 
 
 
@@ -36,6 +37,7 @@ interface CarouselProps {
 const FeedCampaign = ({ item }: any) => {
   const [campaignMenuOpen, setCampaignMenuOpen] = useState(false);
   const [showPromoteModal, setShowPromoteModal] = useState(false);
+  const[confirmSubModal, setConfirmSubModal] = useState(false) 
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showPurchaseUnitsModal, setPurchaseUnitsModal] = useState(false);
   const [paymentMethodModal, setPaymentMethodModal] = useState(false);
@@ -64,6 +66,8 @@ const FeedCampaign = ({ item }: any) => {
   const closeInsufficientWalletModal = () => setInsufficientWalletModal(false);
   const opensummarymodal = () => setSummaryModal(true);
   const closeSummaryModal = () => setSummaryModal(false);
+  const openConfirmSubscription = () => setConfirmSubModal(true);
+  const closeConfirmSubscription = () => {setConfirmSubModal(false); setAllData({})};
   const openPromotionSuccessfulModal = () => setPromotionSuccessfulModal(true);
   const closePromotionSuccessfulModal = () => {setPromotionSuccessfulModal(false); setAllData({})};
   const openShareCampaignModal = () => setShareCampaignModal(true);
@@ -108,7 +112,9 @@ const endorseWithWalletData = {
     setSubscriptionPlan(type);  
     setAllData({...allData, subscriptionPlan: type});
    closeSubscriptionModal();
-   openPaymentMethodModal();
+   //toast.success("Subscription Plan Selected");
+   //openPaymentMethodModal();
+   openConfirmSubscription();
   }
 
   const submitUnitsToPurchase = (units:number) => {
@@ -302,17 +308,26 @@ const endorseWithWalletData = {
       />
 
 
-<PromotionSuccessfulModal
-        isOpen={promotionSuccessfulModal}
-        onClose={closePromotionSuccessfulModal}
-        details ={allData}
-      />
+    <PromotionSuccessfulModal
+            isOpen={promotionSuccessfulModal}
+            onClose={closePromotionSuccessfulModal}
+            details ={allData}
+          />
 
-<ShareCampaignModal
-        isOpen={shareCampaignModal}
-        onClose={closeShareCampaignModal}
-        details ={item}
-      />
+
+
+    <ConfirmSubscription
+            isOpen={confirmSubModal}
+            onClose={closeConfirmSubscription}
+            details ={allData}
+          />
+
+
+      <ShareCampaignModal
+              isOpen={shareCampaignModal}
+              onClose={closeShareCampaignModal}
+              details ={item}
+            />
 
 
     </>

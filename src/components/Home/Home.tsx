@@ -193,9 +193,9 @@ useEffect(() => {
             Discover, Endorse, Transform
           </h1>
           <p className="text-base leading-relaxed mb-8 sm:max-w-sm sm:max-w-none">
-            Dive into our platform to discover a world of impactful campaigns, each one a beacon of hope, a catalyst for transformation.
-            With iEndorse, you have the power to endorse causes close to your heart, amplifying their reach and influence.
-            Every endorsement is a vote for change, a commitment to shaping a better tomorrow for all.
+          Dive into our platform to discover a world of impactful campaigns—whether for businesses, 
+          creative endeavors, or meaningful causes. With iEndorse, you have the power to amplify brands you believe in, support visionary creators, and champion transformative initiatives and policies. Every endorsement is a step toward greater influence, a catalyst for change,
+           and a commitment to shaping a better tomorrow for all.
           </p>
           <div className="flex space-x-4">
             <Link to="/">

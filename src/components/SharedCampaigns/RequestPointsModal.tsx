@@ -259,10 +259,10 @@ const RequestPointsModal = ({ onClose, onSuccess, campaignId }: ModalProps) => {
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className={`w-full p-3 rounded ${
+              className={`w-full p-3 text-white bg-customBlue rounded ${
                 isSubmitting
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-customBlue text-white hover:bg-blue-800"
+                  ? "    cursor-not-allowed"
+                  : "  hover:bg-blue-900"
               } transition-colors`}
             >
               {isSubmitting ? "Processing..." : "Proceed"}

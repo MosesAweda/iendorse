@@ -176,7 +176,9 @@ const Search = () => {
   const handleUserProfileClick = (userId: string, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    console.log("user id ",userId)
     navigate("/userprofile", { state: { userId } })
+
   }
 
   return (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import closeIcon from "../svg/close.svg";
-import { baseURL } from "../URL";
-import useFetch from "../Hooks/useFetch";
+import closeIcon from "../../svg/close.svg";
+import { baseURL } from "../../URL";
+import useFetch from "../../Hooks/useFetch";
 import { Backdrop, CircularProgress } from "@mui/material";
 
 interface OccupationModalProps {

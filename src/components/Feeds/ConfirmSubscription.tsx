@@ -4,14 +4,14 @@ import greenCheck from '../svg/greenCheck.svg'
 import { toast } from 'react-toastify';
 import CampaignMenu from './CampaignMenu';
 
-interface PromotionSuccessfulModalProps  {
+interface ConfirmSubProps {
   isOpen: boolean;
   onClose: () => void;
   details :any
   
 }
 
-const PromotionSuccessfulModal: React.FC<PromotionSuccessfulModalProps> = ({ isOpen, onClose, details }) => {
+const ConfirmSubscription: React.FC<ConfirmSubProps> = ({ isOpen, onClose, details }) => {
 console.log(details)
   if (!isOpen) return null;
 
@@ -37,7 +37,7 @@ console.log(details)
           </div>
 
             <div className='text-center  mb-10'>
-            <p> You promoted your campaign #{details.campaignId} with {details.unitsToPurchase} units and your campaign has been published. Thank you.</p>
+            <p> You subscription for promotion your campaign #{details.campaignId} and your campaign has been published. Thank you.</p>
             </div>
          
           <div className="flex pb-2  items-center ">
@@ -55,4 +55,4 @@ console.log(details)
   );
 };
 
-export default PromotionSuccessfulModal; ;
+export default ConfirmSubscription; ;

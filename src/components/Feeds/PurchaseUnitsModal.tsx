@@ -80,7 +80,7 @@ const PurchaseUnitsModal: React.FC<PurchaseUnitProps> = ({ isOpen, onClose, onSu
                     {numberOfUnits} units equals {formatCurrency(nairaEquivalent)}   </span> 
                       
                   :        <span className='bg-blue-50 text-blue-500 px-2 text-xs rounded-full py-2 mt-6' >
-                1 units equals NGN 1000
+                1 unit equals 1 Naira 
                     </span>
                       
                       }

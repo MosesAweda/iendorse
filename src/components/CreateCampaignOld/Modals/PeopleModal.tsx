@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import closeIcon from '../svg/close.svg';
-import searchIcon from "../svg/search.svg";
-import { baseURL } from "../URL";
-import useFetch from "../Hooks/useFetch";
+import closeIcon from '../../svg/close.svg';
+import searchIcon from "../../svg/search.svg";
+import { baseURL } from "../../URL";
+import useFetch from "../../Hooks/useFetch";
 
 interface PeopleModalProps {
   isOpen: boolean;
@@ -61,7 +61,7 @@ const PeopleModal: React.FC<PeopleModalProps> = ({ isOpen, onClose, onSelectPeop
   if (!isOpen) return null;
 
   return (
-    <div className={`fixed inset-0 flex items-start pt-20 sm:pt-1 sm:items-center justify-center"`}>
+    <div className={`fixed inset-0 flex items-start pt-20 sm:pt-1 sm:items-center justify-center`}>
       <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
 
       <div className="relative p-4 w-full max-w-xl max-h-full">

@@ -8,7 +8,7 @@ import NotificationsList from './NotificationsLists';
 import EndorsementsList from './EndorsementsLists';
 
 const Notifications = () => {
-  const [isNotifications, setIsNotifications] = useState(true);
+  const [isNotifications, setIsNotifications] = useState(false);
   const [loading, setLoading] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
   const [otherNotifications, setOtherNotifications] = useState<any[]>([]);
