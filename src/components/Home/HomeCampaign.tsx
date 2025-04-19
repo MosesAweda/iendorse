@@ -331,9 +331,20 @@ const handleItemClick = (x:any) => {
           >
             {file.filePath.endsWith('.mp4') ? (
               <video 
+               
                 className="w-full max-h-full object-cover" 
                 muted 
                 playsInline
+                autoPlay
+                loop
+                controls
+                style={{ borderRadius: '0.5rem' }} // Add border radius to video
+                onClick={() => {
+                  const videoElement = document.querySelector('video');
+                  if (videoElement) {
+                    videoElement.paused ? videoElement.play() : videoElement.pause();
+                  }
+                }}
               >
                 <source src={file.filePath} type="video/mp4" />
                 Your browser does not support the video tag.

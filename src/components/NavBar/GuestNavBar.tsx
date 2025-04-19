@@ -55,7 +55,7 @@ const GuestNavbar = () => {
     {/* Logo */}
     <Link to="/" className="flex items-center">
       <img 
-        src="images/logo.png" 
+        src="https://res.cloudinary.com/dgso4wgqt/image/upload/v1745070101/logo_wrwd9z.png" 
         className="h-8 md:h-10 lg:h-12 md:ml-10" 
         alt="Logo" 
       />

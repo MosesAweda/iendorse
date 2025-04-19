@@ -7,6 +7,7 @@ import instagram from '../svg/instagram.svg';
 import close from '../svg/close.svg';
 import link from '../svg/link.svg';
 import copy from '../svg/copy.svg';
+ 
 
 interface ShareCampaignModalProps {
   isOpen: boolean;
@@ -18,38 +19,7 @@ const ShareCampaignModal: React.FC<ShareCampaignModalProps> = ({ isOpen, onClose
   const [copied, setCopied] = useState(false);
   const [copySuccess, setCopySuccess] = useState('');
   const textToCopy = `https://iendorse.ng/ViewCampaign/${details?.campaignId}`;
-
-  // Add useEffect to handle scroll locking
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     // Save the current scroll position
-  //     const scrollY = window.scrollY;
-      
-  //     // Add styles to prevent scrolling and maintain position
-  //     document.body.style.position = 'fixed';
-  //     document.body.style.top = `-${scrollY}px`;
-  //     document.body.style.width = '100%';
-  //   } else {
-  //     // Get the scroll position from the body's top property
-  //     const scrollY = document.body.style.top;
-      
-  //     // Remove the styles
-  //     document.body.style.position = '';
-  //     document.body.style.top = '';
-  //     document.body.style.width = '';
-      
-  //     // Restore scroll position
-  //     window.scrollTo(0, parseInt(scrollY || '0') * -1);
-  //   }
-
-  //   // Cleanup function
-  //   return () => {
-  //     document.body.style.position = '';
-  //     document.body.style.top = '';
-  //     document.body.style.width = '';
-  //   };
-  // }, [isOpen]);
-
+ 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(textToCopy);
@@ -69,7 +39,7 @@ const ShareCampaignModal: React.FC<ShareCampaignModalProps> = ({ isOpen, onClose
   }, [copied]);
 
   const shareOnTwitter = (campaignId: number, campaignTitle: string, campaignDescription: string) => {
-    const tweetText = `${campaignTitle} - ${campaignDescription}`;
+    const tweetText = `${campaignTitle} - ${campaignDescription.slice(0, 30)}...`;
     const campaignUrl = `https://iendorse.ng/ViewCampaign/${campaignId}`;
     
     const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
@@ -78,6 +48,24 @@ const ShareCampaignModal: React.FC<ShareCampaignModalProps> = ({ isOpen, onClose
     
     window.open(twitterShareUrl, '_blank');
   };
+
+  const shareOnFacebook = (campaignId: number) => {
+    const campaignUrl = `https://iendorse.ng/ViewCampaign/${campaignId}`;
+    
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(campaignUrl)}`;
+    
+    window.open(facebookShareUrl, '_blank');
+  };
+
+  const shareOnLinkedIn = (campaignId: number, campaignTitle: string, campaignDescription: string) => {
+    const campaignUrl = `https://iendorse.ng/ViewCampaign/${campaignId}`;
+    
+    const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(campaignUrl)}&title=${encodeURIComponent(campaignTitle)}&summary=${encodeURIComponent(campaignDescription.slice(0, 30))}`; 
+    
+    window.open(linkedInShareUrl, '_blank');
+  };
+  
+  
 
   return (
     <div className={`fixed z-50 inset-0 transition-opacity ${isOpen ? 'flex' : 'hidden'} items-start mt-20 sm:mt-1 sm:items-center justify-center`}>
@@ -107,14 +95,14 @@ const ShareCampaignModal: React.FC<ShareCampaignModalProps> = ({ isOpen, onClose
             <div onClick={handleCopy}>
               <img src={copy} alt="copy" className="mx-4" width={40} height={40} />
             </div>
-            <div>
-              <img src={instagram} alt="instagram" className="mx-4" width={40} height={40} />
-            </div>
-            <div onClick={() => shareOnTwitter(details.campaignId, details.campaignTitle, details.campaignDescription)}>
+            {/* <div onClick={() => shareOnLinkedIn(details.campaignId, details.campaignTitle, details.description)}>
+              <img src="https://res.cloudinary.com/dgso4wgqt/image/upload/v1745071247/329_linkedin_1_ynib9q.jpg" alt="linkedin" className="mx-4" width={72} height={40} />
+            </div> */}
+            <div onClick={() => shareOnTwitter(details.campaignId, details.campaignTitle, details.description)}>
               <img src={x} alt="x" className="mx-4" width={40} height={40} />
             </div>
             <div>
-              <img src={facebook} alt="fb" className="mx-4" width={40} height={40} />
+              <img onClick={() => shareOnFacebook(details.campaignId)} src={facebook} alt="fb" className="mx-4" width={40} height={40} />
             </div>
           </div>
         </div>

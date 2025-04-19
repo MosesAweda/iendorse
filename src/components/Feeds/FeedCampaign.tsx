@@ -177,7 +177,7 @@ const endorseWithWalletData = {
   }
   return (
     <>
-      <div className="p-4 w-full  max-w-lg sm:border-gray-200 sm:border  bg-white rounded-2xl my-5 px-6">
+      <div className="p-4 w-full  max-w-xl sm:border-gray-200 sm:border  bg-white rounded-2xl my-5 px-6">
       <div className="flex items-center justify-between mb-3" >
           <div>
             <button className="bg-green-100 text-green-600 rounded-lg px-4 py-2 text-xs font-medium">

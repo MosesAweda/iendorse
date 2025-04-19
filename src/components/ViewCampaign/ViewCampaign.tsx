@@ -30,6 +30,7 @@ import EndorsementSuccessfulModal from "./EndorsementSuccessfulModal";
 import Initials from "../Initials";
 import ReportCampaign from "./ReportCampaign";
 import EndorsementFailed from "./EndorsementFailed";
+import Carousel from "react-material-ui-carousel";
 
 const ViewCampaign = ({ item }: any) => {
   const { uid } = useParams();
@@ -84,7 +85,7 @@ const ViewCampaign = ({ item }: any) => {
 
   const campaignURL = `${baseURL}/Campaign/CampaignDetails?CampaignId=${uid}`
   const { data: campaignData, refreshApi: refresCampaignData, error: DataError, loading: DataLoading
-  } = useFetch(campaignURL, "GET", () => {}, () => {});
+  } = useFetch(campaignURL, "GET", () => { }, () => { });
 
   console.log("campaign File", campaignData?.campaignFiles[0]?.filePath)
 
@@ -111,8 +112,8 @@ const ViewCampaign = ({ item }: any) => {
         setWalletBalance(responseData.data.walletBalance);
       }
     } catch (err) {
-    //  toast.error((err as Error).message);
-    console.error("Error posting data:", err);
+      //  toast.error((err as Error).message);
+      console.error("Error posting data:", err);
     } finally {
       setLoading(false);
 
@@ -190,227 +191,237 @@ const ViewCampaign = ({ item }: any) => {
     const options: any = { year: 'numeric', month: 'long', day: 'numeric' };
     return dateObj.toLocaleDateString('en-GB', options);
   }
- 
+
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
   }, []);
 
 
-  function TextComponent() {
-    // The string with literal \n characters
-    const text = "action is specifically designed to address their feelings.\\nThe Magic is here";
-    
-    // Convert literal \n to actual newlines
-    const formattedText = text.replace(/\\n/g, '\n');
-    
-    return <div style={{ whiteSpace: 'pre-line' }}>{formattedText}</div>;
-  }
-
+ 
   return (
     <>
       <Navbar />
 
       {DataLoading && (
         <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-colorBlue"></div>
-      </div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-colorBlue"></div>
+        </div>
       )}
 
       {!DataLoading && (!campaignData || DataError) && (
-      <div className=" flex justify-center items-center pb-20  px-10 h-screen">
-      <div className="text-center p-6 bg-white rounded-lg shadow-md mb-20">
-        <h2 className="text-2xl font-bold text-customBlue mb-4">Campaign Not Found</h2>
-        <p className="text-gray-600 mb-4">
-          The campaign you are looking for might have been removed or is currently unavailable.
-        </p>
-        <div className="flex justify-center">
-          <button 
-            onClick={() => window.history.back()} 
-            className="bg-customBlue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-          >
-            Go Back
-          </button>
+        <div className=" flex justify-center items-center pb-20  px-10 h-screen">
+          <div className="text-center p-6 bg-white rounded-lg shadow-md mb-20">
+            <h2 className="text-2xl font-bold text-customBlue mb-4">Campaign Not Found</h2>
+            <p className="text-gray-600 mb-4">
+              The campaign you are looking for might have been removed or is currently unavailable.
+            </p>
+            <div className="flex justify-center">
+              <button
+                onClick={() => window.history.back()}
+                className="bg-customBlue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
       )}
 
       {campaignData && (
         <>
-        <div className="sm:bg-gray-100  bg-white h-screen mt-20">
+          <div className="sm:bg-gray-100   bg-white h-screen mt-20">
 
 
-          <div className="flex flex-col sm:bg-gray-100  bg-white justify-center items-center      ">
+            <div className="flex flex-col sm:bg-gray-100  bg-white justify-cente items-center      ">
 
-            <div className="p-4 max-w-lg border-gray-700 bg-white rounded-lg my-5  mx-0  sm:mx-1  mb-20">
-              <div className="my-4">
-
-              {campaignData?.campaignFiles[0]?.filePath.endsWith('.mp4') ? (
-  <video
-    className="rounded-2xl w-full"
-    controls
-    muted
-    playsInline
-  >
-    <source src={campaignData?.campaignFiles[0]?.filePath} type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-) : (
-  <img 
-    className="rounded-2xl w-full" 
-    src={campaignData?.campaignFiles[0]?.filePath}
-    alt="Campaign Media"
-  />
-)}
-
-
-              </div>
-
+              <div className="p-4 max-w-2xl border-gray-700 bg-white rounded-lg my-5  mx-0  sm:mx-1  mb-20">
               <div className="flex items-center justify-between">
-                <div className="flex">
-                  <div className="  inline-block  z-1 mr-3" >
-                    {campaignData?.campaignOwnerImage ? (
-                      <img className="rounded-full border-2 w-10 h-10    border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
-                        src={campaignData?.campaignOwnerImage}  alt="" />
-                    ) : (
-                      <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
-                        <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />
-                      </div>
-                    )
-                    }
+                  <div className="flex">
+                    <div className="  inline-block  z-1 mr-3" >
+                      {campaignData?.campaignOwnerImage ? (
+                        <img className="rounded-full border-2 w-10 h-10    border-white" style={{ boxShadow: '0 0 0 1px #0D236E' }}
+                          src={campaignData?.campaignOwnerImage} alt="" />
+                      ) : (
+                        <div className="flex items-center justify-center h-full w-full bg-blue-100 rounded-full text-customBlue p-2">
+                          <Initials fullName={item?.campaignOwner} className="text-lg font-medium" />
+                        </div>
+                      )
+                      }
 
-                  </div>
-                  <div>
-                    <div className="font-semibold text-lg">{campaignData?.campaignOwner}</div>
-                    <div className="text-xs">
-                      <i>{campaignData?.campaignOwnerTitle}</i>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-lg">{campaignData?.campaignOwner}</div>
+                      <div className="text-xs">
+                        <i>{campaignData?.campaignOwnerTitle}</i>
+                      </div>
                     </div>
                   </div>
+                  <div className="p-1 cursor-pointer">
+                    <img src={danger} alt="Report" onClick={openReportMenu} />
+                  </div>
                 </div>
-                <div className="p-1 cursor-pointer">
-                  <img src={danger} alt="Report" onClick={openReportMenu} />
+
+                <div className="my-4 campaign-container min-w-[300px] max-w-[648px] ">
+                  <h1 className="font-medium">{campaignData?.campaignTitle}</h1>
+                  <p className="flex my-2 text-customBlue font-medium text-justify">
+                    <img src={link} alt="Link" />
+                    <a href={campaignData?.campaignUrl} ><span className="px-1">{campaignData?.campaignUrl}</span> </a>
+                  </p>
+
+                  <div className="text-justify my-2 pb-3 description-container">
+                    <div className="px-2" style={{ whiteSpace: 'pre-line' }}>{campaignData?.description}</div>
+                    <p className="text-justify text-xs py-2">{formatDate(campaignData?.created)}</p>
+                  </div>
+                </div>
+
+
+     <Carousel 
+        indicators={campaignData?.campaignFiles.length > 1} // Display indicators only if more than one file
+      >
+        {campaignData?.campaignFiles.map((file: any, index: any) => (
+          <div 
+            key={index} 
+            className="flex items-center justify-center bg-black w-full h-[300px] rounded-lg"
+          >
+            {file.filePath.endsWith('.mp4') ? (
+              <video 
+               
+                className="w-full max-h-full object-cover" 
+                muted 
+                playsInline
+                autoPlay
+                loop
+                controls
+                style={{ borderRadius: '0.5rem' }} // Add border radius to video
+                onClick={() => {
+                  const videoElement = document.querySelector('video');
+                  if (videoElement) {
+                    videoElement.paused ? videoElement.play() : videoElement.pause();
+                  }
+                }}
+              >
+                <source src={file.filePath} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <img 
+                src={file.filePath} 
+                alt={`Campaign ${index}`} 
+                className="w-full max-h-full object-cover" 
+              />
+            )}
+          </div>
+        ))}
+              </Carousel>
+          
+               
+
+
+                <div className="flex mt-4 text-sm justify-between mb-3">
+                  <div className="flex mr-5 items-center w-full">
+                    <button className="p-3 bg-customBlue text-white text-xs rounded-md w-full" onClick={openShareCampaignModal}>
+                      Share Campaign
+                    </button>
+                  </div>
+                  <div className="flex items-center w-full">
+                    <button className="p-3 bg-customBlue   text-xs  text-white rounded-md w-full" onClick={openEndorseMenu} >Endorse Campaign</button>
+                  </div>
                 </div>
               </div>
 
-              <div className="my-4 campaign-container min-w-[300px] max-w-[648px] ">
-                <h1 className="font-medium">{campaignData?.campaignTitle}</h1>
-                <p className="flex my-2 text-customBlue font-medium text-justify">
-                  <img src={link} alt="Link" />
-                  <a href={campaignData?.campaignUrl} ><span className="px-1">{campaignData?.campaignUrl}</span> </a>
-                </p>
 
-                <div className="text-justify my-2 pb-3 description-container">
-              <div style={{ whiteSpace: 'pre-line' }}>{campaignData?.description}</div>
-              <p className="text-justify text-xs py-2">{formatDate(campaignData?.created)}</p>
             </div>
-              </  div>
-
-
-              <div className="flex mt-4 text-sm justify-between mb-3">
-                <div className="flex mr-5 items-center w-full">
-                  <button className="p-3 bg-customBlue text-white text-xs rounded-md w-full" onClick={openShareCampaignModal}>
-                    Share Campaign
-                  </button>
-                </div>
-                <div className="flex items-center w-full">
-                  <button className="p-3 bg-customBlue   text-xs  text-white rounded-md w-full" onClick={openEndorseMenu} >Endorse Campaign</button>
-                </div>
-              </div>
-            </div>
-
 
           </div>
- 
-        </div>
-
-        
-
-      <CampaignMenu
-      isOpen={campaignMenuOpen}
-      onClose={closeCampaignMenu}
-    />
 
 
-    <ReportCampaign
-      isOpen={reportMenu}
-      onClose={closeReportMenu}
-      campaignId={campaignData?.campaignId}
 
-    />
-
-    <EndorseCampaignModal
-      isOpen={endorseMenu}
-      onClose={closeEndorseMenu}
-      onSubmit={submitEndorsement}
-    />
+          <CampaignMenu
+            isOpen={campaignMenuOpen}
+            onClose={closeCampaignMenu}
+          />
 
 
-    {/* <ReportCampaignModal
+          <ReportCampaign
+            isOpen={reportMenu}
+            onClose={closeReportMenu}
+            campaignId={campaignData?.campaignId}
+
+          />
+
+          <EndorseCampaignModal
+            isOpen={endorseMenu}
+            onClose={closeEndorseMenu}
+            onSubmit={submitEndorsement}
+          />
+
+
+          {/* <ReportCampaignModal
       isOpen={ReportCampaignModal}
       onClose={closeReportCampaignModal}
       onSubmit={submitReport}
     /> */}
 
-    {/* 
+          {/* 
   <SubscriptionModal
       isOpen={showSubscriptionModal}
       onClose={closeSubscriptionModal}
       onSubmit={handleSubPlanSelect}
     /> */}
 
-    {/* <PurchaseUnitsModal
+          {/* <PurchaseUnitsModal
       isOpen={showPurchaseUnitsModal}
       onClose={closePurchaseUnitsModal}
       onSubmit={submitUnitsToPurchase}
     /> */}
 
-    <PaymentMethodModal
-      isOpen={paymentMethodModal}
-      onClose={closePaymentMethodModal}
-      onSubmit={submitPaymentMethod}
-    />
+          <PaymentMethodModal
+            isOpen={paymentMethodModal}
+            onClose={closePaymentMethodModal}
+            onSubmit={submitPaymentMethod}
+          />
 
-    <InsufficientWalletBalanceModal
-      isOpen={insufficientWalletModal}
-      onClose={closeInsufficientWalletModal}
-      details={allData}
-    />
+          <InsufficientWalletBalanceModal
+            isOpen={insufficientWalletModal}
+            onClose={closeInsufficientWalletModal}
+            details={allData}
+          />
 
-    <SummaryModal
-      isOpen={summaryModal}
-      onClose={closeSummaryModal}
-      onSubmit={PayWithWallet}
-      details={allData}
-      ApiLoading={ApiFeedbackLoading}
-    />
-
-
-    <EndorsementSuccessfulModal
-      isOpen={endorsementSuccessfulModal}
-      onClose={closeEndorsementSuccessfulModal}
-      details={allData}
-    />
+          <SummaryModal
+            isOpen={summaryModal}
+            onClose={closeSummaryModal}
+            onSubmit={PayWithWallet}
+            details={allData}
+            ApiLoading={ApiFeedbackLoading}
+          />
 
 
-
-    <EndorsementFailed
-      isOpen={endorsementFailed}
-      onClose={closeEndorseFailed}
-      details={allData}
-    />
+          <EndorsementSuccessfulModal
+            isOpen={endorsementSuccessfulModal}
+            onClose={closeEndorsementSuccessfulModal}
+            details={allData}
+          />
 
 
 
-    <ShareCampaignModal
-      isOpen={shareCampaignModal}
-      onClose={closeShareCampaignModal}
-      details={campaignData}
-    />
+          <EndorsementFailed
+            isOpen={endorsementFailed}
+            onClose={closeEndorseFailed}
+            details={allData}
+          />
 
 
 
-      </>
+          <ShareCampaignModal
+            isOpen={shareCampaignModal}
+            onClose={closeShareCampaignModal}
+            details={campaignData}
+          />
+
+
+
+        </>
       )}
 
       {/* All existing modals remain the same */}

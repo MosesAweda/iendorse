@@ -119,7 +119,7 @@ const AuthBar= ({toggleSidebar}:any)=> {
   <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     {/* Logo Section */}
     <Link to="/" className="flex items-center">
-      <img src="/images/logo.png" className="h-8 sm:h-10 md:h-12 md:ml-10" alt="iendorse" />
+      <img src="https://res.cloudinary.com/dgso4wgqt/image/upload/v1745070101/logo_wrwd9z.png" className="h-8 sm:h-10 md:h-12 md:ml-10" alt="iendorse" />
     </Link>
 
     {/* Profile and Mobile Menu Section */}
